@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|c:\\users\\pc\\documents\\github\\grupa4-tim1\\implementacija\\jahacki klub zeljeznicar\\jahacki klub zeljeznicar\\data\\migrations\\20250520195037_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|solutionrelative:jahacki klub zeljeznicar\\data\\migrations\\20250520195037_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|c:\\users\\pc\\documents\\github\\grupa4-tim1\\implementacija\\jahacki klub zeljeznicar\\jahacki klub zeljeznicar\\models\\trening_konj.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|solutionrelative:jahacki klub zeljeznicar\\models\\trening_konj.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -58,11 +62,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Data\\ApplicationDbContext.cs",
@@ -76,7 +80,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 0,
+              "Title": "20250520195037_Init.cs",
+              "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Data\\Migrations\\20250520195037_Init.cs",
+              "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Data\\Migrations\\20250520195037_Init.cs",
+              "ToolTip": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Data\\Migrations\\20250520195037_Init.cs",
+              "RelativeToolTip": "Jahacki klub Zeljeznicar\\Data\\Migrations\\20250520195037_Init.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-20T19:50:39.176Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "Nivo.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Nivo.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\Nivo.cs",
@@ -88,7 +105,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "Kategorija.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Kategorija.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\Kategorija.cs",
@@ -100,7 +117,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Trail_Konj.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Trail_Konj.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\Trail_Konj.cs",
@@ -113,7 +130,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Trail.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Trail.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\Trail.cs",
@@ -126,7 +143,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "Konj.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Konj.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\Konj.cs",
@@ -138,7 +155,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Trening_Konj.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Trening_Konj.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\Trening_Konj.cs",
@@ -151,7 +168,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Trening_User.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Trening_User.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\Trening_User.cs",
@@ -164,7 +181,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Trening.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Trening.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\Trening.cs",
@@ -177,7 +194,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Clanarina.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Clanarina.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\Clanarina.cs",
@@ -190,7 +207,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "Spol.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Spol.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\Spol.cs",
@@ -202,7 +219,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\User.cs",
               "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\User.cs",
