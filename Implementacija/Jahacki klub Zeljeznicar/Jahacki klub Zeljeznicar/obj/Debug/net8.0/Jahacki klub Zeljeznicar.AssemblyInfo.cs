@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Jahacki klub Zeljeznicar")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8fe59313a0a12c404cb7b90beaa49ee1ec4e2be5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b91fcffdc0fb3ca4eb16f508dad4a34f69377b92")]
 [assembly: System.Reflection.AssemblyProductAttribute("Jahacki klub Zeljeznicar")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Jahacki klub Zeljeznicar")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
