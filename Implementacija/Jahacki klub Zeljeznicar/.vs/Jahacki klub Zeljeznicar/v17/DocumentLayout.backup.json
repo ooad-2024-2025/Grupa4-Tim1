@@ -1,12 +1,122 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Vedad\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|c:\\users\\pc\\documents\\github\\grupa4-tim1\\implementacija\\jahacki klub zeljeznicar\\jahacki klub zeljeznicar\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|solutionrelative:jahacki klub zeljeznicar\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|c:\\users\\pc\\documents\\github\\grupa4-tim1\\implementacija\\jahacki klub zeljeznicar\\jahacki klub zeljeznicar\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|solutionrelative:jahacki klub zeljeznicar\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|c:\\users\\pc\\documents\\github\\grupa4-tim1\\implementacija\\jahacki klub zeljeznicar\\jahacki klub zeljeznicar\\models\\nivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|solutionrelative:jahacki klub zeljeznicar\\models\\nivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|c:\\users\\pc\\documents\\github\\grupa4-tim1\\implementacija\\jahacki klub zeljeznicar\\jahacki klub zeljeznicar\\areas\\identity\\pages\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|solutionrelative:jahacki klub zeljeznicar\\areas\\identity\\pages\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|c:\\users\\pc\\documents\\github\\grupa4-tim1\\implementacija\\jahacki klub zeljeznicar\\jahacki klub zeljeznicar\\wwwroot\\css\\bootstrap.min.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|solutionrelative:jahacki klub zeljeznicar\\wwwroot\\css\\bootstrap.min.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|c:\\users\\pc\\documents\\github\\grupa4-tim1\\implementacija\\jahacki klub zeljeznicar\\jahacki klub zeljeznicar\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{B870211D-ECAC-4F40-BFA2-427EADFB52C3}|Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar.csproj|solutionrelative:jahacki klub zeljeznicar\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Jahacki klub Zeljeznicar\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAoAAACAMjMzMzMLwA0AAABYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-27T13:35:07.025Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Nivo.cs",
+              "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Nivo.cs",
+              "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Models\\Nivo.cs",
+              "ToolTip": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Models\\Nivo.cs",
+              "RelativeToolTip": "Jahacki klub Zeljeznicar\\Models\\Nivo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T13:33:41.662Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Views\\Home\\Index.cshtml*",
+              "RelativeToolTip": "Jahacki klub Zeljeznicar\\Views\\Home\\Index.cshtml*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-27T13:30:29.497Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
+              "RelativeToolTip": "Jahacki klub Zeljeznicar\\Areas\\Identity\\Pages\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-27T13:30:17.738Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "bootstrap.min.css",
+              "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\wwwroot\\css\\bootstrap.min.css",
+              "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\wwwroot\\css\\bootstrap.min.css",
+              "ToolTip": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\wwwroot\\css\\bootstrap.min.css",
+              "RelativeToolTip": "Jahacki klub Zeljeznicar\\wwwroot\\css\\bootstrap.min.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-05-27T13:29:38.199Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "Jahacki klub Zeljeznicar\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\Pc\\Documents\\GitHub\\Grupa4-Tim1\\Implementacija\\Jahacki klub Zeljeznicar\\Jahacki klub Zeljeznicar\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "Jahacki klub Zeljeznicar\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-05-27T13:29:31.072Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
