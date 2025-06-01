@@ -5,12 +5,22 @@ namespace Jahacki_klub_Zeljeznicar.Models
 {
     public class User : IdentityUser
     {
-        [Required]
+        [Required(ErrorMessage = "Kategorija je obavezna")]
+        [Display(Name = "Kategorija", ResourceType = typeof(Kategorija))]
         public Kategorija Kategorija { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Ime je obavezno")]
+        [StringLength(50, ErrorMessage = "Ime ne može biti duže od 50 karaktera")]
+        [Display(Name = "Ime")]
         public string Ime { get; set; }
-        [Required]
+
+
+        [Required(ErrorMessage = "Prezime je obavezno")]
+        [StringLength(50, ErrorMessage = "Prezime ne može biti duže od 50 karaktera")]
+        [Display(Name = "Prezime")]
         public string Prezime { get; set; }
+
+        [Display(Name = "Nivo", ResourceType = typeof(Nivo))]
         public Nivo Nivo { get; set; }
 
         public ICollection<Clanarina> Clanarine { get; set; }

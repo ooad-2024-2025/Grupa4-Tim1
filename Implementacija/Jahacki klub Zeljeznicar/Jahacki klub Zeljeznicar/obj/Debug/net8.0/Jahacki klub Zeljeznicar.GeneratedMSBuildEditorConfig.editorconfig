@@ -1,57 +1,225 @@
 is_global = true
 build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Jahacki_klub_Zeljeznicar
 build_property.RootNamespace = Jahacki_klub_Zeljeznicar
-build_property.ProjectDir = C:\Users\Pc\Documents\GitHub\Grupa4-Tim1\Implementacija\Jahacki klub Zeljeznicar\Jahacki klub Zeljeznicar\
+build_property.ProjectDir = C:\Users\Vedad\Documents\GitHub\Grupa4-Tim1\Implementacija\Jahacki klub Zeljeznicar\Jahacki klub Zeljeznicar\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Pc\Documents\GitHub\Grupa4-Tim1\Implementacija\Jahacki klub Zeljeznicar\Jahacki klub Zeljeznicar
+build_property.MSBuildProjectDirectory = C:\Users\Vedad\Documents\GitHub\Grupa4-Tim1\Implementacija\Jahacki klub Zeljeznicar\Jahacki klub Zeljeznicar
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Pc/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Areas/Identity/Pages/_ViewStart.cshtml]
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Pc/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Home/Index.cshtml]
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Clanarina/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhbmFyaW5hXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Clanarina/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhbmFyaW5hXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Clanarina/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhbmFyaW5hXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Clanarina/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhbmFyaW5hXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Clanarina/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhbmFyaW5hXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Pc/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Home/Privacy.cshtml]
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Pc/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Shared/Error.cshtml]
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Konj/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29ualxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Konj/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29ualxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Konj/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29ualxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Konj/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29ualxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Konj/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS29ualxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Pc/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Shared/_LoginPartial.cshtml]
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Pc/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Pc/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/_ViewImports.cshtml]
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trails/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trails/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxzXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trails/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxzXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trails/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trails/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trail/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trail/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trail/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trail/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trail/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trail_Konj/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxfS29ualxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trail_Konj/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxfS29ualxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trail_Konj/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxfS29ualxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trail_Konj/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxfS29ualxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trail_Konj/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaWxfS29ualxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening_Konj/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ19Lb25qXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening_Konj/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ19Lb25qXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening_Konj/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ19Lb25qXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening_Konj/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ19Lb25qXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening_Konj/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ19Lb25qXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening_User/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ19Vc2VyXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening_User/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ19Vc2VyXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening_User/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ19Vc2VyXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening_User/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ19Vc2VyXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Trening_User/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJlbmluZ19Vc2VyXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Pc/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/_ViewStart.cshtml]
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Pc/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Shared/_Layout.cshtml]
+[C:/Users/Vedad/Documents/GitHub/Grupa4-Tim1/Implementacija/Jahacki klub Zeljeznicar/Jahacki klub Zeljeznicar/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-nvgp27b04l
