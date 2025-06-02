@@ -10,10 +10,12 @@ namespace Jahacki_klub_Zeljeznicar.Models
 
         [Required(ErrorMessage = "Početak članarine je obavezan")]
         [Display(Name = "Početak članarine")]
+        [DataType(DataType.Date)]
         public DateTime PocetakClanarine { get; set; }
 
         [Required(ErrorMessage = "Istek članarine je obavezan")]
         [Display(Name = "Istek članarine")]
+        [DataType(DataType.Date)]
         public DateTime IstekClanarine { get; set; }
 
         [Required]

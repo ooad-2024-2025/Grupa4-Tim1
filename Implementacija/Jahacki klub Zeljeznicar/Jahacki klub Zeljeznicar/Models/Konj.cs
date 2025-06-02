@@ -16,7 +16,8 @@ namespace Jahacki_klub_Zeljeznicar.Models
         public string Opis { get; set; }
 
         [Required(ErrorMessage = "Spol konja je obavezan")]
-        [Display(Name = "Spol", ResourceType = typeof(Spol))]
+        [Display(Name = "Spol")]
+        [EnumDataType(typeof(Spol))]
         public Spol Spol { get; set; }
 
         [StringLength(50, ErrorMessage = "Boja ne može biti duža od 50 karaktera")]

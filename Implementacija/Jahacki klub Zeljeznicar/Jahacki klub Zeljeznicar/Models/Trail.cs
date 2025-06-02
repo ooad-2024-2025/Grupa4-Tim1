@@ -19,6 +19,7 @@ namespace Jahacki_klub_Zeljeznicar.Models
 
         [Required(ErrorMessage = "Datum je obavezan")]
         [Display(Name = "Datum")]
+        [DataType(DataType.Date)]
         public DateTime Datum { get; set; }
 
         // Navigation property

@@ -6,7 +6,8 @@ namespace Jahacki_klub_Zeljeznicar.Models
     public class User : IdentityUser
     {
         [Required(ErrorMessage = "Kategorija je obavezna")]
-        [Display(Name = "Kategorija", ResourceType = typeof(Kategorija))]
+        [Display(Name = "Kategorija")]
+        [EnumDataType(typeof(Kategorija))]
         public Kategorija Kategorija { get; set; }
 
         [Required(ErrorMessage = "Ime je obavezno")]
@@ -20,7 +21,8 @@ namespace Jahacki_klub_Zeljeznicar.Models
         [Display(Name = "Prezime")]
         public string Prezime { get; set; }
 
-        [Display(Name = "Nivo", ResourceType = typeof(Nivo))]
+        [Display(Name = "Nivo")]
+        [EnumDataType(typeof(Nivo))]
         public Nivo Nivo { get; set; }
 
         public ICollection<Clanarina> Clanarine { get; set; }

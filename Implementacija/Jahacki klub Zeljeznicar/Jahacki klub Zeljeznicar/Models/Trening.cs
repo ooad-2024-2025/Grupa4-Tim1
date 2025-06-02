@@ -14,11 +14,13 @@ namespace Jahacki_klub_Zeljeznicar.Models
         public string Naziv { get; set; }
 
         [Required(ErrorMessage = "Nivo je obavezan")]
-        [Display(Name = "Nivo", ResourceType = typeof(Nivo))]
+        [Display(Name = "Nivo")]
+        [EnumDataType(typeof(Nivo))]
         public Nivo Nivo { get; set; }
 
         [Required(ErrorMessage = "Datum je obavezan")]
         [Display(Name = "Datum")]
+        [DataType(DataType.Date)]
         public DateTime Datum { get; set; }
 
         [Required(ErrorMessage = "Maksimalni broj članova je obavezan")]
