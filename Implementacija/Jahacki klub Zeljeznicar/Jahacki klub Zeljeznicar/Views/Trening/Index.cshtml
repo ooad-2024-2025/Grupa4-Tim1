@@ -1,59 +1,166 @@
-﻿@model IEnumerable<Jahacki_klub_Zeljeznicar.Models.Trening>
-
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    ViewData["Title"] = "Prijavljeni treninzi";
 }
 
-<h1>Index</h1>
+<style>
+    /* Glavni kontejner */
+    .training-container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 20px;
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Naziv)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nivo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Datum)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MaxBrClanova)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Trener)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Naziv)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nivo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Datum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaxBrClanova)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Trener.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        /* Naslovi */
+        .training-container h1, .training-container h3 {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+    /* Karte za treninge */
+    .training-card {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 100%;
+        max-width: 300px; /* Kartice postavljene na širinu 300px */
+        margin-bottom: 20px;
+        text-align: center;
+        display: inline-block; /* Postavljene kao inline-block kako bi bile u istoj liniji */
+        box-sizing: border-box;
+    }
+
+        .training-card .training-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .training-card .training-info {
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .training-card .btn {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            font-size: 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+            .training-card .btn:hover {
+                background-color: #23272b;
+            }
+
+    /* Prikazivanje nivoa treninga */
+    .training-level {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .level-advanced {
+        background-color: #ff6f61;
+        color: white;
+        padding: 5px;
+        border-radius: 4px;
+    }
+
+    .level-medium {
+        background-color: #f0ad4e;
+        color: white;
+        padding: 5px;
+        border-radius: 4px;
+    }
+
+    /* Zeleni okvir za korisnika koji nije prijavljen */
+    .no-training-message {
+        text-align: center;
+        font-size: 20px;
+        color: #888;
+        margin-bottom: 40px;
+    }
+
+        .no-training-message strong {
+            font-size: 24px;
+        }
+
+    /* Responsive design */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .col-md-4 {
+        flex: 1 1 30%;
+    }
+
+    .training-card-container {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+</style>
+
+<div class="training-container">
+    <h1>Prijavljeni treninzi:</h1>
+
+    <!-- Proverite da li je korisnik prijavljen -->
+    <div class="no-training-message">
+        <p>Niste prijavljeni ni na jedan trening</p>
+    </div>
+
+    <h3>Prijavi se na trening</h3>
+
+    <!-- Red sa karticama treninga -->
+    <div class="training-card-container">
+        <!-- Karte za treninge -->
+        <div class="training-card">
+            <div class="training-title">Trening 1</div>
+            <div class="training-level level-advanced">Advanced</div>
+            <div class="training-info">
+                <p>Konji: Konj A, Konj B, Konj C</p>
+                <p>Trener: Milan Milanović</p>
+                <p>Datum: 5.2.2025.</p>
+                <p>Vrijeme: 12:00</p>
+            </div>
+            <a href="#" class="btn">Prijavi se</a>
+        </div>
+
+        <div class="training-card">
+            <div class="training-title">Trening 2</div>
+            <div class="training-level level-advanced">Advanced</div>
+            <div class="training-info">
+                <p>Konji: Konj A, Konj B, Konj C</p>
+                <p>Trener: Milan Milanović</p>
+                <p>Datum: 5.2.2025.</p>
+                <p>Vrijeme: 12:00</p>
+            </div>
+            <a href="#" class="btn">Prijavi se</a>
+        </div>
+
+        <div class="training-card">
+            <div class="training-title">Trening 3</div>
+            <div class="training-level level-medium">Medium</div>
+            <div class="training-info">
+                <p>Konji: Konj A, Konj B, Konj C</p>
+                <p>Trener: Milan Milanović</p>
+                <p>Datum: 5.2.2025.</p>
+                <p>Vrijeme: 12:00</p>
+            </div>
+            <a href="#" class="btn">Prijavi se</a>
+        </div>
+    </div>
+</div>

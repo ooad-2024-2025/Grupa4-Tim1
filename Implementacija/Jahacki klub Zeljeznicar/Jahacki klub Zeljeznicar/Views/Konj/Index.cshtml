@@ -1,53 +1,124 @@
-﻿@model IEnumerable<Jahacki_klub_Zeljeznicar.Models.Konj>
-
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    ViewData["Title"] = "Konji";
 }
 
-<h1>Index</h1>
+<!-- Header sa naslovom i dugmetom -->
+<div class="header-container">
+    <h1>Konji</h1>
+    <a href="@Url.Action("Create", "Konj")" class="btn btn-add">Dodaj +</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<!-- Tabela za prikaz konja -->
+<table class="horses-table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Ime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Opis)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Spol)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Boja)
-            </th>
-            <th></th>
+            <th>Ime</th>
+            <th>Spol</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Opis)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Spol)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Boja)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        <!-- Prazni redovi za buduće konje -->
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
+        <tr><td></td><td></td></tr>
     </tbody>
 </table>
+
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+        padding: 20px;
+    }
+
+    /* Header container */
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    /* Naslov */
+    h1 {
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+        margin: 0;
+    }
+
+    /* Dugme za dodavanje */
+    .btn-add {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-add:hover {
+            background-color: #5a6268;
+            color: white;
+            text-decoration: none;
+        }
+
+    /* Glavni stilovi za tabelu */
+    .horses-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        border: 1px solid #dee2e6;
+    }
+
+        .horses-table th,
+        .horses-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+            height: 45px;
+        }
+
+        .horses-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+
+            /* Širina kolona */
+            .horses-table th:nth-child(1),
+            .horses-table td:nth-child(1) {
+                width: 50%;
+            }
+
+            .horses-table th:nth-child(2),
+            .horses-table td:nth-child(2) {
+                width: 50%;
+            }
+
+        /* Prazan red stil */
+        .horses-table tbody tr td {
+            background-color: #fafafa;
+        }
+
+        .horses-table tbody tr:nth-child(even) td {
+            background-color: #f8f9fa;
+        }
+
+        .horses-table tbody tr:hover td {
+            background-color: #e9ecef;
+        }
+</style>

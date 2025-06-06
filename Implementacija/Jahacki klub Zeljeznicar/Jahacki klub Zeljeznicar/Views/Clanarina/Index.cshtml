@@ -1,47 +1,118 @@
-﻿@model IEnumerable<Jahacki_klub_Zeljeznicar.Models.Clanarina>
+﻿<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Članarina - Jahački klub Željezničar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
 
-@{
-    ViewData["Title"] = "Index";
-}
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 15px;
+        }
 
-<h1>Index</h1>
+        h1 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PocetakClanarine)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IstekClanarine)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PocetakClanarine)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IstekClanarine)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        h3 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+            .card:hover {
+                transform: scale(1.05);
+            }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .btn-dark {
+            background-color: #343a40;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+            .btn-dark:hover {
+                background-color: #23272b;
+            }
+
+        .row {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+        }
+
+        .col-md-4 {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <span>Vaša članarina traje do:</span>
+            <strong>datum</strong>
+        </h1>
+        <h3>Produži članarinu:</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <h5 class="card-title">1 mjesec</h5>
+                    <p class="card-text"><strong>70.00 KM</strong></p>
+                    <a href="#" class="btn btn-dark">Produži</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <h5 class="card-title">6 mjeseci</h5>
+                    <p class="card-text"><strong>400.00 KM</strong></p>
+                    <a href="#" class="btn btn-dark">Produži</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <h5 class="card-title">12 mjeseci</h5>
+                    <p class="card-text"><strong>700.00 KM</strong></p>
+                    <a href="#" class="btn btn-dark">Produži</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
