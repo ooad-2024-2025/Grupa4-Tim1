@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/Jahacki_klub_Zeljeznicar.styles.css" asp-append-version="true" />
     <style>
-        /* Header and Navbar Styles */
+       
         header {
             background-color: #f8f9fa;
             padding: 20px 0 !important;
@@ -28,13 +28,18 @@
             align-items: center;
             padding: 0 !important;
             margin: 0 !important;
+            position: relative;
+            z-index: 10;
         }
 
             .navbar-brand img {
-                height: 60px;
-                width: 60px;
-                margin-right: 10px;
+                height: 90px; 
+                width: 90px;
+                margin-right: 15px;
                 border-radius: 4px;
+                position: relative;
+                transform: scale(1.2); 
+                transform-origin: left center;
             }
 
         .brand-text {
@@ -142,8 +147,8 @@
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
                 <a class="navbar-brand" href="@Url.Action("Index", "Home")">
-                    <img src="~/images/logo.jpg" alt="Jahački klub Željezničar Logo" />
-                   
+                    <img src="~/images/logo.png" alt="Jahački klub Željezničar Logo" />
+
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
