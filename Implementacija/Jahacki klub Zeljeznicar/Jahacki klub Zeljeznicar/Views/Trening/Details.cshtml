@@ -1,48 +1,245 @@
 ﻿@model Jahacki_klub_Zeljeznicar.Models.Trening
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalji treninga";
 }
 
-<h1>Details</h1>
+<div class="details-container">
+    <div class="details-card">
+        <div class="details-header">
+            <h1>Detalji treninga</h1>
+        </div>
 
-<div>
-    <h4>Trening</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Naziv)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Naziv)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nivo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nivo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Datum)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Datum)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaxBrClanova)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaxBrClanova)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Trener)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Trener.Id)
-        </dd>
-    </dl>
+        <div class="details-body">
+            <div class="detail-row">
+                <div class="detail-label">Naziv treninga</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.Naziv)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Nivo</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.Nivo)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Datum</div>
+                <div class="detail-value">@Model.Datum.ToString("dd.MM.yyyy")</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Maksimalni broj članova</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.MaxBrClanova)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Trener</div>
+                <div class="detail-value">
+                    @if (Model.Trener != null)
+                    {
+                        <span>@Model.Trener.Ime @Model.Trener.Prezime</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Nije dodjeljen</span>
+                    }
+                </div>
+            </div>
+
+            @if (Model.TreningKonji != null && Model.TreningKonji.Any())
+            {
+                <div class="detail-row">
+                    <div class="detail-label">Konji</div>
+                    <div class="detail-value">
+                        <div class="horses-list">
+                            @foreach (var tk in Model.TreningKonji)
+                            {
+                                <span class="horse-tag">@tk.Konj.Ime</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (Model.TreningUsers != null && Model.TreningUsers.Any())
+            {
+                <div class="detail-row">
+                    <div class="detail-label">Prijavljeni učesnici</div>
+                    <div class="detail-value">
+                        <div class="participants-list">
+                            @foreach (var tu in Model.TreningUsers)
+                            {
+                                <div class="participant-item">@tu.User.Ime @tu.User.Prezime</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="details-footer">
+            <a asp-action="Index" class="btn btn-secondary">Nazad na listu</a>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<style>
+    .details-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+        padding: 20px;
+        background-color: #f8f9fa;
+    }
+
+    .details-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 0;
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .details-header {
+        background-color: #333;
+        color: white;
+        padding: 20px 30px;
+        border-radius: 8px 8px 0 0;
+        text-align: center;
+    }
+
+        .details-header h1 {
+            margin: 0;
+            color:white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+    .details-body {
+        padding: 30px;
+    }
+
+    .detail-row {
+        display: flex;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    .detail-label {
+        font-weight: bold;
+        color: #495057;
+        width: 200px;
+        flex-shrink: 0;
+        padding-right: 20px;
+    }
+
+    .detail-value {
+        flex: 1;
+        color: #212529;
+        font-size: 16px;
+    }
+
+    .text-muted {
+        color: #6c757d !important;
+        font-style: italic;
+    }
+
+    .horses-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .horse-tag {
+        background-color: #e9ecef;
+        color: #495057;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .participants-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .participant-item {
+        background-color: #f8f9fa;
+        color: #495057;
+        padding: 8px 15px;
+        border-radius: 4px;
+        border-left: 3px solid #007bff;
+    }
+
+    .details-footer {
+        padding: 20px 30px;
+        background-color: #f8f9fa;
+        border-radius: 0 0 8px 8px;
+        text-align: center;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 0 5px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #333;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            color: white;
+            text-decoration: none;
+        }
+
+    
+
+    .detail-row {
+        flex-direction: column;
+    }
+
+    .detail-label {
+        width: 100%;
+        margin-bottom: 8px;
+        padding-right: 0;
+    }
+
+    .details-header,
+    .details-body,
+    .details-footer {
+        padding: 20px;
+    }
+
+    }
+</style>

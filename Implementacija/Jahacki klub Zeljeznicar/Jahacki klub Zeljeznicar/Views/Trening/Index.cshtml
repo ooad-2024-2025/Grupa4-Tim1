@@ -2,23 +2,76 @@
 
 @{
     ViewData["Title"] = "Prijavljeni treninzi";
+
+  
+    var currentUserLevel = ViewBag.CurrentUserLevel as Jahacki_klub_Zeljeznicar.Models.Nivo? ?? Jahacki_klub_Zeljeznicar.Models.Nivo.Pocetnik;
+
+    var userLevelClass = currentUserLevel switch
+    {
+        Jahacki_klub_Zeljeznicar.Models.Nivo.Napredni => "level-advanced",
+        Jahacki_klub_Zeljeznicar.Models.Nivo.Srednji => "level-medium",
+        Jahacki_klub_Zeljeznicar.Models.Nivo.Pocetnik => "level-low",
+        _ => "level-low"
+    };
+
+    var userLevelText = currentUserLevel switch
+    {
+        Jahacki_klub_Zeljeznicar.Models.Nivo.Napredni => "Napredni",
+        Jahacki_klub_Zeljeznicar.Models.Nivo.Srednji => "Srednji",
+        Jahacki_klub_Zeljeznicar.Models.Nivo.Pocetnik => "Početnik",
+        _ => "Početnik"
+    };
 }
 
 <style>
     /* Glavni kontejner */
     .training-container {
-        max-width: 1200px;
+        max-width: 1000px;
         margin: 30px auto;
         padding: 20px;
     }
 
-        /* Naslovi */
-        .training-container h1, .training-container h3 {
-            text-align: center;
+    /* Header sekcija */
+    .training-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #eee;
+    }
+
+        .training-header h1 {
             font-size: 32px;
             font-weight: bold;
-            margin-bottom: 30px;
+            margin: 0;
         }
+
+        .training-header .user-level-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .training-header .user-level-info span {
+                font-size: 18px;
+                font-weight: 500;
+            }
+
+        .training-header .user-level-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+    /* Naslovi */
+    .training-container h3 {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
 
     /* Karte za treninge */
     .training-card {
@@ -28,10 +81,10 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         padding: 20px;
         width: 100%;
-        max-width: 300px; /* Kartice postavljene na širinu 300px */
+        max-width: 300px;
         margin-bottom: 20px;
         text-align: center;
-        display: inline-block; /* Postavljene kao inline-block kako bi bile u istoj liniji */
+        display: inline-block;
         box-sizing: border-box;
     }
 
@@ -97,6 +150,9 @@
         font-size: 20px;
         color: #888;
         margin-bottom: 40px;
+        border: 2px solid #ddd;
+        padding: 40px;
+        border-radius: 8px;
     }
 
         .no-training-message strong {
@@ -122,8 +178,15 @@
         gap: 20px;
     }
 </style>
+
 <div class="training-container">
-    <h1>Prijavljeni treninzi:</h1>
+    <div class="training-header">
+        <h1>Prijavljeni treninzi:</h1>
+        <div class="user-level-info">
+            <span>Vaš trenutni nivo je:</span>
+            <span class="user-level-badge @userLevelClass">@userLevelText</span>
+        </div>
+    </div>
 
     @if (Model == null || !Model.Any())
     {
@@ -150,7 +213,6 @@
                 <div class="training-level @nivoKlasa">@trening.Nivo</div>
                 <div class="training-info">
                     <p>Konji: @(string.Join(", ", ((IEnumerable<Jahacki_klub_Zeljeznicar.Models.Trening_Konj>)trening.TreningKonji).Select(tk => tk.Konj.Ime)))</p>
-
                     <p>Trener: @(trening.Trener.Ime) @(trening.Trener.Prezime)</p>
                     <p>Datum: @trening.Datum.ToString("dd.MM.yyyy.")</p>
                 </div>

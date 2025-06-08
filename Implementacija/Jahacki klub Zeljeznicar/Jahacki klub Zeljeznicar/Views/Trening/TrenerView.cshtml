@@ -1,0 +1,236 @@
+﻿@model IEnumerable<Jahacki_klub_Zeljeznicar.Models.Trening>
+@{
+    ViewData["Title"] = "Treninzi";
+}
+
+<!-- Success poruka -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<!-- Header sa naslovom i dugmetom -->
+<div class="header-container">
+    <h1>Treninzi</h1>
+    <a href="@Url.Action("Create", "Trening")" class="btn btn-add">Dodaj +</a>
+</div>
+
+<!-- Tabela za prikaz treninga -->
+<table class="trainings-table">
+    <thead>
+        <tr>
+            <th></th> <!-- Kolona za X dugme -->
+            <th>Naziv</th>
+            <th>Nivo</th>
+            <th>Datum</th>
+            <th>Max. članovi</th>
+            <th>Trener</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var trening in Model)
+            {
+                <tr onclick="window.location.href='@Url.Action("Details", "Trening", new { id = trening.Id })'" class="clickable-row">
+                    <td class="action-column">
+                        <form asp-controller="Trening" asp-action="Delete" asp-route-id="@trening.Id" method="post" class="delete-form" onsubmit="return confirm('Da li ste sigurni da želite obrisati trening @trening.Naziv?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-delete-x" onclick="event.stopPropagation();" title="Obriši trening">×</button>
+                        </form>
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => trening.Naziv)</td>
+                    <td>@Html.DisplayFor(modelItem => trening.Nivo)</td>
+                    <td>@trening.Datum.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@Html.DisplayFor(modelItem => trening.MaxBrClanova)</td>
+                    <td>@(trening.Trener != null ? $"{trening.Trener.Ime} {trening.Trener.Prezime}" : "N/A")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="no-data">Nema dodanih treninga</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        position: relative;
+        padding: 20px;
+    }
+
+    /* Success alert */
+    .alert {
+        padding: 12px 20px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+    }
+
+    /* Header container */
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    /* Naslov */
+    h1 {
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+        margin: 0;
+    }
+
+    /* Dugme za dodavanje */
+    .btn-add {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-add:hover {
+            background-color: #5a6268;
+            color: white;
+            text-decoration: none;
+        }
+
+    /* Glavni stilovi za tabelu */
+    .trainings-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        border: 1px solid #dee2e6;
+    }
+
+        .trainings-table th,
+        .trainings-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+            height: 45px;
+        }
+
+        .trainings-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+
+            /* Širina kolona - prilagođena jer nema poslednju kolonu */
+            .trainings-table th:nth-child(1),
+            .trainings-table td:nth-child(1) {
+                width: 50px; /* X dugme */
+                text-align: center;
+            }
+
+            .trainings-table th:nth-child(2),
+            .trainings-table td:nth-child(2) {
+                width: 25%; /* Naziv */
+            }
+
+            .trainings-table th:nth-child(3),
+            .trainings-table td:nth-child(3) {
+                width: 15%; /* Nivo */
+            }
+
+            .trainings-table th:nth-child(4),
+            .trainings-table td:nth-child(4) {
+                width: 20%; /* Datum */
+            }
+
+            .trainings-table th:nth-child(5),
+            .trainings-table td:nth-child(5) {
+                width: 10%; /* Max članovi */
+                text-align: center;
+            }
+
+            .trainings-table th:nth-child(6),
+            .trainings-table td:nth-child(6) {
+                width: 30%; /* Trener - povećano jer nema poslednju kolonu */
+            }
+
+        /* Redovi s podacima */
+        .trainings-table tbody tr td {
+            background-color: white;
+        }
+
+        .trainings-table tbody tr:nth-child(even) td {
+            background-color: #f8f9fa;
+        }
+
+    /* Klikabilni redovi */
+    .clickable-row {
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+        .clickable-row:hover td {
+            background-color: #e3f2fd !important;
+        }
+
+    /* Action column styling */
+    .action-column {
+        text-align: center;
+        vertical-align: middle;
+        padding: 8px !important;
+    }
+
+    .delete-form {
+        margin: 0;
+        display: inline-block;
+    }
+
+    /* Delete button */
+    .btn-delete-x {
+        background-color: #333;
+        color: white;
+        border: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        line-height: 1;
+    }
+
+        .btn-delete-x:hover {
+            background-color: #dc3545;
+            transform: scale(1.1);
+        }
+
+        .btn-delete-x:active {
+            transform: scale(0.95);
+        }
+
+    /* No data stil */
+    .no-data {
+        text-align: center;
+        font-style: italic;
+        color: #6c757d;
+    }
+</style>
