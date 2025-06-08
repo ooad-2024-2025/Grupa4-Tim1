@@ -1,8 +1,274 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<Trail>
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<style>
+    .hero-section {
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+                    url('https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') 
+                    center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        color: white;
+        min-height: 800px;
+    }
+    main{
+        width: auto!important;
+    }
+    .container_content{
+        max-width: 1400px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .hero-content {
+        max-width: 600px;
+        padding: 0 50px;
+        text-align: left;
+    }
+
+        .hero-content h1 {
+            color:white;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+    .btn-primary {
+        background-color: #fff;
+        color: #333;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+=            text-decoration: none;
+            background-color: #333;
+            border: none;
+        }
+
+    .trails-section {
+        padding: 80px 0;
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 30px;
+    }
+    .container-bottom {
+        max-width: 1400px;
+        margin: 0;
+        padding: 0;
+    }
+    .trails-section h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 50px;
+        color: #333;
+        font-weight: 700;
+    }
+
+    .trails-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .trail-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .trail-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+    .trail-image {
+        height: 200px;
+        background: url('https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80') center/cover;
+        position: relative;
+    }
+
+    .trail-content {
+        padding: 25px;
+    }
+
+    .trail-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .trail-info {
+        margin-bottom: 15px;
+    }
+
+        .trail-info p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+    .trail-description {
+        color: #777;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .btn-reserve {
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-reserve:hover {
+            background-color: #555;
+            color: white;
+            text-decoration: none;
+        }
+
+    .view-all-btn {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+            color: white;
+            text-decoration: none;
+        }
+
+    .no-trails {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+    }
+
+        .no-trails h3 {
+            margin-bottom: 15px;
+        }
+
+    @@media (max-width: 768px) {
+        .hero-content h1 {
+            font-size: 2.5rem;
+        }
+
+        .trails-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="hero-section">
+    <div class="hero-content">
+        <h1>Postani član kluba</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam et nunc congue ex. Nam non nibh ante. Pellentesque lorem leo, cursus a nisl sed, laoreet sagittis ipsum.</p>
+        <a href="#trails" class="btn-primary">Prijavi se</a>
+    </div>
+</section>
+
+<!-- Trails Section -->
+<section class="trails-section" id="trails">
+    <div class="container">
+        <h2>Prijavi se na trail</h2>
+            
+        @if (Model != null && Model.Any())
+        {
+            <div class="trails-grid">
+                @foreach (var trail in Model)
+                {
+                    <div class="trail-card">
+                        <div class="trail-image"></div>
+                        <div class="trail-content">
+                            <h3 class="trail-title">@trail.Naziv</h3>
+                            <div class="trail-info">
+                                <p><strong>Datum:</strong> @trail.Datum.ToString("dd.MM.yyyy")</p>
+                                <p><strong>Organizator:</strong> @(trail.Rezervator?.UserName ?? "N/A")</p>
+                            </div>
+                            @if (!string.IsNullOrEmpty(trail.Opis))
+                            {
+                                <p class="trail-description">
+                                    @(trail.Opis.Length > 100 ? trail.Opis.Substring(0, 100) + "..." : trail.Opis)
+                                </p>
+                            }
+                            <a href="@Url.Action("Details", "Trail", new { id = trail.Id })" class="btn-reserve">
+                                Rezerviši
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+                
+            <div class="view-all-btn">
+                <a href="@Url.Action("Index", "Trail")" class="btn-secondary">Pogledaj sve trail-ove</a>
+            </div>
+        }
+        else
+        {
+            <div class="no-trails">
+                <h3>Trenutno nema dostupnih trail-ova</h3>
+                <p>Provjerite ponovo uskoro!</p>
+            </div>
+        }
+    </div>
+</section>
+
+<script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
