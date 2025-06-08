@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O nama - Jahački klub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+
+        .hero-section {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            color: white;
+            min-height: 800px;
+            position: relative;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            margin-left: calc(-50vw + 50%);
+            margin-right: calc(-50vw + 50%);
+        }
+
+            .hero-section::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+                z-index: -2;
+            }
+
+            .hero-section::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+                z-index: -1;
+            }
+
+        .container_content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            padding: 0 50px;
+            text-align: left;
+            animation: fadeInUp 1s ease-out;
+        }
+
+            .hero-content h1 {
+                font-size: 3.5rem;
+                margin-bottom: 1rem;
+                font-weight: 700;
+                color: white;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+                margin-bottom: 2rem;
+                line-height: 1.8;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            }
+
+        .about-section {
+            background-color: #f8f9fa;
+            padding: 80px 30px;
+        }
+
+            .about-section .container {
+                max-width: 1000px;
+                margin: 0 auto;
+                color: #333;
+            }
+
+            .about-section h2 {
+                font-size: 2.8rem;
+                margin-bottom: 30px;
+                font-weight: 700;
+                text-align: center;
+                color: #2c3e50;
+            }
+
+            .about-section p {
+                font-size: 1.1rem;
+                line-height: 1.8;
+                margin-bottom: 20px;
+                text-align: justify;
+            }
+
+        
+
+        
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1rem;
+        }
+
+        .about-section h2 {
+            font-size: 2.2rem;
+        }
+
+        .about-section p {
+            font-size: 1rem;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <section class="hero-section">
+        <div class="container_content">
+            <div class="hero-content">
+                <h1>Dobrodošli u naš Jahački klub</h1>
+                <p>Mjesto gdje ljubav prema konjima i prirodi prerasta u zajedništvo, disciplinu i neponovljive uspomene.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <h2>O nama</h2>
+            <p>Jahački klub Željezničar osnovan je davne 1982. godine, s ciljem da okuplja zaljubljenike u konje i jahanje. Kroz decenije predanog rada, naš klub je postao jedno od vodećih mjesta za edukaciju, rekreaciju i takmičenja u oblasti konjičkog sporta u regiji.</p>
+            <p>Naši članovi su različitih uzrasta i dolaze iz svih dijelova zemlje. Ponosni smo na tradiciju mentorstva, gdje iskusniji jahači pomažu mlađim generacijama da razviju vještine, strpljenje i odgovornost kroz rad sa konjima.</p>
+            <p>Klub posjeduje modernu infrastrukturu, uključujući zatvorenu arenu, terene za slobodno jahanje, i štale koje ispunjavaju sve standarde brige o životinjama. Organizujemo treninge, izlete, terapijsko jahanje i takmičenja tokom cijele godine.</p>
+            <p>Bez obzira jeste li početnik ili iskusan jahač, naš klub vam pruža prostor da rastete, učite i budete dio velike konjičke porodice.</p>
+        </div>
+    </section>
+</body>
+</html>

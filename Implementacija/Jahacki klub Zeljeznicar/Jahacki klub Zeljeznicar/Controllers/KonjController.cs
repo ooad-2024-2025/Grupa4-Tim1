@@ -46,7 +46,8 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         // GET: Konj/Create
         public IActionResult Create()
         {
-            return View();
+            // Proslijedi prazan model za binding
+            return View(new Konj());
         }
 
         // POST: Konj/Create
@@ -54,15 +55,51 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Ime,Opis,Spol,Boja")] Konj konj)
+        [HttpPost]
+        public async Task<IActionResult> Create([Bind("Ime,Opis,Spol,Boja")] Konj konj)
         {
-            if (ModelState.IsValid)
+            // Debugging
+            System.Diagnostics.Debug.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
+    
+            if (!ModelState.IsValid)
             {
-                _context.Add(konj);
-                await _context.SaveChangesAsync();
+                foreach (var error in ModelState)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Key: {error.Key}, Errors: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                }
+                return View(konj);
+            }
+
+            try
+            {
+                // Kreiraj novi objekt samo s osnovnim svojstvima
+                var noviKonj = new Konj
+                {
+                    Ime = konj.Ime,
+                    Opis = konj.Opis,
+                    Spol = konj.Spol,
+                    Boja = konj.Boja
+                };
+
+                _context.Konji.Add(noviKonj);
+                var result = await _context.SaveChangesAsync();
+        
+                System.Diagnostics.Debug.WriteLine($"Rows affected: {result}");
+
+                TempData["SuccessMessage"] = "Konj je uspješno dodan!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(konj);
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exception: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                }
+        
+                ModelState.AddModelError("", $"Došlo je do greške prilikom čuvanja: {ex.Message}");
+                return View(konj);
+            }
         }
 
         // GET: Konj/Edit/5
@@ -99,6 +136,9 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 {
                     _context.Update(konj);
                     await _context.SaveChangesAsync();
+
+                    // Dodaj success poruku
+                    TempData["SuccessMessage"] = "Konj je uspješno ažuriran!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -146,6 +186,10 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             await _context.SaveChangesAsync();
+
+            // Dodaj success poruku
+            TempData["SuccessMessage"] = "Konj je uspješno uklonjen!";
+
             return RedirectToAction(nameof(Index));
         }
 

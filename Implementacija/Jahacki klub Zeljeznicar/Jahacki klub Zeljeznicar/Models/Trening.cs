@@ -34,7 +34,7 @@ namespace Jahacki_klub_Zeljeznicar.Models
         public string TrenerId { get; set; }
         public User Trener { get; set; }
 
-        public ICollection<Trening_Konj> TreningKonji { get; set; }
-        public ICollection<Trening_User> TreningUsers { get; set; }
+        public ICollection<Trening_Konj> TreningKonji { get; set; } = new List<Trening_Konj>();
+        public ICollection<Trening_User> TreningUsers { get; set; } = new List<Trening_User>();
     }
 }

@@ -1,7 +1,7 @@
-﻿@{
+﻿@model Jahacki_klub_Zeljeznicar.Models.Konj
+@{
     ViewData["Title"] = "Dodaj konja";
 }
-
 <style>
     .horse-form-container {
         max-width: 600px;
@@ -67,40 +67,54 @@
                 background-color: #23272b;
             }
 
+    .text-danger {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
     .container {
         max-width: 100% !important;
         padding: 0 15px;
     }
 </style>
-
 <div class="horse-form-container">
     <h1>Dodaj konja</h1>
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
 
-    <form method="post">
         <div class="form-group">
-            <label for="ime">Ime</label>
-            <input type="text" id="ime" name="ime" class="form-control" placeholder="Unesite ime konja" required>
+            <label asp-for="Ime">Ime</label>
+            <input asp-for="Ime" class="form-control" placeholder="Unesite ime konja" />
+            <span asp-validation-for="Ime" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="boja">Boja</label>
-            <input type="text" id="boja" name="boja" class="form-control" placeholder="Unesite boju konja" required>
+            <label asp-for="Boja">Boja</label>
+            <input asp-for="Boja" class="form-control" placeholder="Unesite boju konja" />
+            <span asp-validation-for="Boja" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="spol">Spol</label>
-            <select id="spol" name="spol" class="form-control" required>
+            <label asp-for="Spol">Spol</label>
+            <select asp-for="Spol" class="form-control" asp-items="Html.GetEnumSelectList<Jahacki_klub_Zeljeznicar.Models.Spol>()">
                 <option value="">Izaberite spol</option>
-                <option value="muški">Muški</option>
-                <option value="ženski">Ženski</option>
             </select>
+            <span asp-validation-for="Spol" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="opis">Opis</label>
-            <textarea id="opis" name="opis" class="form-control" rows="4" placeholder="Unesite opis konja" required></textarea>
+            <label asp-for="Opis">Opis</label>
+            <textarea asp-for="Opis" class="form-control" rows="4" placeholder="Unesite opis konja"></textarea>
+            <span asp-validation-for="Opis" class="text-danger"></span>
         </div>
 
         <button type="submit" class="btn-submit">Dodaj konja</button>
     </form>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,5 +1,7 @@
-﻿@{
+﻿@model Jahacki_klub_Zeljeznicar.Models.Trail
+@{
     ViewData["Title"] = "Dodaj trail";
+    var konji = ViewBag.Konji as List<Jahacki_klub_Zeljeznicar.Models.Konj>;
 }
 
 <style>
@@ -141,54 +143,69 @@
         max-width: 100% !important;
         padding: 0 15px;
     }
+
+    .text-danger {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+    }
 </style>
 
 <div class="training-form-container">
     <h1>Dodaj trail</h1>
 
-    <form method="post">
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
         <div class="form-group">
-            <label for="naziv">Naziv</label>
-            <input type="text" id="naziv" name="naziv" class="form-control" placeholder="Unesite naziv traila" required>
+            <label asp-for="Naziv">Naziv</label>
+            <input asp-for="Naziv" class="form-control" placeholder="Unesite naziv traila" />
+            <span asp-validation-for="Naziv" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label for="konji">Konji</label>
-            <select id="konji" name="konji" class="form-control">
+            <select id="konji" class="form-control">
                 <option value="">Izaberite konje</option>
-                <option value="konja1">Konja 1</option>
-                <option value="konja2">Konja 2</option>
-                <option value="konja3">Konja 3</option>
-                <option value="konja4">Konja 4</option>
+                @if (konji != null && konji.Any())
+                {
+                    @foreach (var konj in konji)
+                    {
+                        <option value="@konj.Id">@konj.Ime</option>
+                    }
+                }
+                else
+                {
+                    <option disabled>Nema dostupnih konja</option>
+                }
             </select>
             <div class="selected-items" id="selectedHorses">
-                <div class="selected-item">
-                    Konj1
-                    <button type="button" class="remove-item" onclick="removeHorse(this)">×</button>
-                </div>
-                <div class="selected-item">
-                    Konj2
-                    <button type="button" class="remove-item" onclick="removeHorse(this)">×</button>
-                </div>
+                <!-- Ovdje će se dinamički dodavati izabrani konji -->
             </div>
         </div>
 
         <div class="form-group">
-            <label for="datum">Datum</label>
-            <input type="date" id="datum" name="datum" class="form-control" required>
+            <label asp-for="Datum">Datum</label>
+            <input asp-for="Datum" type="date" class="form-control" />
+            <span asp-validation-for="Datum" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="opis">Opis</label>
-            <textarea id="opis" name="opis" class="form-control" rows="4" placeholder="Unesite opis traila" required></textarea>
+            <label asp-for="Opis">Opis</label>
+            <textarea asp-for="Opis" class="form-control" rows="4" placeholder="Unesite opis traila"></textarea>
+            <span asp-validation-for="Opis" class="text-danger"></span>
         </div>
 
+        <!-- Hidden input za čuvanje ID-jeva izabranih konja -->
+        <input type="hidden" id="selectedHorsesIds" name="SelectedKonjiIds" value="" />
+
         <button type="submit" class="btn-submit">Dodaj trail</button>
-  
     </form>
 </div>
 
 <script>
+    let selectedHorses = [];
+
     // Funkcija za dodavanje konja
     document.getElementById('konji').addEventListener('change', function() {
         if (this.value) {
@@ -196,9 +213,10 @@
             const selectedValue = this.value;
 
             // Provjeri da li je već dodano
-            const existing = document.querySelector(`[data-value="${selectedValue}"]`);
-            if (!existing) {
+            if (!selectedHorses.includes(selectedValue)) {
+                selectedHorses.push(selectedValue);
                 addHorse(selectedValue, selectedText);
+                updateHiddenInput();
             }
 
             this.value = '';
@@ -212,21 +230,36 @@
         item.setAttribute('data-value', value);
         item.innerHTML = `
             ${text}
-            <button type="button" class="remove-item" onclick="removeHorse(this)">×</button>
+            <button type="button" class="remove-item" onclick="removeHorse(this, '${value}')">×</button>
         `;
         selectedItems.appendChild(item);
     }
 
-    function removeHorse(button) {
+    function removeHorse(button, value) {
+        // Ukloni iz niza
+        selectedHorses = selectedHorses.filter(id => id !== value);
+        // Ukloni iz DOM-a
         button.parentElement.remove();
+        // Ažuriraj hidden input
+        updateHiddenInput();
+    }
+
+    function updateHiddenInput() {
+        document.getElementById('selectedHorsesIds').value = selectedHorses.join(',');
     }
 
     // Validacija forme
     document.querySelector('form').addEventListener('submit', function(e) {
-        const selectedHorses = document.querySelectorAll('.selected-item').length;
-        if (selectedHorses === 0) {
+        if (selectedHorses.length === 0) {
             e.preventDefault();
             alert('Molimo odaberite najmanje jednog konja.');
+            return false;
         }
     });
 </script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

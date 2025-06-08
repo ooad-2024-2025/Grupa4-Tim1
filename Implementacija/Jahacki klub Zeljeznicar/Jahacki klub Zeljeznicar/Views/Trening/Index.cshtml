@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<Jahacki_klub_Zeljeznicar.Models.Trening>
+
+@{
     ViewData["Title"] = "Prijavljeni treninzi";
 }
 
@@ -69,14 +71,21 @@
     }
 
     .level-advanced {
-        background-color: #ff6f61;
+        background-color: red;
         color: white;
         padding: 5px;
         border-radius: 4px;
     }
 
     .level-medium {
-        background-color: #f0ad4e;
+        background-color: orange;
+        color: white;
+        padding: 5px;
+        border-radius: 4px;
+    }
+
+    .level-low {
+        background-color: green;
         color: white;
         padding: 5px;
         border-radius: 4px;
@@ -113,54 +122,40 @@
         gap: 20px;
     }
 </style>
-
 <div class="training-container">
     <h1>Prijavljeni treninzi:</h1>
 
-    <!-- Proverite da li je korisnik prijavljen -->
-    <div class="no-training-message">
-        <p>Niste prijavljeni ni na jedan trening</p>
-    </div>
+    @if (Model == null || !Model.Any())
+    {
+        <div class="no-training-message">
+            <p>Niste prijavljeni ni na jedan trening</p>
+        </div>
+    }
 
     <h3>Prijavi se na trening</h3>
 
-    <!-- Red sa karticama treninga -->
     <div class="training-card-container">
-        <!-- Karte za treninge -->
-        <div class="training-card">
-            <div class="training-title">Trening 1</div>
-            <div class="training-level level-advanced">Advanced</div>
-            <div class="training-info">
-                <p>Konji: Konj A, Konj B, Konj C</p>
-                <p>Trener: Milan Milanović</p>
-                <p>Datum: 5.2.2025.</p>
-                <p>Vrijeme: 12:00</p>
-            </div>
-            <a href="#" class="btn">Prijavi se</a>
-        </div>
+        @foreach (var trening in Model)
+        {
+            var nivoKlasa = trening.Nivo switch
+            {
+                Jahacki_klub_Zeljeznicar.Models.Nivo.Napredni => "level-advanced",
+                Jahacki_klub_Zeljeznicar.Models.Nivo.Srednji => "level-medium",
+                Jahacki_klub_Zeljeznicar.Models.Nivo.Pocetnik => "level-low",
+                _ => ""
+            };
 
-        <div class="training-card">
-            <div class="training-title">Trening 2</div>
-            <div class="training-level level-advanced">Advanced</div>
-            <div class="training-info">
-                <p>Konji: Konj A, Konj B, Konj C</p>
-                <p>Trener: Milan Milanović</p>
-                <p>Datum: 5.2.2025.</p>
-                <p>Vrijeme: 12:00</p>
-            </div>
-            <a href="#" class="btn">Prijavi se</a>
-        </div>
+            <div class="training-card">
+                <div class="training-title">@trening.Naziv</div>
+                <div class="training-level @nivoKlasa">@trening.Nivo</div>
+                <div class="training-info">
+                    <p>Konji: @(string.Join(", ", ((IEnumerable<Jahacki_klub_Zeljeznicar.Models.Trening_Konj>)trening.TreningKonji).Select(tk => tk.Konj.Ime)))</p>
 
-        <div class="training-card">
-            <div class="training-title">Trening 3</div>
-            <div class="training-level level-medium">Medium</div>
-            <div class="training-info">
-                <p>Konji: Konj A, Konj B, Konj C</p>
-                <p>Trener: Milan Milanović</p>
-                <p>Datum: 5.2.2025.</p>
-                <p>Vrijeme: 12:00</p>
+                    <p>Trener: @(trening.Trener.Ime) @(trening.Trener.Prezime)</p>
+                    <p>Datum: @trening.Datum.ToString("dd.MM.yyyy.")</p>
+                </div>
+                <a href="@Url.Action("PrijaviSe", "Trening", new { id = trening.Id })" class="btn">Prijavi se</a>
             </div>
-            <a href="#" class="btn">Prijavi se</a>
-        </div>
+        }
     </div>
 </div>

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Jahacki_klub_Zeljeznicar.Models.Trening
+@{
     ViewData["Title"] = "Dodaj trening";
 }
 
@@ -81,6 +82,7 @@
         display: flex;
         gap: 8px;
         margin-top: 8px;
+        flex-wrap: wrap;
     }
 
     .selected-item {
@@ -92,7 +94,7 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        white-space: nowrap; /* Prevent text wrapping */
+        white-space: nowrap;
     }
 
     .remove-item {
@@ -131,27 +133,11 @@
             background-color: #23272b;
         }
 
-    .training-form-container .btn-back {
-        width: 100%;
-        padding: 12px 24px;
-        font-size: 16px;
-        border-radius: 4px;
-        border: none;
-        cursor: pointer;
-        background-color: #6c757d;
-        color: white;
-        margin-top: 10px;
-        text-decoration: none;
-        display: inline-block;
-        text-align: center;
-        transition: background-color 0.3s ease;
+    .text-danger {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
     }
-
-        .training-form-container .btn-back:hover {
-            background-color: #545b62;
-            color: white;
-            text-decoration: none;
-        }
 
     /* Override Bootstrap container za ovu stranicu */
     .container {
@@ -163,97 +149,118 @@
 <div class="training-form-container">
     <h1>Dodaj trening</h1>
 
-    <form method="post">
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
         <div class="form-group">
-            <label for="naziv">Naziv</label>
-            <input type="text" id="naziv" name="naziv" class="form-control" placeholder="Unesite naziv treninga" required>
+            <label asp-for="Naziv">Naziv</label>
+            <input asp-for="Naziv" class="form-control" placeholder="Unesite naziv treninga" />
+            <span asp-validation-for="Naziv" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="nivo">Nivo</label>
-            <select id="nivo" name="nivo" class="form-control" required>
+            <label asp-for="Nivo">Nivo</label>
+            <select asp-for="Nivo" class="form-control" asp-items="Html.GetEnumSelectList<Jahacki_klub_Zeljeznicar.Models.Nivo>()">
                 <option value="">Izaberite nivo</option>
-                <option value="početni">Početni</option>
-                <option value="srednji">Srednji</option>
-                <option value="napredni">Napredni</option>
             </select>
+            <span asp-validation-for="Nivo" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="datum">Datum</label>
-            <input type="date" id="datum" name="datum" class="form-control" required>
+            <label asp-for="Datum">Datum</label>
+            <input asp-for="Datum" type="date" class="form-control" />
+            <span asp-validation-for="Datum" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="konji">Konji</label>
-            <select id="konji" name="konji" class="form-control">
+            <label for="konji-select">Konji</label>
+            <select id="konji-select" class="form-control">
                 <option value="">Izaberite konje</option>
-                <option value="konja1">Konja 1</option>
-                <option value="konja2">Konja 2</option>
-                <option value="konja3">Konja 3</option>
-                <option value="konja4">Konja 4</option>
+                @if (ViewBag.Konji != null)
+                {
+                    @foreach (var konj in ViewBag.Konji)
+                    {
+                        <option value="@konj.Id">@konj.Ime</option>
+                    }
+                }
             </select>
-            <div class="selected-items" id="selectedHorses">
-                <div class="selected-item">
-                    Konj1
-                    <button type="button" class="remove-item" onclick="removeHorse(this)">×</button>
-                </div>
-                <div class="selected-item">
-                    Konj2
-                    <button type="button" class="remove-item" onclick="removeHorse(this)">×</button>
-                </div>
-            </div>
+            <div class="selected-items" id="selectedHorses"></div>
+            <!-- Hidden inputs za odabrane konje -->
+            <div id="hiddenHorseInputs"></div>
         </div>
 
         <div class="form-group">
-            <label for="max-clanovi">Maksimalni broj članova</label>
-            <input type="number" id="max-clanovi" name="max-clanovi" class="form-control" placeholder="Unesite maksimalni broj članova" min="1" required>
+            <label asp-for="MaxBrClanova">Maksimalni broj članova</label>
+            <input asp-for="MaxBrClanova" type="number" class="form-control" placeholder="Unesite maksimalni broj članova" min="1" />
+            <span asp-validation-for="MaxBrClanova" class="text-danger"></span>
         </div>
 
         <button type="submit" class="btn-submit">Dodaj trening</button>
-     
     </form>
 </div>
 
 <script>
+    let selectedHorses = [];
+
     // Funkcija za dodavanje konja
-    document.getElementById('konji').addEventListener('change', function() {
+    document.getElementById('konji-select').addEventListener('change', function() {
         if (this.value) {
+            const selectedValue = parseInt(this.value);
             const selectedText = this.options[this.selectedIndex].text;
-            const selectedValue = this.value;
 
             // Provjeri da li je već dodano
-            const existing = document.querySelector(`[data-value="${selectedValue}"]`);
-            if (!existing) {
+            if (!selectedHorses.includes(selectedValue)) {
+                selectedHorses.push(selectedValue);
                 addHorse(selectedValue, selectedText);
+                updateHiddenInputs();
             }
 
             this.value = '';
         }
     });
 
-    function addHorse(value, text) {
+    function addHorse(id, name) {
         const selectedItems = document.getElementById('selectedHorses');
         const item = document.createElement('div');
         item.className = 'selected-item';
-        item.setAttribute('data-value', value);
+        item.setAttribute('data-id', id);
         item.innerHTML = `
-            ${text}
-            <button type="button" class="remove-item" onclick="removeHorse(this)">×</button>
+            ${name}
+            <button type="button" class="remove-item" onclick="removeHorse(this, ${id})">×</button>
         `;
         selectedItems.appendChild(item);
     }
 
-    function removeHorse(button) {
+    function removeHorse(button, horseId) {
+        selectedHorses = selectedHorses.filter(id => id !== horseId);
         button.parentElement.remove();
+        updateHiddenInputs();
+    }
+
+    function updateHiddenInputs() {
+        const container = document.getElementById('hiddenHorseInputs');
+        container.innerHTML = '';
+
+        selectedHorses.forEach((horseId, index) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `SelectedHorseIds[${index}]`;
+            input.value = horseId;
+            container.appendChild(input);
+        });
     }
 
     // Validacija forme
     document.querySelector('form').addEventListener('submit', function(e) {
-        const selectedHorses = document.querySelectorAll('.selected-item').length;
-        if (selectedHorses === 0) {
+        if (selectedHorses.length === 0) {
             e.preventDefault();
             alert('Molimo odaberite najmanje jednog konja.');
         }
     });
 </script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

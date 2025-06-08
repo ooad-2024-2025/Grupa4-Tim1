@@ -1,5 +1,14 @@
-﻿@{
+﻿@model IEnumerable<Jahacki_klub_Zeljeznicar.Models.Konj>
+@{
     ViewData["Title"] = "Konji";
+}
+
+<!-- Success poruka -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
 }
 
 <!-- Header sa naslovom i dugmetom -->
@@ -12,24 +21,36 @@
 <table class="horses-table">
     <thead>
         <tr>
+            <th></th> <!-- Kolona za X dugme -->
             <th>Ime</th>
             <th>Spol</th>
+            <th>Boja</th>
         </tr>
     </thead>
     <tbody>
-        <!-- Prazni redovi za buduće konje -->
-        <tr><td></td><td></td></tr>
-        <tr><td></td><td></td></tr>
-        <tr><td></td><td></td></tr>
-        <tr><td></td><td></td></tr>
-        <tr><td></td><td></td></tr>
-        <tr><td></td><td></td></tr>
-        <tr><td></td><td></td></tr>
-        <tr><td></td><td></td></tr>
-        <tr><td></td><td></td></tr>
-        <tr><td></td><td></td></tr>
-        <tr><td></td><td></td></tr>
-        <tr><td></td><td></td></tr>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var konj in Model)
+            {
+                <tr>
+                    <td class="delete-column">
+                        <form asp-controller="Konj" asp-action="Delete" asp-route-id="@konj.Id" method="post" class="delete-form" onsubmit="return confirm('Da li ste sigurni da želite obrisati konja @konj.Ime?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-delete-x" title="Obriši konja">×</button>
+                        </form>
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => konj.Ime)</td>
+                    <td>@Html.DisplayFor(modelItem => konj.Spol)</td>
+                    <td>@Html.DisplayFor(modelItem => konj.Boja)</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="no-data">Nema dodanih konja</td>
+            </tr>
+        }
     </tbody>
 </table>
 
@@ -39,6 +60,19 @@
         margin: 0 auto;
         position: relative;
         padding: 20px;
+    }
+
+    /* Success alert */
+    .alert {
+        padding: 12px 20px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
     }
 
     /* Header container */
@@ -101,17 +135,28 @@
             /* Širina kolona */
             .horses-table th:nth-child(1),
             .horses-table td:nth-child(1) {
-                width: 50%;
+                width: 50px; /* Fiksna širina za X dugme */
+                text-align: center;
             }
 
             .horses-table th:nth-child(2),
             .horses-table td:nth-child(2) {
-                width: 50%;
+                width: 35%;
             }
 
-        /* Prazan red stil */
+            .horses-table th:nth-child(3),
+            .horses-table td:nth-child(3) {
+                width: 25%;
+            }
+
+            .horses-table th:nth-child(4),
+            .horses-table td:nth-child(4) {
+                width: 40%;
+            }
+
+        /* Redovi s podacima */
         .horses-table tbody tr td {
-            background-color: #fafafa;
+            background-color: white;
         }
 
         .horses-table tbody tr:nth-child(even) td {
@@ -121,4 +166,49 @@
         .horses-table tbody tr:hover td {
             background-color: #e9ecef;
         }
+
+    /* Delete column styling */
+    .delete-column {
+        text-align: center;
+        vertical-align: middle;
+        padding: 8px !important;
+    }
+
+    .delete-form {
+        margin: 0;
+        display: inline-block;
+    }
+
+    .btn-delete-x {
+        background-color: #333;
+        color: white;
+        border: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        line-height: 1;
+    }
+
+        .btn-delete-x:hover {
+            background-color: #333;
+            transform: scale(1.1);
+        }
+
+        .btn-delete-x:active {
+            transform: scale(0.95);
+        }
+
+    /* No data stil */
+    .no-data {
+        text-align: center;
+        font-style: italic;
+        color: #6c757d;
+    }
 </style>

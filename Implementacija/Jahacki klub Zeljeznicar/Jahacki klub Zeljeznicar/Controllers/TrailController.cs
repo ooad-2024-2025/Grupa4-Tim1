@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Jahacki_klub_Zeljeznicar.Data;
+using Jahacki_klub_Zeljeznicar.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Jahacki_klub_Zeljeznicar.Data;
-using Jahacki_klub_Zeljeznicar.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Jahacki_klub_Zeljeznicar.Controllers
 {
@@ -46,26 +47,49 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Trail/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["RezervatorId"] = new SelectList(_context.Set<User>(), "Id", "Id");
+            var konji = await _context.Konji.ToListAsync();
+            ViewBag.Konji = konji;
             return View();
         }
 
-        // POST: Trail/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Trail/Create - ISPRAVLJENA VERZIJA
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Naziv,Opis,Datum,RezervatorId")] Trail trail)
+        public async Task<IActionResult> Create([Bind("Naziv,Opis,Datum")] Trail trail, List<int> SelectedHorseIds)
         {
+            ModelState.Remove("RezervatorId");
+            ModelState.Remove("Rezervator");
+
             if (ModelState.IsValid)
             {
+                trail.RezervatorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                 _context.Add(trail);
                 await _context.SaveChangesAsync();
+
+                // Dodaj konje ako su odabrani
+                if (SelectedHorseIds != null && SelectedHorseIds.Any())
+                {
+                    foreach (var konjId in SelectedHorseIds)
+                    {
+                        var trailKonj = new Trail_Konj
+                        {
+                            TrailId = trail.Id,
+                            KonjId = konjId
+                        };
+                        _context.TrailKonji.Add(trailKonj);
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RezervatorId"] = new SelectList(_context.Set<User>(), "Id", "Id", trail.RezervatorId);
+
+            var konji = await _context.Konji.ToListAsync();
+            ViewBag.Konji = konji;
             return View(trail);
         }
 
@@ -87,8 +111,6 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // POST: Trail/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Naziv,Opis,Datum,RezervatorId")] Trail trail)
