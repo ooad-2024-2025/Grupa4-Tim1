@@ -109,11 +109,11 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Dashboard");
             }
 
             ViewBag.Konji = _context.Konji.ToList();
-            return View(trening);
+            return RedirectToAction("Index", "Dashboard");
         }
 
         // GET: Trening/Edit/5
@@ -137,7 +137,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             ViewBag.Konji = _context.Konji.ToList();
             ViewBag.SelectedHorseIds = trening.TreningKonji.Select(tk => tk.KonjId).ToArray();
 
-            return View(trening);
+            return RedirectToAction("Index", "Dashboard");
         }
 
         // POST: Trening/Edit/5
@@ -187,7 +187,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Dashboard");
             }
 
             ViewData["TrenerId"] = new SelectList(_context.Set<User>(), "Id", "Id", trening.TrenerId);
@@ -237,7 +237,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Dashboard");
         }
 
         private bool TreningExists(int id)
@@ -271,79 +271,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             return View(treninzi);
         }
 
-        // Dodaj metodu za prijavljivanje na trening
-        [HttpGet]
-        public async Task<IActionResult> PrijaviSe(int id)
-        {
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var trening = await _context.Treninzi
-                .Include(t => t.TreningUsers)
-                .FirstOrDefaultAsync(t => t.Id == id);
-
-            if (trening == null)
-            {
-                return NotFound();
-            }
-
-            // Proveri da li je korisnik već prijavljen
-            var vec_prijavljen = trening.TreningUsers.Any(tu => tu.UserId == currentUser.Id);
-            if (vec_prijavljen)
-            {
-                TempData["Error"] = "Već ste prijavljeni na ovaj trening!";
-                return RedirectToAction("AvailableTrainings");
-            }
-
-            // Proveri da li je trening popunjen
-            if (trening.TreningUsers.Count >= trening.MaxBrClanova)
-            {
-                TempData["Error"] = "Trening je popunjen!";
-                return RedirectToAction("AvailableTrainings");
-            }
-
-            // Dodaj korisnika na trening
-            var treningUser = new Trening_User
-            {
-                TreningId = id,
-                UserId = currentUser.Id
-            };
-
-            _context.TreningUsers.Add(treningUser);
-            await _context.SaveChangesAsync();
-
-            TempData["Success"] = "Uspešno ste se prijavili na trening!";
-            return RedirectToAction("AvailableTrainings");
-        }
-
-        // Metoda za prikaz prijavljenih treninga korisnika
-        public async Task<IActionResult> MojiTreninzi()
-        {
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            ViewBag.CurrentUserLevel = currentUser.Nivo;
-            ViewBag.CurrentUserName = $"{currentUser.Ime} {currentUser.Prezime}";
-
-            var mojiTreninzi = await _context.TreningUsers
-                .Where(tu => tu.UserId == currentUser.Id)
-                .Include(tu => tu.Trening)
-                    .ThenInclude(t => t.Trener)
-                .Include(tu => tu.Trening)
-                    .ThenInclude(t => t.TreningKonji)
-                        .ThenInclude(tk => tk.Konj)
-                .Select(tu => tu.Trening)
-                .OrderBy(t => t.Datum)
-                .ToListAsync();
-
-            return View(mojiTreninzi);
-        }
+        
         public async Task<IActionResult> TrenerView()
         {
             // Učitaj sve treninge sa povezanim podacima za trenerski prikaz

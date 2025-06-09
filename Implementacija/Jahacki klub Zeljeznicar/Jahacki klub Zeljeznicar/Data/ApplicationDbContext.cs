@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Jahacki_klub_Zeljeznicar.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext>
        options)

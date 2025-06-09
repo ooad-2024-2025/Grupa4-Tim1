@@ -1,7 +1,8 @@
 ﻿using Jahacki_klub_Zeljeznicar.Models;
+using Jahacki_klub_Zeljeznicar.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Jahacki_klub_Zeljeznicar.ViewModels;
+using System.Diagnostics;
 
 namespace Jahacki_klub_Zeljeznicar.Controllers
 {
@@ -58,12 +59,19 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
             var result = await _signInManager.PasswordSignInAsync(
                 model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+            
 
             if (result.Succeeded)
+            {
+                Debug.WriteLine("Login successful for user: " + model.Email);
                 return RedirectToAction("Index", "Home");
-
+            }
             if (result.IsLockedOut)
+                
+            {
+                Debug.WriteLine("Login failed for user: " + model.Email);
                 return View("Lockout");
+            }
 
             ModelState.AddModelError("", "Pogrešan email ili lozinka.");
             return View(model);

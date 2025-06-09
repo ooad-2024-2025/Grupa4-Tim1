@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="~/Jahacki_klub_Zeljeznicar.styles.css" asp-append-version="true" />
     <link rel="icon" href="~/favicon-white.svg" media="(prefers-color-scheme: light)">
     <link rel="icon" href="~/favicon-black.svg" media="(prefers-color-scheme: dark)">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
 </head>
 <body>
     <header>
@@ -44,7 +46,7 @@
                     <div class="auth-buttons">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <a class="btn btn-dark" href="@Url.Action("Dashboard", "Home")">Dashboard</a>
+                            <a class="btn btn-dark" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
                             <form method="post" asp-controller="Account" asp-action="Logout" class="d-inline">
                                 <button type="submit" class="btn btn-outline-secondary ms-2">Logout</button>
                             </form>

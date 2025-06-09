@@ -1,0 +1,73 @@
+﻿@model Jahacki_klub_Zeljeznicar.ViewModels.DashboardViewModel
+
+<div class="dashboard-section">
+    <div class="section-header">
+        <h2>Moje Ture</h2>
+    </div>
+
+    @if (Model.UserTrails != null && Model.UserTrails.Any())
+    {
+        <div class="dashboard-cards">
+            @foreach (var trail in Model.UserTrails)
+            {
+                <div class="dashboard-card">
+                    <h3>@trail.Naziv</h3>
+                    <div class="trail-info">
+                        <p><strong>Datum:</strong> @trail.Datum.ToString("dd.MM.yyyy HH:mm")</p>
+                        <p><strong>Opis:</strong> @trail.Opis</p>
+                        @if (trail.RezervatorId != null)
+                        {
+                            <p><strong>Rezervisano:</strong> @(trail.RezervatorId!=null ? "Da" : "Ne")</p>
+                        }
+                    </div>
+                    <div class="trail-actions">
+                        <a href="@Url.Action("Details", "Trail", new { id = trail.Id })" class="btn btn-primary">
+                            Detalji
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="no-data-message">
+            <p>Niste prijavljeni na nijednu turu.</p>
+            <p>Kontaktirajte administratora za više informacija o dostupnim turama.</p>
+        </div>
+    }
+</div>
+
+<style>
+    .trail-info {
+        margin-bottom: 15px;
+    }
+
+        .trail-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+    .trail-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .no-data-message {
+        text-align: center;
+        padding: 40px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        color: #6c757d;
+    }
+
+        .no-data-message p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+    .dashboard-section{
+        margin: 40px;
+    }
+</style>

@@ -1,0 +1,468 @@
+﻿@model Jahacki_klub_Zeljeznicar.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+
+<style>
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Dashboard Header */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .dashboard-header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    /* User Role Badges */
+    .user-role-badge {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+        .user-role-badge.guest {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .user-role-badge.clan {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .user-role-badge.trener {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .user-role-badge.admin {
+            background-color: #dc3545;
+            color: white;
+        }
+
+    /* Alert Messages */
+    .alert {
+        padding: 12px 20px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        border: 1px solid transparent;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+
+    /* Common Dashboard Styles */
+    .dashboard-section {
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #eee;
+    }
+
+        .section-header h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            color: #333;
+        }
+
+    /* Button Styles */
+    .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background-color: #1e7e34;
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            color: white;
+            text-decoration: none;
+        }
+
+    /* Table Styles */
+    .dashboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        border: 1px solid #dee2e6;
+    }
+
+        .dashboard-table th,
+        .dashboard-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+
+        .dashboard-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .dashboard-table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .dashboard-table tbody tr:hover {
+            background-color: #e3f2fd;
+        }
+
+    /* Card Styles */
+    .dashboard-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .dashboard-card {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-card h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+    <style >
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Dashboard Header */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .dashboard-header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    /* User Role Badges */
+    .user-role-badge {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+        .user-role-badge.guest {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .user-role-badge.clan {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .user-role-badge.trener {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .user-role-badge.admin {
+            background-color: #dc3545;
+            color: white;
+        }
+
+    /* Alert Messages */
+    .alert {
+        padding: 12px 20px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        border: 1px solid transparent;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+
+    /* Common Dashboard Styles */
+    .dashboard-section {
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #eee;
+    }
+
+        .section-header h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            color: #333;
+        }
+
+    /* Button Styles */
+    .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background-color: #1e7e34;
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            color: white;
+            text-decoration: none;
+        }
+
+    /* Table Styles */
+    .dashboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        border: 1px solid #dee2e6;
+    }
+
+        .dashboard-table th,
+        .dashboard-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+
+        .dashboard-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .dashboard-table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .dashboard-table tbody tr:hover {
+            background-color: #e3f2fd;
+        }
+
+    /* Card Styles */
+    .dashboard-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .dashboard-card {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-card h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #333;
+        }
+</style>
+    
+
+<!-- Success/Error Messages -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<!-- Role-based Dashboard Content -->
+@switch (Model.UserCategory)
+{
+    case Kategorija.Guest:
+        @await Html.PartialAsync("_GuestDashboard", Model)
+        break;
+    case Kategorija.Clan:
+        @await Html.PartialAsync("_ClanDashboard", Model)
+        break;
+    case Kategorija.Trener:
+        @await Html.PartialAsync("_TrenerDashboard", Model)
+        break;
+    case Kategorija.Admin:
+        @await Html.PartialAsync("_AdminDashboard", Model)
+        break;
+}
+

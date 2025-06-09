@@ -1,0 +1,27 @@
+﻿using Jahacki_klub_Zeljeznicar.Models;
+
+namespace Jahacki_klub_Zeljeznicar.ViewModels
+{
+    public class DashboardViewModel
+    {
+        public User CurrentUser { get; set; }
+        public Kategorija UserCategory { get; set; }
+        public Nivo? CurrentUserLevel { get; set; }
+
+        // For Guest users
+        public List<Trail> UserTrails { get; set; } = new List<Trail>();
+
+        // For Clan users
+        public List<Trening> AvailableTrainings { get; set; } = new List<Trening>();
+        public List<Trening> RegisteredTrainings { get; set; } = new List<Trening>();
+
+        // For Trener and Admin users
+        public List<Trening> AllTrainings { get; set; } = new List<Trening>();
+        public List<User> ClanMembers { get; set; } = new List<User>();
+
+        // For Admin users only
+        public List<Trail> AllTrails { get; set; } = new List<Trail>();
+        public List<User> AllTrainers { get; set; } = new List<User>();
+        public List<User> AllUsers { get; set; } = new List<User>();
+    }
+}

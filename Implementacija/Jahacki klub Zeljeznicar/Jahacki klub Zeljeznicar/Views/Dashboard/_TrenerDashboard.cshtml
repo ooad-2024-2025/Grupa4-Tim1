@@ -1,0 +1,420 @@
+﻿@model Jahacki_klub_Zeljeznicar.ViewModels.DashboardViewModel
+
+<!-- Trainings Management Section -->
+<div class="dashboard-section">
+    <div class="section-header">
+        <h2>Upravljanje Treninzima</h2>
+        <a href="@Url.Action("Create", "Trening")" class="btn btn-success">
+            <i class="fas fa-plus"></i> Dodaj Novi Trening
+        </a>
+    </div>
+
+    @if (Model.AllTrainings != null && Model.AllTrainings.Any())
+    {
+        <div class="table-responsive">
+            <table class="dashboard-table">
+                <thead>
+                    <tr>
+                        <th>Akcije</th>
+                        <th>Naziv</th>
+                        <th>Nivo</th>
+                        <th>Datum</th>
+                        <th>Max. Članovi</th>
+                        <th>Trener</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var trening in Model.AllTrainings)
+                    {
+                        var isPast = trening.Datum < DateTime.Now;
+                        <tr class="@(isPast ? "past-training" : "")">
+                            <td class="action-column">
+                                <div class="action-buttons btn-group" role="group">
+                                    <a href="@Url.Action("Details", "Trening", new { id = trening.Id })"
+                                       class="btn btn-sm btn-outline-primary" title="Detalji" data-bs-toggle="tooltip">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="@Url.Action("Edit", "Trening", new { id = trening.Id })"
+                                       class="btn btn-sm btn-outline-secondary" title="Uredi" data-bs-toggle="tooltip">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form asp-controller="Trening" asp-action="Delete" asp-route-id="@trening.Id"
+                                          method="post" class="delete-form" onsubmit="return confirm('Da li ste sigurni da želite obrisati trening @trening.Naziv?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Obriši" data-bs-toggle="tooltip">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+
+                            <td>@trening.Naziv</td>
+                            <td>
+                                <span class="training-level @(trening.Nivo switch { Nivo.Napredni => "level-advanced", Nivo.Srednji => "level-medium", Nivo.Pocetnik => "level-low", _ => "level-low" })">
+                                    @trening.Nivo
+                                </span>
+                            </td>
+                            <td>@trening.Datum.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="text-center">@trening.MaxBrClanova</td>
+                            <td>@(trening.Trener != null ? $"{trening.Trener.Ime} {trening.Trener.Prezime}" : "N/A")</td>
+                            <td>
+                                @if (isPast)
+                                {
+                                    <span class="status-badge past">Završen</span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge upcoming">Predstoji</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-data-message">
+            <p>Nema dodanih treninga.</p>
+            <a href="@Url.Action("Create", "Trening")" class="btn btn-success">Dodaj Prvi Trening</a>
+        </div>
+    }
+</div>
+
+<!-- Clan Members Management Section -->
+<div class="dashboard-section">
+    <div class="section-header">
+        <h2>Upravljanje Nivoima Članova</h2>
+    </div>
+
+    @if (Model.ClanMembers != null && Model.ClanMembers.Any())
+    {
+        <div class="table-responsive">
+            <table class="dashboard-table">
+                <thead>
+                    <tr>
+                        <th>Ime</th>
+                        <th>Prezime</th>
+                        <th>Trenutni Nivo</th>
+                        <th>Novi Nivo</th>
+                        <th>Akcije</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var clan in Model.ClanMembers)
+                    {
+                        <tr>
+                            <td>@clan.Ime</td>
+                            <td>@clan.Prezime</td>
+                            <td>
+                                <span class="training-level @(clan.Nivo switch { Nivo.Napredni => "level-advanced", Nivo.Srednji => "level-medium", Nivo.Pocetnik => "level-low", _ => "level-low" })">
+                                    @clan.Nivo
+                                </span>
+                            </td>
+                            <td>
+                                <select name="newLevel" class="form-select form-select-sm level-select"
+                                        asp-items="Html.GetEnumSelectList<Jahacki_klub_Zeljeznicar.Models.Nivo>()"
+                                        data-user-id="@clan.Id" data-user-name="@clan.Ime @clan.Prezime">
+                                    <option value="">Izaberite nivo</option>
+                                </select>
+                            </td>
+                            <td class="text-end">
+                                <form asp-controller="Dashboard" asp-action="ChangeUserLevel" method="post" style="display: inline-block;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="userId" value="@clan.Id" />
+                                    <input type="hidden" name="newLevel" class="selected-level" value="" />
+
+                                    <button type="submit" class="btn btn-sm btn-primary save-level-btn"
+                                            title="Sačuvaj promene" disabled
+                                            data-user-name="@clan.Ime @clan.Prezime">
+                                        <i class="fas fa-save"></i> Sačuvaj
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="no-data-message">
+            <p>Nema registrovanih članova.</p>
+        </div>
+    }
+</div>
+
+<style>
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .action-column {
+        width: 140px;
+        text-align: center;
+    }
+
+    .action-buttons {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .action-buttons .btn {
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+            .action-buttons .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+
+            .action-buttons .btn i {
+                font-size: 0.875rem;
+            }
+
+
+    .btn-sm {
+        padding: 4px 8px;
+        font-size: 12px;
+        border-radius: 3px;
+    }
+
+    .training-level {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .level-advanced {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .level-medium {
+        background-color: #fd7e14;
+        color: white;
+    }
+
+    .level-low {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .status-badge {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+        .status-badge.past {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .status-badge.upcoming {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+    .past-training {
+        opacity: 0.7;
+        background-color: #f8f9fa !important;
+    }
+
+    .level-change-actions {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .no-data-message {
+        text-align: center;
+        padding: 40px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        color: #6c757d;
+    }
+
+        .no-data-message p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+    .level-select {
+        width: auto !important;
+        min-width: fit-content;
+        max-width: 200px;
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+        .level-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+            background: #ffffff;
+        }
+
+        .level-select:hover {
+            border-color: #0d6efd;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+    .save-level-btn {
+        background: linear-gradient(145deg, #0d6efd, #0b5ed7);
+        border: none;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2);
+    }
+
+        .save-level-btn:hover:not(:disabled) {
+            background: linear-gradient(145deg, #0b5ed7, #0a58ca);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+        }
+
+        .save-level-btn:disabled {
+            background: #6c757d;
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+    .training-level {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.875em;
+        font-weight: 600;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .fas {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+    }
+
+    .level-change-form {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .training-level {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.875em;
+        font-weight: 500;
+    }
+
+    .form-select-sm {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+}
+
+.text-end {
+    text-align: right !important;
+}
+
+.dashboard-table td {
+    vertical-align: middle;
+    padding: 12px 8px;
+}
+
+.level-change-row {
+    transition: background-color 0.2s ease;
+}
+
+.level-change-row:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle dropdown changes and enable/disable save buttons
+        const dropdowns = document.querySelectorAll('.level-select');
+
+        dropdowns.forEach(dropdown => {
+            const userId = dropdown.getAttribute('data-user-id');
+            const userName = dropdown.getAttribute('data-user-name');
+            const saveBtn = dropdown.closest('tr').querySelector('.save-level-btn');
+            const hiddenInput = dropdown.closest('tr').querySelector('.selected-level');
+
+            // Set initial value based on current user level
+            const currentLevelSpan = dropdown.closest('tr').querySelector('.training-level');
+            const currentLevelText = currentLevelSpan.textContent.trim().toUpperCase();
+
+            // Map display text to enum values
+            const levelMap = {
+                'POČETNIK': '0',
+                'POCETNIK': '0',
+                'SREDNJI': '1',
+                'NAPREDNI': '2'
+            };
+
+            const currentLevelValue = levelMap[currentLevelText];
+            if (currentLevelValue) {
+                dropdown.value = currentLevelValue;
+                hiddenInput.value = currentLevelValue;
+            }
+
+            dropdown.addEventListener('change', function() {
+                const selectedValue = this.value;
+                hiddenInput.value = selectedValue;
+
+                if (selectedValue && selectedValue !== currentLevelValue) {
+                    saveBtn.disabled = false;
+                    saveBtn.classList.add('btn-warning');
+                    saveBtn.classList.remove('btn-primary');
+                } else {
+                    saveBtn.disabled = true;
+                    saveBtn.classList.remove('btn-warning');
+                    saveBtn.classList.add('btn-primary');
+                }
+            });
+
+            // Add confirmation dialog
+            saveBtn.addEventListener('click', function(e) {
+                const selectedLevel = dropdown.options[dropdown.selectedIndex].text;
+                if (!confirm(`Da li ste sigurni da želite promeniti nivo člana ${userName} na ${selectedLevel}?`)) {
+                    e.preventDefault();
+                }
+            });
+        });
+    });
+</script>
