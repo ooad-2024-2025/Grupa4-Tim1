@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model Jahacki_klub_Zeljeznicar.Models.Clanarina
+
+<!DOCTYPE html>
 <html lang="bs">
 <head>
     <meta charset="UTF-8" />
@@ -81,35 +83,61 @@
         .col-md-4 {
             flex: 1;
         }
+
+        .expiry-date {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .valid-date {
+            color: #28a745;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>
             <span>Vaša članarina traje do:</span>
-            <strong>datum</strong>
+            <strong class="@(Model.IstekClanarine < DateTime.Now ? "expiry-date" : "valid-date")">
+                @Model.IstekClanarine.ToString("dd.MM.yyyy")
+            </strong>
         </h1>
+
+        @if (Model.IstekClanarine < DateTime.Now)
+        {
+            <div style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                <strong>Upozorenje:</strong> Vaša članarina je istekla. Molimo produžite članarinu.
+            </div>
+        }
+        else if (Model.IstekClanarine <= DateTime.Now.AddDays(30))
+        {
+            <div style="background-color: #fff3cd; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                <strong>Napomena:</strong> Vaša članarina ističe uskoro. Preporučujemo produžavanje.
+            </div>
+        }
+
         <h3>Produži članarinu:</h3>
         <div class="row">
             <div class="col-md-4">
                 <div class="card">
                     <h5 class="card-title">1 mjesec</h5>
                     <p class="card-text"><strong>70.00 KM</strong></p>
-                    <a href="#" class="btn btn-dark">Produži</a>
+                    <a href="@Url.Action("Placanje", "Clanarina", new { mjeseci = 1 })" class="btn btn-dark">Produži</a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
                     <h5 class="card-title">6 mjeseci</h5>
                     <p class="card-text"><strong>400.00 KM</strong></p>
-                    <a href="#" class="btn btn-dark">Produži</a>
+                    <a href="@Url.Action("Placanje", "Clanarina", new { mjeseci = 6 })" class="btn btn-dark">Produži</a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
                     <h5 class="card-title">12 mjeseci</h5>
                     <p class="card-text"><strong>700.00 KM</strong></p>
-                    <a href="#" class="btn btn-dark">Produži</a>
+                    <a href="@Url.Action("Placanje", "Clanarina", new { mjeseci = 12 })" class="btn btn-dark">Produži</a>
                 </div>
             </div>
         </div>

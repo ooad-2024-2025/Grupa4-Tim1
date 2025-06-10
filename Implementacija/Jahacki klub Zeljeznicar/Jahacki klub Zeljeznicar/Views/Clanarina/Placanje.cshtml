@@ -1,0 +1,129 @@
+﻿@{
+    ViewData["Title"] = "Plaćanje članarine";
+    int mjeseci = ViewBag.Mjeseci;
+    decimal cijena = ViewBag.Cijena;
+}
+@model Jahacki_klub_Zeljeznicar.Models.Clanarina
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plaćanje članarine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .info-box {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background-color: #343a40;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+            button:hover {
+                background-color: #23272b;
+            }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            margin-top: 5px;
+        }
+
+            .btn-secondary:hover {
+                background-color: #5a6268;
+            }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="form-container">
+            <h2>Plaćanje članarine</h2>
+            <div class="info-box">
+                <strong>Odabrani paket:</strong> @mjeseci @(mjeseci == 1 ? "mjesec" : "mjeseci")<br />
+                <strong>Cijena:</strong> @cijena.ToString("F2") KM
+            </div>
+            @if (TempData["Error"] != null)
+            {
+                <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                    @TempData["Error"]
+                </div>
+            }
+            <form method="post" asp-action="PotvrdiPlacanje">
+                <div class="form-group">
+                    <label for="ImePrezime">Ime i prezime</label>
+                    <input type="text" id="ImePrezime" name="ImePrezime" placeholder="" required />
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div class="form-group" style="flex: 2;">
+                        <label for="BrojKartice">Broj kartice</label>
+                        <input type="text" id="BrojKartice" name="BrojKartice" placeholder="1234 5678 9012 3456" required />
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="CVV">CVV</label>
+                        <input type="text" id="CVV" name="CVV" placeholder="123" maxlength="3" required />
+                    </div>
+                </div>
+                <input type="hidden" name="Opcija" value="@mjeseci" />
+                <button type="submit">Potvrdi plaćanje</button>
+                <button type="button" class="btn-secondary" onclick="window.location.href='@Url.Action("Index", "Clanarina")'">
+                    Odustani
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
