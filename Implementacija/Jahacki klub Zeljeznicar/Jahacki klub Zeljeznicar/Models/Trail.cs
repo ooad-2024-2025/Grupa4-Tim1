@@ -22,12 +22,11 @@ namespace Jahacki_klub_Zeljeznicar.Models
         [DataType(DataType.Date)]
         public DateTime Datum { get; set; }
 
-        // Navigation property
-        [Required]
+
         [ForeignKey("User")]
         [StringLength(450)]
-        public string RezervatorId { get; set; }
-        public User Rezervator { get; set; }
+        public string? RezervatorId { get; set; }
+        public User? Rezervator { get; set; }
 
         public ICollection<Trail_Konj> TrailKonji { get; set; }
     }

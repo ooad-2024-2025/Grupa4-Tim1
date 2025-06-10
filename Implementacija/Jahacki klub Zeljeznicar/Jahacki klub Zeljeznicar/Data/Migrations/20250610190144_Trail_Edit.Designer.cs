@@ -4,6 +4,7 @@ using Jahacki_klub_Zeljeznicar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Jahacki_klub_Zeljeznicar.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250610190144_Trail_Edit")]
+    partial class Trail_Edit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,6 +102,7 @@ namespace Jahacki_klub_Zeljeznicar.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("RezervatorId")
+                        .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
@@ -444,7 +448,8 @@ namespace Jahacki_klub_Zeljeznicar.Migrations
                     b.HasOne("Jahacki_klub_Zeljeznicar.Models.User", "Rezervator")
                         .WithMany()
                         .HasForeignKey("RezervatorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Rezervator");
                 });

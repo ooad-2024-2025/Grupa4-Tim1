@@ -23,5 +23,6 @@ namespace Jahacki_klub_Zeljeznicar.ViewModels
         public List<Trail> AllTrails { get; set; } = new List<Trail>();
         public List<User> AllTrainers { get; set; } = new List<User>();
         public List<User> AllUsers { get; set; } = new List<User>();
+        public List<Konj> AllHorses { get; set; } = new List<Konj>(); // Added this property
     }
 }

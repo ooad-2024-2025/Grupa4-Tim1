@@ -1,0 +1,528 @@
+﻿@model Jahacki_klub_Zeljeznicar.ViewModels.DashboardViewModel
+
+<div class="dashboard-container">
+
+    <!-- Trainings Management Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2>Upravljanje Treninzima</h2>
+            <a href="@Url.Action("Create", "Trening")" class="btn btn-success">
+                <i class="fas fa-plus"></i> Dodaj Novi Trening
+            </a>
+        </div>
+
+        @if (Model.AllTrainings != null && Model.AllTrainings.Any())
+        {
+            <div class="table-responsive">
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Akcije</th>
+                            <th>Naziv</th>
+                            <th>Nivo</th>
+                            <th>Datum</th>
+                            <th>Max. Članovi</th>
+                            <th>Trener</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var trening in Model.AllTrainings)
+                        {
+                            var isPast = trening.Datum < DateTime.Now;
+                            <tr class="@(isPast ? "past-training" : "")">
+                                <td class="action-column">
+                                    <div class="action-buttons btn-group" role="group">
+                                        <a href="@Url.Action("Details", "Trening", new { id = trening.Id })"
+                                           class="btn btn-sm btn-outline-primary" title="Detalji" data-bs-toggle="tooltip">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="@Url.Action("Edit", "Trening", new { id = trening.Id })"
+                                           class="btn btn-sm btn-outline-secondary" title="Uredi" data-bs-toggle="tooltip">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-controller="Trening" asp-action="Delete" asp-route-id="@trening.Id"
+                                              method="post" class="delete-form" onsubmit="return confirm('Da li ste sigurni da želite obrisati trening @trening.Naziv?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Obriši" data-bs-toggle="tooltip">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>@trening.Naziv</td>
+                                <td>
+                                    <span class="training-level @(trening.Nivo switch { Nivo.Napredni => "level-advanced", Nivo.Srednji => "level-medium", Nivo.Pocetnik => "level-low", _ => "level-low" })">
+                                        @trening.Nivo
+                                    </span>
+                                </td>
+                                <td>@trening.Datum.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td class="text-center">@trening.MaxBrClanova</td>
+                                <td>@(trening.Trener != null ? $"{trening.Trener.Ime} {trening.Trener.Prezime}" : "N/A")</td>
+                                <td>
+                                    @if (isPast)
+                                    {
+                                        <span class="status-badge past">Završen</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge upcoming">Predstoji</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="no-data-message">
+                <p>Nema dodanih treninga.</p>
+                <a href="@Url.Action("Create", "Trening")" class="btn btn-success">Dodaj Prvi Trening</a>
+            </div>
+        }
+    </div>
+
+    <!-- Trainers Management Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2>Upravljanje Trenerima</h2>
+            <a href="@Url.Action("Create", "Account", new { role = "Trener" })" class="btn btn-success">
+                <i class="fas fa-plus"></i> Dodaj Novog Trenera
+            </a>
+        </div>
+
+        @if (Model.AllTrainers != null && Model.AllTrainers.Any())
+        {
+            <div class="table-responsive">
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Akcije</th>
+                            <th>Ime</th>
+                            <th>Prezime</th>
+                            <th>Email</th>
+                            <th>Telefon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var trener in Model.AllTrainers)
+                        {
+                            <tr>
+                                <td class="action-column">
+                                    <div class="action-buttons btn-group" role="group">
+                                        <a href="@Url.Action("Details", "User", new { id = trener.Id })"
+                                           class="btn btn-sm btn-outline-primary" title="Detalji" data-bs-toggle="tooltip">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="@Url.Action("Edit", "User", new { id = trener.Id })"
+                                           class="btn btn-sm btn-outline-secondary" title="Uredi" data-bs-toggle="tooltip">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-controller="User" asp-action="Delete" asp-route-id="@trener.Id"
+                                              method="post" class="delete-form" onsubmit="return confirm('Da li ste sigurni da želite obrisati trenera @trener.Ime @trener.Prezime?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Obriši" data-bs-toggle="tooltip">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>@trener.Ime</td>
+                                <td>@trener.Prezime</td>
+                                <td>@trener.Email</td>
+                                <td>@(trener.PhoneNumber ?? "N/A")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="no-data-message">
+                <p>Nema registrovanih trenera.</p>
+                <a href="@Url.Action("Create", "Account", new { role = "Trener" })" class="btn btn-success">Dodaj Prvog Trenera</a>
+            </div>
+        }
+    </div>
+
+    <!-- Trails Management Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2>Upravljanje Trailovima</h2>
+            <a href="@Url.Action("Create", "Trail")" class="btn btn-success">
+                <i class="fas fa-plus"></i> Dodaj Novi Trail
+            </a>
+        </div>
+
+        @if (Model.AllTrails != null && Model.AllTrails.Any())
+        {
+            <div class="table-responsive">
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Akcije</th>
+                            <th>Naziv</th>
+                            <th>Opis</th>
+                            <th>Datum</th>
+                            <th>Rezervator</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var trail in Model.AllTrails)
+                        {
+                            var isPast = trail.Datum < DateTime.Now;
+                            <tr class="@(isPast ? "past-trail" : "")">
+                                <td class="action-column">
+                                    <div class="action-buttons btn-group" role="group">
+                                        <a href="@Url.Action("Details", "Trail", new { id = trail.Id })"
+                                           class="btn btn-sm btn-outline-primary" title="Detalji" data-bs-toggle="tooltip">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="@Url.Action("Edit", "Trail", new { id = trail.Id })"
+                                           class="btn btn-sm btn-outline-secondary" title="Uredi" data-bs-toggle="tooltip">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-controller="Trail" asp-action="Delete" asp-route-id="@trail.Id"
+                                              method="post" class="delete-form" onsubmit="return confirm('Da li ste sigurni da želite obrisati stazu @trail.Naziv?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Obriši" data-bs-toggle="tooltip">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>@trail.Naziv</td>
+                                <td>@(trail.Opis?.Length > 50 ? trail.Opis.Substring(0, 50) + "..." : trail.Opis)</td>
+                                <td>@trail.Datum.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>@(trail.Rezervator != null ? $"{trail.Rezervator.Ime} {trail.Rezervator.Prezime}" : "N/A")</td>
+                                <td>
+                                    @if (isPast)
+                                    {
+                                        <span class="status-badge past">Završena</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge upcoming">Planirana</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="no-data-message">
+                <p>Nema dodanih trilova.</p>
+                <a href="@Url.Action("Create", "Trail")" class="btn btn-success">Dodaj Prvi Trail</a>
+            </div>
+        }
+    </div>
+
+    <!-- Horses Management Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2>Upravljanje Konjima</h2>
+            <a href="@Url.Action("Create", "Konj")" class="btn btn-success">
+                <i class="fas fa-plus"></i> Dodaj Novog Konja
+            </a>
+        </div>
+
+        @if (Model.AllHorses != null && Model.AllHorses.Any())
+        {
+            <div class="table-responsive">
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Akcije</th>
+                            <th>Ime</th>
+                            <th>Spol</th>
+                            <th>Boja</th>
+                            <th>Opis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var konj in Model.AllHorses)
+                        {
+                            <tr>
+                                <td class="action-column">
+                                    <div class="action-buttons btn-group" role="group">
+                                        <a href="@Url.Action("Details", "Konj", new { id = konj.Id })"
+                                           class="btn btn-sm btn-outline-primary" title="Detalji" data-bs-toggle="tooltip">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="@Url.Action("Edit", "Konj", new { id = konj.Id })"
+                                           class="btn btn-sm btn-outline-secondary" title="Uredi" data-bs-toggle="tooltip">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-controller="Konj" asp-action="Delete" asp-route-id="@konj.Id"
+                                              method="post" class="delete-form" onsubmit="return confirm('Da li ste sigurni da želite obrisati konja @konj.Ime?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Obriši" data-bs-toggle="tooltip">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>@konj.Ime</td>
+                                <td>
+                                    <span class="gender-badge @(konj.Spol.ToString().ToLower())">
+                                        @konj.Spol
+                                    </span>
+                                </td>
+                                <td>@(konj.Boja ?? "N/A")</td>
+                                <td>@(konj.Opis?.Length > 50 ? konj.Opis.Substring(0, 50) + "..." : konj.Opis ?? "N/A")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="no-data-message">
+                <p>Nema dodanih konja.</p>
+                <a href="@Url.Action("Create", "Konj")" class="btn btn-success">Dodaj Prvog Konja</a>
+            </div>
+        }
+    </div>
+
+    <!-- Users Management Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2>Upravljanje Korisnicima</h2>
+            <a href="@Url.Action("Create", "Account")" class="btn btn-success">
+                <i class="fas fa-plus"></i> Dodaj Novog Korisnika
+            </a>
+        </div>
+
+        @if (Model.AllUsers != null && Model.AllUsers.Any())
+        {
+            <div class="table-responsive">
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Akcije</th>
+                            <th>Ime</th>
+                            <th>Prezime</th>
+                            <th>Email</th>
+                            <th>Kategorija</th>
+                            <th>Nivo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.AllUsers.Where(u => u.Kategorija != Kategorija.Admin))
+                        {
+                            <tr>
+                                <td class="action-column">
+                                    <div class="action-buttons btn-group" role="group">
+                                        <a href="@Url.Action("Details", "User", new { id = user.Id })"
+                                           class="btn btn-sm btn-outline-primary" title="Detalji" data-bs-toggle="tooltip">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="@Url.Action("Edit", "User", new { id = user.Id })"
+                                           class="btn btn-sm btn-outline-secondary" title="Uredi" data-bs-toggle="tooltip">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @if (user.Kategorija != Kategorija.Admin)
+                                        {
+                                            <form asp-controller="User" asp-action="Delete" asp-route-id="@user.Id"
+                                                  method="post" class="delete-form" onsubmit="return confirm('Da li ste sigurni da želite obrisati korisnika @user.Ime @user.Prezime?');">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Obriši" data-bs-toggle="tooltip">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                                <td>@user.Ime</td>
+                                <td>@user.Prezime</td>
+                                <td>@user.Email</td>
+                                <td>
+                                    <span class="user-role-badge @user.Kategorija.ToString().ToLower()">
+                                        @user.Kategorija
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (user.Kategorija == Kategorija.Clan)
+                                    {
+                                        <span class="training-level @(user.Nivo switch { Nivo.Napredni => "level-advanced", Nivo.Srednji => "level-medium", Nivo.Pocetnik => "level-low", _ => "level-low" })">
+                                            @user.Nivo
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">N/A</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="no-data-message">
+                <p>Nema registrovanih korisnika.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .action-column {
+        width: 140px;
+        text-align: center;
+    }
+
+    .action-buttons {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .action-buttons .btn {
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+            .action-buttons .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+
+            .action-buttons .btn i {
+                font-size: 0.875rem;
+            }
+
+    .btn-sm {
+        padding: 4px 8px;
+        font-size: 12px;
+        border-radius: 3px;
+    }
+
+    .training-level {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .level-advanced {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .level-medium {
+        background-color: #fd7e14;
+        color: white;
+    }
+
+    .level-low {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .status-badge {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+        .status-badge.past {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .status-badge.upcoming {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .status-badge.active {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .status-badge.inactive {
+            background-color: #dc3545;
+            color: white;
+        }
+
+    .health-status.healthy {
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .health-status.sick {
+        color: #dc3545;
+        font-weight: bold;
+    }
+
+    .past-training, .past-trail {
+        opacity: 0.7;
+        background-color: #f8f9fa !important;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-muted {
+        color: #6c757d !important;
+    }
+
+    .no-data-message {
+        text-align: center;
+        padding: 40px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        color: #6c757d;
+    }
+
+        .no-data-message p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .fas {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+
+        // Add confirmation for delete forms
+        document.querySelectorAll('.delete-form').forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                if (!this.getAttribute('onsubmit')) {
+                    if (!confirm('Da li ste sigurni da želite obrisati ovaj element?')) {
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+    });
+</script>

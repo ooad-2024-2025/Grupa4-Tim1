@@ -135,6 +135,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 .ToListAsync();
         }
 
+
         private async Task LoadAdminDashboardData(DashboardViewModel model)
         {
             // Get all trainings
@@ -157,6 +158,11 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             // Get all users for management
             model.AllUsers = await _context.Users
                 .OrderBy(u => u.Ime)
+                .ToListAsync();
+
+            // Get all horses for management
+            model.AllHorses = await _context.Konji
+                .OrderBy(k => k.Ime)
                 .ToListAsync();
         }
 
