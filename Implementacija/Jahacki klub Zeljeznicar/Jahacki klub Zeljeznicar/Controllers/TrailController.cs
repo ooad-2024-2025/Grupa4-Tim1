@@ -59,35 +59,74 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Naziv,Opis,Datum")] Trail trail, List<int> SelectedHorseIds)
         {
-            ModelState.Remove("RezervatorId");
-            ModelState.Remove("Rezervator");
-
-            if (ModelState.IsValid)
+            try
             {
+                // Debug informacije
+                System.Diagnostics.Debug.WriteLine($"Naziv: {trail.Naziv}");
+                System.Diagnostics.Debug.WriteLine($"Datum: {trail.Datum}");
+                System.Diagnostics.Debug.WriteLine($"Opis: {trail.Opis}");
+                System.Diagnostics.Debug.WriteLine($"Selected horses count: {SelectedHorseIds?.Count ?? 0}");
+
+                // VAŽNO: Postavi RezervatorId PRE validacije jer je Required
                 trail.RezervatorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                _context.Add(trail);
-                await _context.SaveChangesAsync();
+                // Ukloni iz ModelState da se ne validira kroz Bind
+                ModelState.Remove("RezervatorId");
+                ModelState.Remove("Rezervator");
+                ModelState.Remove("TrailKonji");
 
-                // Dodaj konje ako su odabrani
-                if (SelectedHorseIds != null && SelectedHorseIds.Any())
+                // Validacija konja - obavezno je izabrati najmanje jednog konja
+                if (SelectedHorseIds == null || !SelectedHorseIds.Any())
                 {
-                    foreach (var konjId in SelectedHorseIds)
-                    {
-                        var trailKonj = new Trail_Konj
-                        {
-                            TrailId = trail.Id,
-                            KonjId = konjId
-                        };
-                        _context.TrailKonji.Add(trailKonj);
-                    }
-
-                    await _context.SaveChangesAsync();
+                    ModelState.AddModelError("", "Morate izabrati najmanje jednog konja za trail.");
                 }
 
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    // RezervatorId je već postavljen iznad
+
+                    // Dodaj trail u bazu
+                    _context.Add(trail);
+                    await _context.SaveChangesAsync();
+
+                    // Dodaj konje ako su odabrani
+                    if (SelectedHorseIds != null && SelectedHorseIds.Any())
+                    {
+                        foreach (var konjId in SelectedHorseIds)
+                        {
+                            var trailKonj = new Trail_Konj
+                            {
+                                TrailId = trail.Id,
+                                KonjId = konjId
+                            };
+                            _context.TrailKonji.Add(trailKonj);
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
+
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    // Debug model state greške
+                    foreach (var modelState in ModelState)
+                    {
+                        foreach (var error in modelState.Value.Errors)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Greška za {modelState.Key}: {error.ErrorMessage}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Debug greške
+                System.Diagnostics.Debug.WriteLine($"Greška pri dodavanju traila: {ex.Message}");
+                ModelState.AddModelError("", "Dogodila se greška pri dodavanju traila. Molimo pokušajte ponovo.");
             }
 
+            // Ako dođe do greške, ponovno učitaj konje
             var konji = await _context.Konji.ToListAsync();
             ViewBag.Konji = konji;
             return View(trail);

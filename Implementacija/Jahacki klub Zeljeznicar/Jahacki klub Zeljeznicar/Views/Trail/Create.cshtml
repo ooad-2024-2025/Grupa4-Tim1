@@ -196,8 +196,8 @@
             <span asp-validation-for="Opis" class="text-danger"></span>
         </div>
 
-        <!-- Hidden input za čuvanje ID-jeva izabranih konja -->
-        <input type="hidden" id="selectedHorsesIds" name="SelectedKonjiIds" value="" />
+        <!-- ISPRAVLJEN NAZIV: SelectedHorseIds umesto SelectedKonjiIds -->
+        <input type="hidden" id="selectedHorsesIds" name="SelectedHorseIds" value="" />
 
         <button type="submit" class="btn-submit">Dodaj trail</button>
     </form>
@@ -246,13 +246,14 @@
 
     function updateHiddenInput() {
         document.getElementById('selectedHorsesIds').value = selectedHorses.join(',');
+        console.log('Selected horses: ', selectedHorses); // Debug linija
     }
 
-    // Validacija forme
+    // Validacija forme - konji su obavezni
     document.querySelector('form').addEventListener('submit', function(e) {
         if (selectedHorses.length === 0) {
             e.preventDefault();
-            alert('Molimo odaberite najmanje jednog konja.');
+            alert('Molimo odaberite najmanje jednog konja za trail.');
             return false;
         }
     });
