@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Jahacki_klub_Zeljeznicar.Data.Migrations
+namespace Jahacki_klub_Zeljeznicar.Migrations
 {
     /// <inheritdoc />
-    public partial class EnumFix2 : Migration
+    public partial class Test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
