@@ -1,53 +1,207 @@
 ﻿@model IEnumerable<Jahacki_klub_Zeljeznicar.Models.Trail>
-
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<style>
+    .trails-container {
+        padding: 40px 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Naziv)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Opis)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Datum)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rezervator)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Naziv)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Opis)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Datum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rezervator.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    .page-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 50px;
+        color: #333;
+        font-weight: 700;
+    }
+
+    .trails-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .trail-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #e0e0e0;
+    }
+
+        .trail-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+    .trail-image {
+        height: 200px;
+        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80') center/cover;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .trail-number {
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .trail-content {
+        padding: 25px;
+        text-align: center;
+    }
+
+    .trail-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .trail-info {
+        margin-bottom: 20px;
+    }
+
+    .trail-date {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 10px;
+        font-weight: 500;
+    }
+
+    .trail-description {
+        color: #777;
+        margin-bottom: 25px;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        min-height: 60px;
+    }
+
+    .trail-reservator {
+        color: #888;
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+        font-style: italic;
+    }
+
+    .trail-actions {
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn-reserve {
+        background-color: #333;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
+        display: inline-block;
+    }
+
+        .btn-reserve:hover {
+            background-color: #555;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+    .no-trails {
+        text-align: center;
+        padding: 80px 20px;
+        color: #666;
+    }
+
+        .no-trails h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+    
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .trail-actions {
+        flex-direction: column;
+    }
+
+    .btn-reserve {
+        width: 100%;
+    }
+
+    }
+</style>
+
+<div class="trails-container">
+    <h1 class="page-title">Trailovi</h1>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="trails-grid">
+            @{
+                int counter = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <div class="trail-card">
+                    <div class="trail-image">
+                       
+                    </div>
+                    <div class="trail-content">
+                        <h3 class="trail-title">@Html.DisplayFor(modelItem => item.Naziv)</h3>
+
+                        <div class="trail-info">
+                            <div class="trail-date">
+                                <strong>Datum:</strong> @item.Datum.ToString("dd.MM.yyyy")
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(item.Opis))
+                        {
+                            <div class="trail-description">
+                                @(item.Opis.Length > 100 ? item.Opis.Substring(0, 100) + "..." : item.Opis)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="trail-description">Nema opisa</div>
+                        }
+
+                        <div class="trail-actions">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-reserve">Rezerviši</a>
+                        </div>
+                    </div>
+                </div>
+                counter++;
+            }
+        </div>
+    }
+    else
+    {
+        <div class="no-trails">
+            <h3>Trenutno nema dostupnih trail-ova</h3>
+            <p>Dodajte novi trail da biste počeli!</p>
+        </div>
+    }
+</div>
