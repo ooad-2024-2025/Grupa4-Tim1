@@ -76,7 +76,146 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             ModelState.AddModelError("", "Pogrešan email ili lozinka.");
             return View(model);
         }
+        [HttpGet]
+        public IActionResult RegisterClan() => View();
 
+        [HttpPost]
+        public async Task<IActionResult> RegisterClan(RegisterClanViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = new User
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                Ime = model.Ime,
+                Prezime = model.Prezime,
+                Kategorija = Kategorija.Clan,
+                Nivo = Nivo.Pocetnik
+               
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                // You might want to assign clan member role here
+                // await _userManager.AddToRoleAsync(user, "ClanMember");
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult RegisterTrener() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterTrener(RegisterTrenerViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = new User
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                Ime = model.Ime,
+                Prezime = model.Prezime,
+                Kategorija = Kategorija.Trener,
+                Nivo = null //Nivo.etnik
+
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                // You might want to assign clan member role here
+                // await _userManager.AddToRoleAsync(user, "ClanMember");
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+            return View(model);
+        }
+        
+        [HttpGet]
+        public IActionResult RegisterAdmin() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterAdmin(RegisterAdminViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = new User
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                Ime = model.Ime,
+                Prezime = model.Prezime,
+                Kategorija = Kategorija.Admin,
+                Nivo = null 
+
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                // You might want to assign clan member role here
+                // await _userManager.AddToRoleAsync(user, "ClanMember");
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult RegisterGuest(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterGuest(RegisterGuestViewModel model, string returnUrl = null)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+
+            var user = new User
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                Ime = model.Ime,
+                Prezime = model.Prezime,
+                Kategorija = Kategorija.Guest,
+                Nivo = null
+
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                // You might want to assign clan member role here
+                // await _userManager.AddToRoleAsync(user, "ClanMember");
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                if (!string.IsNullOrEmpty(returnUrl))
+                    return Redirect(returnUrl);
+                return RedirectToAction("Index", "Home");
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+            return View(model);
+        }
         [HttpPost]
         public async Task<IActionResult> Logout()
         {

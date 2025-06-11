@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Jahacki_klub_Zeljeznicar.Controllers
@@ -27,6 +28,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Trail/Details/5
+        /*
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,7 +46,47 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
             return View(trail);
         }
+        */
+        public async Task<IActionResult> Details(int id)
+        {
+            var trail = await _context.Trails
+                .Include(t => t.Rezervator)
+                .FirstOrDefaultAsync(t => t.Id == id);
 
+            if (trail == null)
+                return NotFound();
+
+            // Count horses for this trail
+            int maxHorses = await _context.TrailKonji.CountAsync(tk => tk.TrailId == id);
+
+            var viewModel = new ViewModels.TrailDetailsViewModel
+            {
+                Trail = trail,
+                MaxHorses = maxHorses
+            };
+
+            return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Rezervisi(int trailId)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                // Save return URL and redirect to RegisterGuest
+                return RedirectToAction("RegisterGuest", "Account", new { returnUrl = Url.Action("Details", "Trail", new { id = trailId }) });
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var trail = await _context.Trails.FindAsync(trailId);
+            if (trail == null)
+                return NotFound();
+
+            trail.RezervatorId = userId;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = trailId });
+        }
         // GET: Trail/Create
         public async Task<IActionResult> Create()
         {

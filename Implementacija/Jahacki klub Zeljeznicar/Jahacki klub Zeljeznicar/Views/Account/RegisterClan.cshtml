@@ -1,7 +1,8 @@
-﻿@model Jahacki_klub_Zeljeznicar.ViewModels.LoginViewModel
+﻿@model Jahacki_klub_Zeljeznicar.ViewModels.RegisterClanViewModel
 @{
-    ViewData["Title"] = "Prijava";
+    ViewData["Title"] = "Registracija";
 }
+
 
 <style>
     .account-form-container {
@@ -75,9 +76,9 @@
 </style>
 
 <div class="account-form-container">
-    <h1>Prijava</h1>
+    <h1>Registracija Clana</h1>
 
-    <form asp-action="Login" method="post">
+    <form asp-action="RegisterClan" method="post">
         <div class="form-group">
             <label asp-for="Email"></label>
             <input asp-for="Email" class="form-control" />
@@ -89,15 +90,30 @@
             <input asp-for="Password" class="form-control" />
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
-        <!--
-        <div class="form-group form-check">
-            <input asp-for="RememberMe" class="form-check-input" />
-            <label asp-for="RememberMe" class="form-check-label"></label>
+
+        <div class="form-group">
+            <label asp-for="ConfirmPassword"></label>
+            <input asp-for="ConfirmPassword" class="form-control" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
-        -->
-        <button type="submit" class="btn-submit">Prijavi se</button>
+
+        <div class="form-group">
+            <label asp-for="Ime"></label>
+            <input asp-for="Ime" class="form-control" />
+            <span asp-validation-for="Ime" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Prezime"></label>
+            <input asp-for="Prezime" class="form-control" />
+            <span asp-validation-for="Prezime" class="text-danger"></span>
+        </div>
+        
+        
+        <button type="submit" class="btn-submit">Registruj se</button>
     </form>
 </div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
