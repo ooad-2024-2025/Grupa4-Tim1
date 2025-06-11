@@ -1,0 +1,194 @@
+﻿@model Jahacki_klub_Zeljeznicar.Models.User
+@{
+    ViewData["Title"] = "Obriši korisnika";
+}
+
+<style>
+    .training-form-container {
+        max-width: 600px;
+        margin: 30px auto;
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+        .training-form-container h1 {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #dc3545;
+        }
+
+    .warning-message {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        color: #856404;
+        padding: 15px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .detail-row {
+        display: flex;
+        margin-bottom: 15px;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+    .detail-label {
+        font-weight: bold;
+        color: #333;
+        width: 120px;
+        flex-shrink: 0;
+        font-size: 16px;
+    }
+
+    .detail-value {
+        color: #555;
+        font-size: 16px;
+        flex: 1;
+    }
+
+    .badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        display: inline-block;
+    }
+
+    .badge-admin {
+        background-color: #dc3545;
+    }
+
+    .badge-trener {
+        background-color: #28a745;
+    }
+
+    .badge-clan {
+        background-color: #007bff;
+    }
+
+    .badge-guest {
+        background-color: #6c757d;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        font-size: 16px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        transition: background-color 0.3s ease;
+        flex: 1;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-back {
+        background-color: #6c757d;
+        color: white;
+    }
+
+        .btn-back:hover {
+            background-color: #545b62;
+            color: white;
+            text-decoration: none;
+        }
+
+    .container {
+        max-width: 100% !important;
+        padding: 0 15px;
+    }
+</style>
+
+<div class="training-form-container">
+    <h1>Obriši korisnika</h1>
+
+    <div class="warning-message">
+        <strong>Upozorenje!</strong> Ova akcija će trajno obrisati korisnika. Ova akcija se ne može poništiti.
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">Ime:</div>
+        <div class="detail-value">@Html.DisplayFor(model => model.Ime)</div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">Prezime:</div>
+        <div class="detail-value">@Html.DisplayFor(model => model.Prezime)</div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">Email:</div>
+        <div class="detail-value">@Html.DisplayFor(model => model.Email)</div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">Kategorija:</div>
+        <div class="detail-value">
+            @if (Model.Kategorija == Kategorija.Admin)
+            {
+                <span class="badge badge-admin">Admin</span>
+            }
+            else if (Model.Kategorija == Kategorija.Trener)
+            {
+                <span class="badge badge-trener">Trener</span>
+            }
+            else if (Model.Kategorija == Kategorija.Clan)
+            {
+                <span class="badge badge-clan">Član</span>
+            }
+            else
+            {
+                <span class="badge badge-guest">@Html.DisplayFor(model => model.Kategorija)</span>
+            }
+        </div>
+    </div>
+
+    @if (Model.Nivo != null)
+    {
+        <div class="detail-row">
+            <div class="detail-label">Nivo:</div>
+            <div class="detail-value">@Html.DisplayFor(model => model.Nivo)</div>
+        </div>
+    }
+
+
+    <form asp-action="DeleteConfirmed" method="post" class="btn-group">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Da li ste sigurni da želite obrisati ovog korisnika?')">
+            Obriši korisnika
+        </button>
+        <a asp-action="Index" class="btn btn-back">Odustani</a>
+    </form>
+</div>

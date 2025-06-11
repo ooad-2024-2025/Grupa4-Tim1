@@ -8,6 +8,9 @@ namespace Jahacki_klub_Zeljeznicar.ViewModels
         public Kategorija UserCategory { get; set; }
         public Nivo? CurrentUserLevel { get; set; }
 
+        // For Clan users - membership info  
+        public Clanarina CurrentUserClanarina { get; set; }
+
         // For Guest users
         public List<Trail> UserTrails { get; set; } = new List<Trail>();
 
@@ -23,6 +26,6 @@ namespace Jahacki_klub_Zeljeznicar.ViewModels
         public List<Trail> AllTrails { get; set; } = new List<Trail>();
         public List<User> AllTrainers { get; set; } = new List<User>();
         public List<User> AllUsers { get; set; } = new List<User>();
-        public List<Konj> AllHorses { get; set; } = new List<Konj>(); // Added this property
+        public List<Konj> AllHorses { get; set; } = new List<Konj>();
     }
 }

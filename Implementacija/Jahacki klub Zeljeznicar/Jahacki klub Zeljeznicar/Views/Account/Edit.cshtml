@@ -1,0 +1,186 @@
+﻿@model Jahacki_klub_Zeljeznicar.ViewModels.EditUserViewModel
+@{
+    ViewData["Title"] = "Uredi korisnika";
+}
+
+<style>
+    .training-form-container {
+        max-width: 600px;
+        margin: 30px auto;
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+        .training-form-container h1 {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .training-form-container .form-group {
+            margin-bottom: 20px;
+        }
+
+        .training-form-container label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .training-form-container .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #f8f9fa;
+        }
+
+            .training-form-container .form-control:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+                background-color: white;
+            }
+
+        .training-form-container select.form-control {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .training-form-container .btn-submit {
+            width: 100%;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            background-color: #343a40;
+            color: white;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+            .training-form-container .btn-submit:hover {
+                background-color: #23272b;
+            }
+
+        .training-form-container .btn-back {
+            width: 100%;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            background-color: #6c757d;
+            color: white;
+            margin-top: 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+            .training-form-container .btn-back:hover {
+                background-color: #545b62;
+                color: white;
+                text-decoration: none;
+            }
+
+    .container {
+        max-width: 100% !important;
+        padding: 0 15px;
+    }
+
+    .text-danger {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .password-section {
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
+        margin-top: 20px;
+    }
+
+        .password-section h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+</style>
+
+<div class="training-form-container">
+    <h1>Uredi korisnika</h1>
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+
+        <div class="form-group">
+            <label asp-for="Ime">Ime</label>
+            <input asp-for="Ime" class="form-control" placeholder="Unesite ime" />
+            <span asp-validation-for="Ime" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Prezime">Prezime</label>
+            <input asp-for="Prezime" class="form-control" placeholder="Unesite prezime" />
+            <span asp-validation-for="Prezime" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" type="email" class="form-control" placeholder="Unesite email adresu" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Kategorija">Kategorija</label>
+            <select asp-for="Kategorija" class="form-control" asp-items="Html.GetEnumSelectList<Kategorija>()">
+                <option value="">Izaberite kategoriju</option>
+            </select>
+            <span asp-validation-for="Kategorija" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Nivo">Nivo</label>
+            <select asp-for="Nivo" class="form-control" asp-items="Html.GetEnumSelectList<Nivo>()">
+                <option value="">Izaberite nivo (opciono)</option>
+            </select>
+            <span asp-validation-for="Nivo" class="text-danger"></span>
+        </div>
+
+        <div class="password-section">
+            <h3>Promjena lozinke (opciono)</h3>
+            <div class="form-group">
+                <label asp-for="NewPassword">Nova lozinka</label>
+                <input asp-for="NewPassword" type="password" class="form-control" placeholder="Ostavite prazno ako ne mijenjate lozinku" />
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Spremi promjene</button>
+        <a href="@Url.Action("Index", "Dashboard")" class="btn-back">Nazad na listu</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

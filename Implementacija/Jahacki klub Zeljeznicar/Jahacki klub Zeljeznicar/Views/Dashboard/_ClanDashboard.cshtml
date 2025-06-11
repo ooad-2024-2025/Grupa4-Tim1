@@ -130,6 +130,80 @@
     </div>
 </div>
 
+<!-- Clanarina Status Section - Add this before Registered Trainings -->
+@if (Model.CurrentUser?.Kategorija == Kategorija.Clan)
+{
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2>Status Članarine</h2>
+        </div>
+
+        @{
+            // Get the current user's active clanarina (latest one that hasn't expired or latest overall)
+            var aktivnaClanarina = Model.CurrentUserClanarina;
+        }
+        
+        @if (aktivnaClanarina == null || aktivnaClanarina.IstekClanarine < DateTime.Now)
+        {
+            <!-- No active membership -->
+            <div class="dashboard-card" style="border-left: 4px solid #dc3545; background-color: #f8d7da;">
+                <h3 style="color: #721c24;">Nemate aktivnu članarinu</h3>
+                <div class="training-info">
+                    @if (aktivnaClanarina == null)
+                    {
+                        <p>Trenutno nemate registrovanu članarinu.</p>
+                    }
+                    else
+                    {
+                        <p>Vaša članarina je istekla: @aktivnaClanarina.IstekClanarine.ToString("dd.MM.yyyy")</p>
+                    }
+                    <p>Da biste mogli da se prijavljujete na treninge, potrebno je da produžite članarinu.</p>
+                </div>
+                <div class="training-actions">
+                    <a href="@Url.Action("Index", "Clanarina")" class="btn btn-primary">
+                        Produži Članarinu
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <!-- Active membership -->
+            
+            var daysUntilExpiry = (aktivnaClanarina.IstekClanarine - DateTime.Now).Days;
+            var statusClass = daysUntilExpiry <= 7 ? "border-left: 4px solid #ffc107; background-color: #fff3cd;" : "border-left: 4px solid #28a745; background-color: #d4edda;";
+            var statusColor = daysUntilExpiry <= 7 ? "#856404" : "#155724";
+            
+            
+            <div class="dashboard-card" style="@statusClass">
+                <h3 style="color: @statusColor;">
+                    @if (daysUntilExpiry <= 7)
+                    {
+                        <span>⚠️ Članarina uskoro ističe</span>
+                    }
+                    else
+                    {
+                        <span>✅ Aktivna članarina</span>
+                    }
+                </h3>
+                <div class="training-info">
+                    <p><strong>Važeća do:</strong> @aktivnaClanarina.IstekClanarine.ToString("dd.MM.yyyy")</p>
+                    <p><strong>Preostalo dana:</strong> @daysUntilExpiry</p>
+                    @if (daysUntilExpiry <= 7)
+                    {
+                        <p style="color: #856404;">Preporučujemo da produžite članarinu na vrijeme.</p>
+                    }
+                </div>
+                <div class="training-actions">
+                    <a href="@Url.Action("Index", "Clanarina")" class="btn btn-success">
+                        Produži Članarinu
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+}
+
 <!-- Registered Trainings -->
 @if (Model.RegisteredTrainings != null && Model.RegisteredTrainings.Any())
 {
@@ -145,7 +219,7 @@
                     <div class="training-level @(trening.Nivo switch { Nivo.Napredni => "level-advanced", Nivo.Srednji => "level-medium", Nivo.Pocetnik => "level-low", _ => "level-low" })">
                         @trening.Nivo
                     </div>
-                    <div class="training-info">
+                    <div class="training-info" id="treninzi">
                         <p><strong>Datum:</strong> @trening.Datum.ToString("dd.MM.yyyy HH:mm")</p>
                         <p><strong>Trener:</strong> @trening.Trener?.Ime @trening.Trener?.Prezime</p>
                         <p><strong>Max. članovi:</strong> @trening.MaxBrClanova</p>

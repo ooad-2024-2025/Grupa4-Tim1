@@ -6,5 +6,7 @@ namespace Jahacki_klub_Zeljeznicar.ViewModels
     {
         public Trail Trail { get; set; }
         public int MaxHorses { get; set; }
+        public string LoggedInUserId { get; set; }
     }
+
 }

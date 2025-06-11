@@ -28,7 +28,6 @@
         <dd class="col-sm-10">
             @Model.Trail.Datum.ToString("dd.MM.yyyy")
         </dd>
-       
         <dt class="col-sm-2">
             Maksimalan broj konja
         </dt>
@@ -37,11 +36,22 @@
         </dd>
     </dl>
 </div>
+
 <div>
-    <form asp-action="Rezervisi" asp-controller="Trail" method="post">
-        <input type="hidden" name="trailId" value="@Model.Trail.Id" />
-        <button type="submit" class="btn btn-primary">Rezerviši</button>
-    </form>
+    @if (Model.Trail.RezervatorId == null)
+    {
+        <form asp-action="Rezervisi" asp-controller="Trail" method="post">
+            <input type="hidden" name="trailId" value="@Model.Trail.Id" />
+            <button type="submit" class="btn btn-primary">Rezerviši</button>
+        </form>
+    }
+    else if (Model.Trail.RezervatorId == Model.LoggedInUserId)
+    {
+        <div class="alert alert-info mt-2">
+            Vi ste rezervisali ovaj trail. Za otkazivanje, kontaktirajte vlasnike direktno.
+        </div>
+    }
+
     <a asp-action="Edit" asp-route-id="@Model.Trail.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a href="@Url.Action("Index", "Dashboard")">Back to List</a>
 </div>

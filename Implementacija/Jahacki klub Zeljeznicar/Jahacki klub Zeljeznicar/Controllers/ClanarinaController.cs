@@ -64,25 +64,32 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             var userId = _userManager.GetUserId(User);
-            var postojecaClanarina = await _context.Clanarine
-                .FirstOrDefaultAsync(c => c.UserId == userId);
 
-            DateTime noviPocetak = DateTime.Now;
+            // Get all clanarinas for this user, ordered by expiration date descending
+            var allClanarinas = await _context.Clanarine
+                .Where(c => c.UserId == userId)
+                .OrderByDescending(c => c.IstekClanarine)
+                .ToListAsync();
+
+            DateTime noviPocetak;
             DateTime noviIstek;
 
-            if (postojecaClanarina != null)
+            if (allClanarinas.Any())
             {
-                // Ako postoji važeća članarina, produžuj od datuma isteka
-                if (postojecaClanarina.IstekClanarine > DateTime.Now)
-                {
-                    noviPocetak = postojecaClanarina.IstekClanarine;
-                }
+                // Get the latest expiration date from all clanarinas
+                var najnoviji_istek = allClanarinas.First().IstekClanarine;
 
+                // If the latest expiration is in the future, extend from that date
+                // Otherwise, start from today
+                noviPocetak = najnoviji_istek > DateTime.Now ? najnoviji_istek : DateTime.Now;
                 noviIstek = noviPocetak.AddMonths(mjeseci);
 
-                // Ažuriraj postojeću članarinu
+                // Update the most recent clanarina
+                var postojecaClanarina = allClanarinas.First();
                 postojecaClanarina.IstekClanarine = noviIstek;
-                if (postojecaClanarina.PocetakClanarine > DateTime.Now || postojecaClanarina.IstekClanarine <= DateTime.Now)
+
+                // If the start date needs updating (when extending expired membership)
+                if (postojecaClanarina.IstekClanarine <= DateTime.Now)
                 {
                     postojecaClanarina.PocetakClanarine = DateTime.Now;
                 }
@@ -91,7 +98,8 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
             else
             {
-                // Kreiraj novu članarinu
+                // Create new clanarina if none exists
+                noviPocetak = DateTime.Now;
                 noviIstek = noviPocetak.AddMonths(mjeseci);
                 var novaClanarina = new Clanarina
                 {
@@ -383,6 +391,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // POST: Clanarina/PotvrdiPlacanje
+        // Corrected PotvrdiPlacanje method in ClanarinaController.cs
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> PotvrdiPlacanje(string ImePrezime, string BrojKartice, string CVV, int Opcija)
@@ -396,56 +405,51 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
             var userId = _userManager.GetUserId(User);
             var user = await _userManager.FindByIdAsync(userId);
-            var postojecaClanarina = await _context.Clanarine
-                .FirstOrDefaultAsync(c => c.UserId == userId);
 
-            DateTime noviPocetak = DateTime.Now;
+            // Get all clanarinas for this user, ordered by expiration date descending
+            var allClanarinas = await _context.Clanarine
+                .Where(c => c.UserId == userId)
+                .OrderByDescending(c => c.IstekClanarine)
+                .ToListAsync();
+
+            DateTime noviPocetak;
             DateTime noviIstek;
 
-            if (postojecaClanarina != null)
+            if (allClanarinas.Any())
             {
-                // Ako postoji važeća članarina, produžuj od datuma isteka
-                if (postojecaClanarina.IstekClanarine > DateTime.Now)
-                {
-                    noviPocetak = postojecaClanarina.IstekClanarine;
-                }
+                // Get the latest expiration date from all clanarinas
+                var najnoviji_istek = allClanarinas.First().IstekClanarine;
 
+                // If the latest expiration is in the future, extend from that date
+                // Otherwise, start from today
+                noviPocetak = najnoviji_istek > DateTime.Now ? najnoviji_istek : DateTime.Now;
                 noviIstek = noviPocetak.AddMonths(Opcija);
-
-                // Ažuriraj postojeću članarinu
-                postojecaClanarina.IstekClanarine = noviIstek;
-                if (postojecaClanarina.PocetakClanarine > DateTime.Now || postojecaClanarina.IstekClanarine <= DateTime.Now)
-                {
-                    postojecaClanarina.PocetakClanarine = DateTime.Now;
-                }
-
-                _context.Update(postojecaClanarina);
             }
             else
             {
-                // Kreiraj novu članarinu
+                // If no existing clanarinas, start from today
+                noviPocetak = DateTime.Now;
                 noviIstek = noviPocetak.AddMonths(Opcija);
-                var novaClanarina = new Clanarina
-                {
-                    UserId = userId,
-                    PocetakClanarine = noviPocetak,
-                    IstekClanarine = noviIstek
-                };
-
-                _context.Add(novaClanarina);
             }
 
+            // Always create a new clanarina for each payment
+            var novaClanarina = new Clanarina
+            {
+                UserId = userId,
+                PocetakClanarine = noviPocetak,
+                IstekClanarine = noviIstek
+            };
+
+            _context.Add(novaClanarina);
             await _context.SaveChangesAsync();
 
-            // Pošalji email potvrdu
+            // Send email confirmation
             try
             {
                 await PosaljiEmailPotvrdu(user.Email, user.UserName, Opcija, noviIstek);
             }
             catch (Exception ex)
             {
-                // Log greške, ali ne prekidaj proces
-                // Možete dodati logging ovdje
                 Console.WriteLine($"Greška pri slanju email-a: {ex.Message}");
             }
 

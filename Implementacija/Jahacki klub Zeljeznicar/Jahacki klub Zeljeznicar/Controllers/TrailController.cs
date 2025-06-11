@@ -1,5 +1,6 @@
 ﻿using Jahacki_klub_Zeljeznicar.Data;
 using Jahacki_klub_Zeljeznicar.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,18 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
     public class TrailController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public TrailController(ApplicationDbContext context)
+        private bool IsCurrentUserAdmin()
+        {
+            return User.IsInRole("Admin");
+        }
+
+
+        public TrailController(UserManager<User> userManager, ApplicationDbContext context)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Trail
@@ -62,7 +71,8 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             var viewModel = new ViewModels.TrailDetailsViewModel
             {
                 Trail = trail,
-                MaxHorses = maxHorses
+                MaxHorses = maxHorses,
+                LoggedInUserId = _userManager.GetUserId(User)
             };
 
             return View(viewModel);
@@ -85,7 +95,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             trail.RezervatorId = userId;
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Details", new { id = trailId });
+            return RedirectToAction("Index", "Dashboard");
         }
         // GET: Trail/Create
         public async Task<IActionResult> Create()
@@ -158,7 +168,11 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                         await _context.SaveChangesAsync();
                     }
 
-                    return RedirectToAction("Index", "Dashboard");
+                    if (IsCurrentUserAdmin())
+                        return RedirectToAction("Index", "Dashboard");
+                    else
+                        return RedirectToAction("Index");
+
                 }
                 else
                 {
@@ -289,7 +303,11 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                     }
                 }
 
-                return RedirectToAction("Index", "Dashboard");
+                if (IsCurrentUserAdmin())
+                    return RedirectToAction("Index", "Dashboard");
+                else
+                    return RedirectToAction("Index");
+
             }
 
             // Re-populate horses for View in case of errors
@@ -332,7 +350,11 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Dashboard");
+            if (IsCurrentUserAdmin())
+                return RedirectToAction("Index", "Dashboard");
+            else
+                return RedirectToAction("Index");
+
         }
 
         private bool TrailExists(int id)

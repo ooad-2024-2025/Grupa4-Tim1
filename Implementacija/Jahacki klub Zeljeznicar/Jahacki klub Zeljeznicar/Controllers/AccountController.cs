@@ -1,20 +1,200 @@
-﻿using Jahacki_klub_Zeljeznicar.Models;
+﻿using Jahacki_klub_Zeljeznicar.Data;
+using Jahacki_klub_Zeljeznicar.Models;
 using Jahacki_klub_Zeljeznicar.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace Jahacki_klub_Zeljeznicar.Controllers
 {
+
     public class AccountController : Controller
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly ApplicationDbContext _context;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
+        }
+
+        // GET: List all users
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            return View(users);
+        }
+
+        // GET: User details
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return NotFound();
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            return View(user);
+        }
+
+        // GET: Create user
+        [HttpGet]
+        public IActionResult Create() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateUserViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = new User
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                Ime = model.Ime,
+                Prezime = model.Prezime,
+                Kategorija = model.Kategorija,
+                Nivo = model.Nivo
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                // If creating a Clan member, automatically create their clanarina
+                if (model.Kategorija == Kategorija.Clan)
+                {
+                    await CreateInitialClanarina(user.Id);
+                }
+
+                TempData["SuccessMessage"] = "Korisnik je uspješno kreiran.";
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+
+            return View(model);
+        }
+
+
+        // GET: Edit user
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return NotFound();
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            var model = new EditUserViewModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Ime = user.Ime,
+                Prezime = user.Prezime,
+                Kategorija = user.Kategorija,
+                Nivo = user.Nivo
+            };
+
+            return View(model);
+        }
+
+        // POST: Edit user
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditUserViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+                return NotFound();
+
+            user.Email = model.Email;
+            user.UserName = model.Email;
+            user.Ime = model.Ime;
+            user.Prezime = model.Prezime;
+            user.Kategorija = model.Kategorija;
+            user.Nivo = model.Nivo;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                // Update password if provided
+                if (!string.IsNullOrEmpty(model.NewPassword))
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var passwordResult = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+
+                    if (!passwordResult.Succeeded)
+                    {
+                        foreach (var error in passwordResult.Errors)
+                            ModelState.AddModelError("", error.Description);
+                        return View(model);
+                    }
+                }
+
+                TempData["SuccessMessage"] = "Korisnik je uspješno ažuriran.";
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+
+            return View(model);
+        }
+
+        // GET: Delete confirmation
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return NotFound();
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            return View(user);
+        }
+
+        // POST: Delete user
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+
+            // Check if trying to delete current user
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser?.Id == user.Id)
+            {
+                TempData["ErrorMessage"] = "Ne možete obrisati svoj vlastiti račun.";
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = "Korisnik je uspješno obrisan.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Greška pri brisanju korisnika.";
+            }
+
+            return RedirectToAction("Index", "Dashboard");
         }
 
         [HttpGet]
@@ -40,7 +220,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             }
 
             foreach (var error in result.Errors)
@@ -59,15 +239,15 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
             var result = await _signInManager.PasswordSignInAsync(
                 model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-            
+
 
             if (result.Succeeded)
             {
                 Debug.WriteLine("Login successful for user: " + model.Email);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             }
             if (result.IsLockedOut)
-                
+
             {
                 Debug.WriteLine("Login failed for user: " + model.Email);
                 return View("Lockout");
@@ -92,23 +272,23 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 Prezime = model.Prezime,
                 Kategorija = Kategorija.Clan,
                 Nivo = Nivo.Pocetnik
-               
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                // You might want to assign clan member role here
-                // await _userManager.AddToRoleAsync(user, "ClanMember");
+                // Automatically create initial clanarina for new clan member
+                await CreateInitialClanarina(user.Id);
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             }
 
             foreach (var error in result.Errors)
                 ModelState.AddModelError("", error.Description);
             return View(model);
         }
+
         [HttpGet]
         public IActionResult RegisterTrener() => View();
 
@@ -135,14 +315,14 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 // await _userManager.AddToRoleAsync(user, "ClanMember");
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             }
 
             foreach (var error in result.Errors)
                 ModelState.AddModelError("", error.Description);
             return View(model);
         }
-        
+
         [HttpGet]
         public IActionResult RegisterAdmin() => View();
 
@@ -158,7 +338,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 Ime = model.Ime,
                 Prezime = model.Prezime,
                 Kategorija = Kategorija.Admin,
-                Nivo = null 
+                Nivo = null
 
             };
 
@@ -169,7 +349,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 // await _userManager.AddToRoleAsync(user, "ClanMember");
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             }
 
             foreach (var error in result.Errors)
@@ -209,7 +389,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 if (!string.IsNullOrEmpty(returnUrl))
                     return Redirect(returnUrl);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             }
 
             foreach (var error in result.Errors)
@@ -222,6 +402,27 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-    }
 
+        private async Task CreateInitialClanarina(string userId)
+        {
+            try
+            {
+                var novaClanarina = new Clanarina
+                {
+                    UserId = userId,
+                    PocetakClanarine = DateTime.Now,
+                    IstekClanarine = DateTime.Now.AddMonths(1)
+                };
+
+                _context.Clanarine.Add(novaClanarina);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the error but don't fail the registration process
+                Debug.WriteLine($"Error creating initial clanarina: {ex.Message}");
+            }
+        }
+
+    }
 }

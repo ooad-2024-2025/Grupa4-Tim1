@@ -112,15 +112,15 @@
                             <tr>
                                 <td class="action-column">
                                     <div class="action-buttons btn-group" role="group">
-                                        <a href="@Url.Action("Details", "User", new { id = trener.Id })"
+                                        <a href="@Url.Action("Details", "Account", new { id = trener.Id })"
                                            class="btn btn-sm btn-outline-primary" title="Detalji" data-bs-toggle="tooltip">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="@Url.Action("Edit", "User", new { id = trener.Id })"
+                                        <a href="@Url.Action("Edit", "Account", new { id = trener.Id })"
                                            class="btn btn-sm btn-outline-secondary" title="Uredi" data-bs-toggle="tooltip">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form asp-controller="User" asp-action="Delete" asp-route-id="@trener.Id"
+                                        <form asp-controller="Account" asp-action="Delete" asp-route-id="@trener.Id"
                                               method="post" class="delete-form" onsubmit="return confirm('Da li ste sigurni da želite obrisati trenera @trener.Ime @trener.Prezime?');">
                                             @Html.AntiForgeryToken()
                                             <button type="submit" class="btn btn-sm btn-outline-danger" title="Obriši" data-bs-toggle="tooltip">
@@ -321,17 +321,17 @@
                             <tr>
                                 <td class="action-column">
                                     <div class="action-buttons btn-group" role="group">
-                                        <a href="@Url.Action("Details", "User", new { id = user.Id })"
+                                        <a href="@Url.Action("Details", "Account", new { id = user.Id })"
                                            class="btn btn-sm btn-outline-primary" title="Detalji" data-bs-toggle="tooltip">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="@Url.Action("Edit", "User", new { id = user.Id })"
+                                        <a href="@Url.Action("Edit", "Account", new { id = user.Id })"
                                            class="btn btn-sm btn-outline-secondary" title="Uredi" data-bs-toggle="tooltip">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         @if (user.Kategorija != Kategorija.Admin)
                                         {
-                                            <form asp-controller="User" asp-action="Delete" asp-route-id="@user.Id"
+                                            <form asp-controller="Account" asp-action="Delete" asp-route-id="@user.Id"
                                                   method="post" class="delete-form" onsubmit="return confirm('Da li ste sigurni da želite obrisati korisnika @user.Ime @user.Prezime?');">
                                                 @Html.AntiForgeryToken()
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" title="Obriši" data-bs-toggle="tooltip">

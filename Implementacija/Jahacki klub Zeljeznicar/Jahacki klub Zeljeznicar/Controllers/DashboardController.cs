@@ -90,6 +90,12 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             var userDetails = await _context.Users.FindAsync(userId);
             model.CurrentUserLevel = userDetails?.Nivo ?? Nivo.Pocetnik;
 
+            // Get current user's clanarina (latest one)
+            model.CurrentUserClanarina = await _context.Clanarine
+                .Where(c => c.UserId == userId)
+                .OrderByDescending(c => c.IstekClanarine)
+                .FirstOrDefaultAsync();
+
             // Get IDs of trainings user is already registered for
             var registeredTrainingIds = await _context.TreningUsers
                 .Where(tu => tu.UserId == userId)
@@ -233,6 +239,21 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             if (currentUser == null)
             {
                 return RedirectToAction("Login", "Account");
+            }
+
+            // Check if user has active membership before allowing training registration
+            if (currentUser.Kategorija == Kategorija.Clan)
+            {
+                var aktivnaClanarina = await _context.Clanarine
+                    .Where(c => c.UserId == currentUser.Id)
+                    .OrderByDescending(c => c.IstekClanarine)
+                    .FirstOrDefaultAsync();
+
+                if (aktivnaClanarina == null || aktivnaClanarina.IstekClanarine < DateTime.Now)
+                {
+                    TempData["Error"] = "Ne možete se prijaviti na trening jer nemate aktivnu članarinu. Molimo produžite članarinu.";
+                    return RedirectToAction("Index");
+                }
             }
 
             var trening = await _context.Treninzi
