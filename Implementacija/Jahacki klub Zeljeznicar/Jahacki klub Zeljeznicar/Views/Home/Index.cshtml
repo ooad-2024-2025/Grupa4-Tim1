@@ -212,7 +212,7 @@
     <div class="hero-content">
         <h1>Postani član kluba</h1>
         <p>Ukoliko želite da poboljšate svoje jahanje, ovo je prava opcija za Vas. Uživajte u druženju sa konjima u prirodi i stvorite nezaboravne uspomene.</p>
-        <a href="@Url.Action("Register", "Account")" class="btn-primary">Prijavi se</a>
+        <a href="@Url.Action("RegisterClan", "Account")" class="btn-primary">Prijavi se</a>
     </div>
 </section>
 
@@ -232,7 +232,7 @@
                             <h3 class="trail-title">@trail.Naziv</h3>
                             <div class="trail-info">
                                 <p><strong>Datum:</strong> @trail.Datum.ToString("dd.MM.yyyy")</p>
-                                <p><strong>Organizator:</strong> @(trail.Rezervator?.UserName ?? "N/A")</p>
+                                                            
                             </div>
                             @if (!string.IsNullOrEmpty(trail.Opis))
                             {

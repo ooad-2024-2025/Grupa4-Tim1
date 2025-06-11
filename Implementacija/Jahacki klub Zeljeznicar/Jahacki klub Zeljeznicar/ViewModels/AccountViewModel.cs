@@ -40,7 +40,126 @@ namespace Jahacki_klub_Zeljeznicar.ViewModels
         [EnumDataType(typeof(Nivo))]
         public Nivo Nivo { get; set; }
     }
+    public class RegisterClanViewModel
+    {
+        [Required(ErrorMessage = "Email je obavezan")]
+        [EmailAddress(ErrorMessage = "Neispravna email adresa")]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
 
+        [Required(ErrorMessage = "Lozinka je obavezna")]
+        [StringLength(100, ErrorMessage = "Lozinka mora imati najmanje {2} karaktera.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Lozinka")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Potvrdite lozinku")]
+        [Compare("Password", ErrorMessage = "Lozinke se ne poklapaju.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Ime je obavezno")]
+        [StringLength(50, ErrorMessage = "Ime ne može biti duže od 50 karaktera")]
+        [Display(Name = "Ime")]
+        public string Ime { get; set; }
+
+        [Required(ErrorMessage = "Prezime je obavezno")]
+        [StringLength(50, ErrorMessage = "Prezime ne može biti duže od 50 karaktera")]
+        [Display(Name = "Prezime")]
+        public string Prezime { get; set; }
+
+     
+    }
+    public class RegisterTrenerViewModel
+    {
+        [Required(ErrorMessage = "Email je obavezan")]
+        [EmailAddress(ErrorMessage = "Neispravna email adresa")]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Lozinka je obavezna")]
+        [StringLength(100, ErrorMessage = "Lozinka mora imati najmanje {2} karaktera.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Lozinka")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Potvrdite lozinku")]
+        [Compare("Password", ErrorMessage = "Lozinke se ne poklapaju.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Ime je obavezno")]
+        [StringLength(50, ErrorMessage = "Ime ne može biti duže od 50 karaktera")]
+        [Display(Name = "Ime")]
+        public string Ime { get; set; }
+
+        [Required(ErrorMessage = "Prezime je obavezno")]
+        [StringLength(50, ErrorMessage = "Prezime ne može biti duže od 50 karaktera")]
+        [Display(Name = "Prezime")]
+        public string Prezime { get; set; }
+
+
+    }
+    public class RegisterAdminViewModel
+    {
+        [Required(ErrorMessage = "Email je obavezan")]
+        [EmailAddress(ErrorMessage = "Neispravna email adresa")]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Lozinka je obavezna")]
+        [StringLength(100, ErrorMessage = "Lozinka mora imati najmanje {2} karaktera.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Lozinka")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Potvrdite lozinku")]
+        [Compare("Password", ErrorMessage = "Lozinke se ne poklapaju.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Ime je obavezno")]
+        [StringLength(50, ErrorMessage = "Ime ne može biti duže od 50 karaktera")]
+        [Display(Name = "Ime")]
+        public string Ime { get; set; }
+
+        [Required(ErrorMessage = "Prezime je obavezno")]
+        [StringLength(50, ErrorMessage = "Prezime ne može biti duže od 50 karaktera")]
+        [Display(Name = "Prezime")]
+        public string Prezime { get; set; }
+
+
+    }
+    public class RegisterGuestViewModel
+    {
+        [Required(ErrorMessage = "Email je obavezan")]
+        [EmailAddress(ErrorMessage = "Neispravna email adresa")]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Lozinka je obavezna")]
+        [StringLength(100, ErrorMessage = "Lozinka mora imati najmanje {2} karaktera.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Lozinka")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Potvrdite lozinku")]
+        [Compare("Password", ErrorMessage = "Lozinke se ne poklapaju.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Ime je obavezno")]
+        [StringLength(50, ErrorMessage = "Ime ne može biti duže od 50 karaktera")]
+        [Display(Name = "Ime")]
+        public string Ime { get; set; }
+
+        [Required(ErrorMessage = "Prezime je obavezno")]
+        [StringLength(50, ErrorMessage = "Prezime ne može biti duže od 50 karaktera")]
+        [Display(Name = "Prezime")]
+        public string Prezime { get; set; }
+
+
+    }
     public class LoginViewModel
     {
         [Required(ErrorMessage = "Email je obavezan")]

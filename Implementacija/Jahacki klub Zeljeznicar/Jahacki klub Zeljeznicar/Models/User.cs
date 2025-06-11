@@ -23,7 +23,7 @@ namespace Jahacki_klub_Zeljeznicar.Models
 
         [Display(Name = "Nivo")]
         [EnumDataType(typeof(Nivo))]
-        public Nivo Nivo { get; set; }
+        public Nivo? Nivo { get; set; }
 
         public ICollection<Clanarina> Clanarine { get; set; }
         public ICollection<Trening_User> TreningUsers { get; set; }
