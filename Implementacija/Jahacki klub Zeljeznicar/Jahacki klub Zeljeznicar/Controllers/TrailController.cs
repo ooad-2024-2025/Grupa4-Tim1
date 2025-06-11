@@ -303,11 +303,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                     }
                 }
 
-                if (IsCurrentUserAdmin())
-                    return RedirectToAction("Index", "Dashboard");
-                else
-                    return RedirectToAction("Index");
-
+                return RedirectToAction("Index", "Dashboard");
             }
 
             // Re-populate horses for View in case of errors

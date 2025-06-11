@@ -238,7 +238,7 @@
         <h2 class="pb-3">Prijavi se na trail</h2>
             
         @{
-            var availableTrails = Model?.Where(t => string.IsNullOrEmpty(t.RezervatorId)).ToList();
+            var availableTrails = Model?.Where(t => string.IsNullOrEmpty(t.RezervatorId)).Take(3).ToList();
         }
             
         @if (availableTrails != null && availableTrails.Any())
