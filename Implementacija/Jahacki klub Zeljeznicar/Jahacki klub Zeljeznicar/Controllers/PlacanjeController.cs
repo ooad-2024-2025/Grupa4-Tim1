@@ -16,6 +16,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "ClanOnly")]
         public IActionResult Index(int mjeseci)
         {
             if (mjeseci != 1 && mjeseci != 6 && mjeseci != 12)
@@ -28,6 +29,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "ClanOnly")]
         public async Task<IActionResult> PotvrdiPlacanje(string BrojKartice, int Opcija)
         {
             if (string.IsNullOrWhiteSpace(BrojKartice) || (Opcija != 1 && Opcija != 6 && Opcija != 12))

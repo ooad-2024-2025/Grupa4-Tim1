@@ -166,7 +166,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // Admin funkcije - samo za administratore
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> AdminIndex()
         {
             var applicationDbContext = _context.Clanarine.Include(c => c.User);
@@ -174,7 +174,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Clanarina/Details/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -194,7 +194,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Clanarina/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Create()
         {
             var users = await _context.Users.ToListAsync();
@@ -205,7 +205,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         // POST: Clanarina/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Create([Bind("Id,PocetakClanarine,IstekClanarine,UserId")] Clanarina clanarina)
         {
             if (ModelState.IsValid)
@@ -233,7 +233,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Clanarina/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -255,7 +255,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         // POST: Clanarina/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,PocetakClanarine,IstekClanarine,UserId")] Clanarina clanarina)
         {
             if (id != clanarina.Id)
@@ -291,7 +291,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Clanarina/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -313,7 +313,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         // POST: Clanarina/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var clanarina = await _context.Clanarine.FindAsync(id);

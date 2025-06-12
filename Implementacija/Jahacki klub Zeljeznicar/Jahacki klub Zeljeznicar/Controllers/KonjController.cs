@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Jahacki_klub_Zeljeznicar.Data;
+using Jahacki_klub_Zeljeznicar.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Jahacki_klub_Zeljeznicar.Data;
-using Jahacki_klub_Zeljeznicar.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Jahacki_klub_Zeljeznicar.Controllers
 {
@@ -20,6 +21,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Konj
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Konji.ToListAsync());
@@ -44,6 +46,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Konj/Create
+        [Authorize(Policy = "AdminOnly")]
         public IActionResult Create()
         {
             // Proslijedi prazan model za binding
@@ -56,6 +59,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Create([Bind("Ime,Opis,Spol,Boja")] Konj konj)
         {
             // Debugging
@@ -103,6 +107,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Konj/Edit/5
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -123,6 +128,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Ime,Opis,Spol,Boja")] Konj konj)
         {
             if (id != konj.Id)
@@ -157,6 +163,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Konj/Delete/5
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -177,6 +184,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         // POST: Konj/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var konj = await _context.Konji.FindAsync(id);

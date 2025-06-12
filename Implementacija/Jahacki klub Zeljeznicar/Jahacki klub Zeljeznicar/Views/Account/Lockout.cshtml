@@ -1,18 +1,88 @@
 ﻿@{
     ViewData["Title"] = "Access Denied";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="horse-form-container">
-    <div class="col-md-6 offset-md-3">
-        <div class="card">
-            <div class="card-header">
-                <h2 class="text-center text-danger">@ViewData["Title"]</h2>
-            </div>
-            <div class="card-body text-center">
-                <p class="lead">Vaš nalog je privremeno zaključan zbog previše neuspešnih pokušaja prijave.</p>
-                <p>Molimo pokušajte ponovo kasnije.</p>
-                <a asp-action="Login" class="btn btn-primary">Nazad na prijavu</a>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="fas fa-lock fa-4x text-danger mb-3"></i>
+                        <h1 class="display-4 text-danger">Access Denied</h1>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-muted">Oops! You don't have permission to access this page.</h4>
+                        <p class="lead text-muted">
+                            The page you're trying to reach requires special permissions that your account doesn't have.
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-muted">
+                            If you believe this is an error, please contact your system administrator or try logging in with a different account.
+                        </p>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-primary btn-lg me-md-2">
+                            <i class="fas fa-home me-2"></i>Go to Home
+                        </a>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <form method="post" asp-controller="Account" asp-action="Logout" class="d-inline">
+                                <button type="submit" class="btn btn-outline-secondary ms-2"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Account")" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </a>
+                        }
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(ViewData["ReturnUrl"]?.ToString()))
+                    {
+                        <div class="mt-4">
+                            <p class="small text-muted">
+                                <strong>Attempted URL:</strong> @ViewData["ReturnUrl"]
+                            </p>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+
+    .card-body {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+    }
+
+    .btn {
+        border-radius: 25px;
+        padding: 12px 30px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+    .fa-lock {
+        opacity: 0.8;
+    }
+</style>

@@ -1,5 +1,7 @@
+using Jahacki_klub_Zeljeznicar.Attributes;
 using Jahacki_klub_Zeljeznicar.Data;
 using Jahacki_klub_Zeljeznicar.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,6 +57,25 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/Lockout";
     options.SlidingExpiration = true;
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("GuestOnly", policy =>
+        policy.Requirements.Add(new KategorijaRequirement(Kategorija.Guest)));
+
+    options.AddPolicy("ClanOnly", policy =>
+        policy.Requirements.Add(new KategorijaRequirement(Kategorija.Clan)));
+
+    options.AddPolicy("TrenerOnly", policy =>
+        policy.Requirements.Add(new KategorijaRequirement(Kategorija.Trener)));
+
+    options.AddPolicy("AdminOnly", policy =>
+        policy.Requirements.Add(new KategorijaRequirement(Kategorija.Admin)));
+    options.AddPolicy("TrenerOrAdmin", policy =>
+        policy.Requirements.Add(new KategorijaRequirement(Kategorija.Trener, Kategorija.Admin)));
+});
+
+builder.Services.AddScoped<IAuthorizationHandler, KategorijaHandler>();
 
 var app = builder.Build();
 

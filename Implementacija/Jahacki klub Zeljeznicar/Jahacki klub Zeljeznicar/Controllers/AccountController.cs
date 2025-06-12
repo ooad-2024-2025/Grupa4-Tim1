@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Jahacki_klub_Zeljeznicar.Controllers
 {
@@ -22,8 +24,17 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Lockout(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
         // GET: List all users
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -32,6 +43,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         // GET: User details
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Details(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -46,9 +58,11 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         // GET: Create user
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public IActionResult Create() => View();
 
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Create(CreateUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -86,6 +100,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         // GET: Edit user
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -110,6 +125,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         // POST: Edit user
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Edit(EditUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -155,6 +171,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         // GET: Delete confirmation
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -243,19 +260,13 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
             if (result.Succeeded)
             {
-                Debug.WriteLine("Login successful for user: " + model.Email);
                 return RedirectToAction("Index", "Dashboard");
-            }
-            if (result.IsLockedOut)
-
-            {
-                Debug.WriteLine("Login failed for user: " + model.Email);
-                return View("Lockout");
             }
 
             ModelState.AddModelError("", "Pogrešan email ili lozinka.");
             return View(model);
         }
+
         [HttpGet]
         public IActionResult RegisterClan() => View();
 
@@ -290,6 +301,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public IActionResult RegisterTrener() => View();
 
         [HttpPost]
@@ -324,6 +336,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public IActionResult RegisterAdmin() => View();
 
         [HttpPost]
@@ -356,6 +369,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 ModelState.AddModelError("", error.Description);
             return View(model);
         }
+
         [HttpGet]
         public IActionResult RegisterGuest(string returnUrl = null)
         {
@@ -396,6 +410,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 ModelState.AddModelError("", error.Description);
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> Logout()
         {

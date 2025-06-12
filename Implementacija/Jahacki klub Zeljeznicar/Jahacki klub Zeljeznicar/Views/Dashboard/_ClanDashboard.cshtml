@@ -21,6 +21,73 @@
 
 <div class="dashboard-container">
     <style>
+
+        /* Recommendation Badge Styles */
+        .recommendation-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #856404;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid #ffc107;
+            z-index: 10;
+        }
+
+            .recommendation-badge i {
+                font-size: 11px;
+                color: #856404;
+            }
+
+        /* Enhanced styling for recommended training cards */
+        .recommended-training {
+            position: relative;
+            border: 2px solid #ffc107 !important;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2) !important;
+            background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+        }
+
+            .recommended-training::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: linear-gradient(90deg, #ffd700, #ffed4e, #ffc107);
+                border-radius: 8px 8px 0 0;
+            }
+
+        /* Ensure the training card has relative positioning for absolute badge */
+        .dashboard-card.available-training {
+            position: relative;
+        }
+
+        /* Alternative simple badge style (if you prefer this over the current one) */
+        .simple-recommendation-badge {
+            background: #28a745;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            margin-bottom: 8px;
+        }
+
+            .simple-recommendation-badge i {
+                font-size: 10px;
+            }
+
         .dashboard-container {
             max-width: 70%;
             margin: 0 auto;
@@ -275,7 +342,6 @@
         <div class="section-header">
             <h2>Dostupni Treninzi za Prijavu</h2>
         </div>
-
         @if (Model.AvailableTrainings != null && Model.AvailableTrainings.Any())
         {
             <div class="dashboard-cards">
@@ -288,10 +354,17 @@
                         Nivo.Pocetnik => "level-low",
                         _ => "level-low"
                     };
-
                     var canRegister = (int)trening.Nivo <= (int)currentUserLevel;
+                    var isRecommended = Model.RecommendedTrainingIds != null && Model.RecommendedTrainingIds.Contains(trening.Id);
 
-                    <div class="dashboard-card available-training @(!canRegister ? "disabled" : "")">
+                    <div class="dashboard-card available-training @(canRegister ? "" : "disabled") @(isRecommended ? "recommended-training" : "")">
+                        @if (isRecommended)
+                        {
+                            <div class="recommendation-badge">
+                                <i class="fas fa-star"></i>
+                                <span>Preporučeno</span>
+                            </div>
+                        }
                         <h3>@trening.Naziv</h3>
                         <div class="training-level @nivoKlasa">@trening.Nivo</div>
                         <div class="training-info">
@@ -331,4 +404,5 @@
             </div>
         }
     </div>
+
 </div>

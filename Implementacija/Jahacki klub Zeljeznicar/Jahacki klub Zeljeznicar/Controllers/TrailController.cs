@@ -1,5 +1,6 @@
 ﻿using Jahacki_klub_Zeljeznicar.Data;
 using Jahacki_klub_Zeljeznicar.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -36,26 +37,6 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Trail/Details/5
-        /*
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var trail = await _context.Trails
-                .Include(t => t.Rezervator)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (trail == null)
-            {
-                return NotFound();
-            }
-
-            return View(trail);
-        }
-        */
         public async Task<IActionResult> Details(int id)
         {
             var trail = await _context.Trails
@@ -98,6 +79,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
         // GET: Trail/Create
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Create()
         {
             var konji = await _context.Konji.ToListAsync();
@@ -108,6 +90,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         // POST: Trail/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Create([Bind("Naziv,Opis,Datum")] Trail trail, List<int> SelectedHorseIds)
         {
             try
@@ -197,6 +180,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Trail/Edit/5
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -227,6 +211,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Naziv,Opis,Datum,RezervatorId")] Trail trail, List<int> SelectedHorseIds)
         {
             if (id != trail.Id)
@@ -316,6 +301,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
 
         // GET: Trail/Delete/5
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -337,6 +323,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         // POST: Trail/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var trail = await _context.Trails.FindAsync(id);
