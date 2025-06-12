@@ -21,6 +21,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         {
             if (mjeseci != 1 && mjeseci != 6 && mjeseci != 12)
             {
+                ModelState.AddModelError(nameof(mjeseci), "Nevažeći izbor trajanja članarine.");
                 return RedirectToAction("Index", "Clanarina");
             }
 
@@ -30,15 +31,35 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         [HttpPost]
         [Authorize(Policy = "ClanOnly")]
-        public async Task<IActionResult> PotvrdiPlacanje(string BrojKartice, int Opcija)
+        public async Task<IActionResult> PotvrdiPlacanje(string brojKartice, int opcija)
         {
-            if (string.IsNullOrWhiteSpace(BrojKartice) || (Opcija != 1 && Opcija != 6 && Opcija != 12))
+            // Validate credit card number (basic validation)
+            if (string.IsNullOrWhiteSpace(brojKartice))
             {
-                TempData["Error"] = "Unos nije ispravan.";
-                return RedirectToAction("Index", new { mjeseci = Opcija });
+                ModelState.AddModelError(nameof(brojKartice), "Broj kartice je obavezan.");
+            }
+            else if (brojKartice.Length < 13 || brojKartice.Length > 19)
+            {
+                ModelState.AddModelError(nameof(brojKartice), "Broj kartice mora imati između 13 i 19 znamenki.");
+            }
+            else if (!long.TryParse(brojKartice, out _))
+            {
+                ModelState.AddModelError(nameof(brojKartice), "Broj kartice može sadržavati samo znamenke.");
             }
 
-            return RedirectToAction("Potvrdi", "Clanarina", new { mjeseci = Opcija });
+            // Validate membership option
+            if (opcija != 1 && opcija != 6 && opcija != 12)
+            {
+                ModelState.AddModelError(nameof(opcija), "Nevažeći izbor trajanja članarine.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Popravite greške u obrascu.";
+                return RedirectToAction("Index", new { mjeseci = opcija });
+            }
+
+            return RedirectToAction("Potvrdi", "Clanarina", new { mjeseci = opcija });
         }
     }
 }

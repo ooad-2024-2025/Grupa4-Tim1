@@ -92,7 +92,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
+                ModelState.AddModelError(nameof(model.Password), error.Description);
 
             return View(model);
         }
@@ -154,7 +154,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                     if (!passwordResult.Succeeded)
                     {
                         foreach (var error in passwordResult.Errors)
-                            ModelState.AddModelError("", error.Description);
+                            ModelState.AddModelError(nameof(model.NewPassword), error.Description);
                         return View(model);
                     }
                 }
@@ -164,7 +164,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
+                ModelState.AddModelError(nameof(model.Email), error.Description);
 
             return View(model);
         }
@@ -241,7 +241,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
+                ModelState.AddModelError(nameof(model.Password), error.Description);
 
             return View(model);
         }
@@ -257,15 +257,22 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             var result = await _signInManager.PasswordSignInAsync(
                 model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
 
-
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
 
-            ModelState.AddModelError("", "Pogrešan email ili lozinka.");
+            if (result.IsLockedOut)
+            {
+                ModelState.AddModelError(nameof(model.Email), "Račun je zaključan zbog previše neuspješnih pokušaja.");
+                return View(model);
+            }
+
+            // More specific than "" — targets the Password field directly
+            ModelState.AddModelError(nameof(model.Password), "Pogrešan email ili lozinka.");
             return View(model);
         }
+
 
         [HttpGet]
         public IActionResult RegisterClan() => View();
@@ -296,7 +303,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
+                ModelState.AddModelError(nameof(model.Password), error.Description);
             return View(model);
         }
 
@@ -331,7 +338,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
+                ModelState.AddModelError(nameof(model.Password), error.Description);
             return View(model);
         }
 
@@ -366,7 +373,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
+                ModelState.AddModelError(nameof(model.Password), error.Description);
             return View(model);
         }
 
@@ -407,7 +414,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             foreach (var error in result.Errors)
-                ModelState.AddModelError("", error.Description);
+                ModelState.AddModelError(nameof(model.Password), error.Description);
             return View(model);
         }
 

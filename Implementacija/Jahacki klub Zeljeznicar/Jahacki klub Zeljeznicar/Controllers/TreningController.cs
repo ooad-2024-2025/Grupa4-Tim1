@@ -85,72 +85,78 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         [Authorize(Policy = "TrenerOrAdmin")]
         public async Task<IActionResult> Create(Trening trening, int[] SelectedHorseIds)
         {
-            ModelState.Remove("TrenerId");
-            ModelState.Remove("Trener");
+            // Validate required fields
+            if (string.IsNullOrWhiteSpace(trening.Naziv))
+            {
+                ModelState.AddModelError(nameof(trening.Naziv), "Naziv treninga je obavezan.");
+            }
 
-            var selectedDate = trening.Datum.Date;
+            if (trening.Datum < DateTime.Today)
+            {
+                ModelState.AddModelError(nameof(trening.Datum), "Datum treninga ne može biti u prošlosti.");
+            }
 
+            if (trening.MaxBrClanova <= 0)
+            {
+                ModelState.AddModelError(nameof(trening.MaxBrClanova), "Maksimalan broj članova mora biti veći od 0.");
+            }
+
+            // Validate horse selection
             if (SelectedHorseIds == null || SelectedHorseIds.Length == 0)
             {
-                ModelState.AddModelError("", "Morate izabrati najmanje jednog konja za trening.");
+                ModelState.AddModelError(nameof(SelectedHorseIds), "Morate odabrati najmanje jednog konja.");
             }
             else
             {
                 foreach (var horseId in SelectedHorseIds)
                 {
-                    bool isOccupiedInTrening = await _context.TreningKonji
+                    bool isOccupied = await _context.TreningKonji
                         .Include(tk => tk.Trening)
-                        .AnyAsync(tk => tk.KonjId == horseId && tk.Trening.Datum.Date == selectedDate);
-
-                    bool isOccupiedInTrail = await _context.TrailKonji
+                        .AnyAsync(tk => tk.KonjId == horseId && tk.Trening.Datum.Date == trening.Datum.Date) ||
+                        await _context.TrailKonji
                         .Include(tk => tk.Trail)
-                        .AnyAsync(tk => tk.KonjId == horseId && tk.Trail.Datum.Date == selectedDate);
+                        .AnyAsync(tk => tk.KonjId == horseId && tk.Trail.Datum.Date == trening.Datum.Date);
 
-                    if (isOccupiedInTrening || isOccupiedInTrail)
+                    if (isOccupied)
                     {
                         var horse = await _context.Konji.FindAsync(horseId);
-                        ModelState.AddModelError("", $"Konj {horse?.Ime} je već rezervisan za trail/trening na dan {selectedDate:dd.MM.yyyy}.");
+                        ModelState.AddModelError(nameof(SelectedHorseIds), $"Konj {horse?.Ime} je već rezervisan za taj dan.");
                     }
                 }
             }
 
             if (ModelState.IsValid)
             {
-                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                trening.TrenerId = string.IsNullOrEmpty(currentUserId)
-                    ? _context.Users.Select(u => u.Id).FirstOrDefault()
-                    : currentUserId;
-
-                _context.Treninzi.Add(trening);
-                await _context.SaveChangesAsync();
-
-                foreach (var konjId in SelectedHorseIds)
+                try
                 {
-                    _context.TreningKonji.Add(new Trening_Konj
-                    {
-                        TreningId = trening.Id,
-                        KonjId = konjId
-                    });
-                }
+                    trening.TrenerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    _context.Treninzi.Add(trening);
+                    await _context.SaveChangesAsync();
 
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Dashboard");
+                    foreach (var konjId in SelectedHorseIds)
+                    {
+                        _context.TreningKonji.Add(new Trening_Konj
+                        {
+                            TreningId = trening.Id,
+                            KonjId = konjId
+                        });
+                    }
+                    await _context.SaveChangesAsync();
+
+                    TempData["SuccessMessage"] = "Trening je uspešno kreiran!";
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"Greška pri kreiranju treninga: {ex.Message}");
+                }
             }
 
-            // Ako validacija ne prođe, ponovo postavi ViewBag podatke
-            var treneri = await _userManager.GetUsersInRoleAsync("Trener");
-            ViewBag.TrenerId = new SelectList(
-                treneri.Select(u => new {
-                    Id = u.Id,
-                    ImePrezime = u.Ime + " " + u.Prezime
-                }).ToList(),
-                "Id",
-                "ImePrezime"
-            );
-
-            ViewBag.Konji = await _context.Konji.ToListAsync();
+            // Re-populate view data if validation fails
+            await PopulateCreateViewData();
             return View(trening);
         }
+
 
         // GET: Trening/Edit/5
         [Authorize(Policy = "TrenerOrAdmin")]
@@ -207,31 +213,48 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         {
             if (id != trening.Id)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "ID treninga se ne poklapa.");
+                return View(trening);
             }
 
-            var selectedDate = trening.Datum.Date;
+            // Validate required fields
+            if (string.IsNullOrWhiteSpace(trening.Naziv))
+            {
+                ModelState.AddModelError(nameof(trening.Naziv), "Naziv treninga je obavezan.");
+            }
 
+            if (trening.Datum < DateTime.Today)
+            {
+                ModelState.AddModelError(nameof(trening.Datum), "Datum treninga ne može biti u prošlosti.");
+            }
+
+            if (trening.MaxBrClanova <= 0)
+            {
+                ModelState.AddModelError(nameof(trening.MaxBrClanova), "Maksimalan broj članova mora biti veći od 0.");
+            }
+
+            // Validate horse selection
             if (SelectedHorseIds == null || SelectedHorseIds.Length == 0)
             {
-                ModelState.AddModelError("", "Morate izabrati najmanje jednog konja za trening.");
+                ModelState.AddModelError(nameof(SelectedHorseIds), "Morate odabrati najmanje jednog konja.");
             }
             else
             {
                 foreach (var horseId in SelectedHorseIds)
                 {
-                    bool isOccupiedInTrening = await _context.TreningKonji
+                    bool isOccupied = await _context.TreningKonji
                         .Include(tk => tk.Trening)
-                        .AnyAsync(tk => tk.KonjId == horseId && tk.Trening.Datum.Date == selectedDate && tk.TreningId != id);
-
-                    bool isOccupiedInTrail = await _context.TrailKonji
+                        .AnyAsync(tk => tk.KonjId == horseId &&
+                                       tk.Trening.Datum.Date == trening.Datum.Date &&
+                                       tk.TreningId != id) ||
+                        await _context.TrailKonji
                         .Include(tk => tk.Trail)
-                        .AnyAsync(tk => tk.KonjId == horseId && tk.Trail.Datum.Date == selectedDate);
+                        .AnyAsync(tk => tk.KonjId == horseId && tk.Trail.Datum.Date == trening.Datum.Date);
 
-                    if (isOccupiedInTrening || isOccupiedInTrail)
+                    if (isOccupied)
                     {
                         var horse = await _context.Konji.FindAsync(horseId);
-                        ModelState.AddModelError("", $"Konj {horse?.Ime} je već rezervisan za trail/trening na dan {selectedDate:dd.MM.yyyy}.");
+                        ModelState.AddModelError(nameof(SelectedHorseIds), $"Konj {horse?.Ime} je već rezervisan za taj dan.");
                     }
                 }
             }
@@ -240,21 +263,25 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             {
                 try
                 {
+                    // Update training
                     _context.Update(trening);
 
-                    var postojeciTreningKonji = _context.TreningKonji.Where(tk => tk.TreningId == id);
-                    _context.TreningKonji.RemoveRange(postojeciTreningKonji);
+                    // Update horses
+                    var existingAssignments = _context.TreningKonji.Where(tk => tk.TreningId == id);
+                    _context.TreningKonji.RemoveRange(existingAssignments);
 
-                    foreach (var konjId in SelectedHorseIds)
+                    foreach (var horseId in SelectedHorseIds)
                     {
                         _context.TreningKonji.Add(new Trening_Konj
                         {
                             TreningId = id,
-                            KonjId = konjId
+                            KonjId = horseId
                         });
                     }
 
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Trening je uspešno ažuriran!";
+                    return RedirectToAction("Index", "Dashboard");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -262,27 +289,19 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError(string.Empty, "Greška pri ažuriranju - podaci su promijenjeni od strane drugog korisnika.");
                 }
-                return RedirectToAction("Index", "Dashboard");
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"Greška pri ažuriranju treninga: {ex.Message}");
+                }
             }
 
-            // Ako validacija ne prođe, ponovo postavi ViewBag podatke
-            var treneri2 = await _userManager.GetUsersInRoleAsync("Trener");
-            var trenerList2 = treneri2.Select(u => new SelectListItem
-            {
-                Value = u.Id,
-                Text = $"{u.Ime} {u.Prezime}",
-                Selected = u.Id == trening.TrenerId
-            }).ToList();
-
-            ViewBag.TrenerId = trenerList2;
-            ViewBag.Konji = await _context.Konji.ToListAsync();
+            // Re-populate view data if validation fails
+            await PopulateEditViewData(trening.TrenerId, SelectedHorseIds);
             return View(trening);
         }
+
 
         // GET: Trening/Delete/5
         [Authorize(Policy = "TrenerOrAdmin")]
@@ -314,21 +333,69 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var trening = await _context.Treninzi.FindAsync(id);
-            if (trening != null)
+            if (trening == null)
             {
-                // Prvo ukloni povezane entitete
+                ModelState.AddModelError(string.Empty, "Trening nije pronađen.");
+                return RedirectToAction("Index");
+            }
+
+            try
+            {
+                // Remove related entities first
                 var treningKonji = _context.TreningKonji.Where(tk => tk.TreningId == id);
                 _context.TreningKonji.RemoveRange(treningKonji);
 
                 var treningUsers = _context.TreningUsers.Where(tu => tu.TreningId == id);
                 _context.TreningUsers.RemoveRange(treningUsers);
 
-                // Zatim ukloni trening
+                // Then remove the training
                 _context.Treninzi.Remove(trening);
+
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Trening je uspešno obrisan!";
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Greška pri brisanju treninga: {ex.Message}");
+                return View("Delete", await _context.Treninzi
+                    .Include(t => t.Trener)
+                    .Include(t => t.TreningKonji)
+                        .ThenInclude(tk => tk.Konj)
+                    .FirstOrDefaultAsync(t => t.Id == id));
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Dashboard");
+        }
+
+        private async Task PopulateCreateViewData()
+        {
+            var treneri = await _userManager.GetUsersInRoleAsync("Trener");
+            ViewBag.TrenerId = new SelectList(
+                treneri.Select(u => new {
+                    Id = u.Id,
+                    ImePrezime = $"{u.Ime} {u.Prezime}"
+                }),
+                "Id",
+                "ImePrezime",
+                User.FindFirstValue(ClaimTypes.NameIdentifier)
+            );
+            ViewBag.Konji = await _context.Konji.ToListAsync();
+        }
+
+        private async Task PopulateEditViewData(string trenerId, int[] selectedHorseIds)
+        {
+            var treneri = await _userManager.GetUsersInRoleAsync("Trener");
+            ViewBag.TrenerId = new SelectList(
+                treneri.Select(u => new {
+                    Id = u.Id,
+                    ImePrezime = $"{u.Ime} {u.Prezime}"
+                }),
+                "Id",
+                "ImePrezime",
+                trenerId
+            );
+            ViewBag.Konji = await _context.Konji.ToListAsync();
+            ViewBag.SelectedHorseIds = selectedHorseIds;
         }
 
         private bool TreningExists(int id)

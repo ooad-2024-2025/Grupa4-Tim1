@@ -54,17 +54,22 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // POST: Konj/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Konj/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [HttpPost]
         [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Create([Bind("Ime,Opis,Spol,Boja")] Konj konj)
         {
-            // Debugging
-            System.Diagnostics.Debug.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
-    
+            if (string.IsNullOrWhiteSpace(konj.Ime))
+            {
+                ModelState.AddModelError(nameof(konj.Ime), "Ime konja je obavezno.");
+            }
+
+            if (konj.Ime?.Length > 50)
+            {
+                ModelState.AddModelError(nameof(konj.Ime), "Ime konja ne može biti duže od 50 karaktera.");
+            }
+
             if (!ModelState.IsValid)
             {
                 foreach (var error in ModelState)
@@ -76,7 +81,6 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
             try
             {
-                // Kreiraj novi objekt samo s osnovnim svojstvima
                 var noviKonj = new Konj
                 {
                     Ime = konj.Ime,
@@ -86,22 +90,14 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 };
 
                 _context.Konji.Add(noviKonj);
-                var result = await _context.SaveChangesAsync();
-        
-                System.Diagnostics.Debug.WriteLine($"Rows affected: {result}");
+                await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "Konj je uspješno dodan!";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Exception: {ex.Message}");
-                if (ex.InnerException != null)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Inner Exception: {ex.InnerException.Message}");
-                }
-        
-                ModelState.AddModelError("", $"Došlo je do greške prilikom čuvanja: {ex.Message}");
+                ModelState.AddModelError(string.Empty, $"Došlo je do greške prilikom čuvanja: {ex.Message}");
                 return View(konj);
             }
         }
@@ -124,8 +120,6 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // POST: Konj/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "AdminOnly")]
@@ -133,7 +127,18 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         {
             if (id != konj.Id)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "ID konja se ne poklapa.");
+                return View(konj);
+            }
+
+            if (string.IsNullOrWhiteSpace(konj.Ime))
+            {
+                ModelState.AddModelError(nameof(konj.Ime), "Ime konja je obavezno.");
+            }
+
+            if (konj.Ime?.Length > 50)
+            {
+                ModelState.AddModelError(nameof(konj.Ime), "Ime konja ne može biti duže od 50 karaktera.");
             }
 
             if (ModelState.IsValid)
@@ -142,22 +147,20 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 {
                     _context.Update(konj);
                     await _context.SaveChangesAsync();
-
-                    // Dodaj success poruku
                     TempData["SuccessMessage"] = "Konj je uspješno ažuriran!";
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
                     if (!KonjExists(konj.Id))
                     {
-                        return NotFound();
+                        ModelState.AddModelError(string.Empty, "Konj nije pronađen u bazi podataka.");
                     }
                     else
                     {
-                        throw;
+                        ModelState.AddModelError(string.Empty, $"Došlo je do greške prilikom ažuriranja: {ex.Message}");
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(konj);
         }
@@ -187,16 +190,23 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var konj = await _context.Konji.FindAsync(id);
-            if (konj != null)
+            try
             {
+                var konj = await _context.Konji.FindAsync(id);
+                if (konj == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Konj nije pronađen.");
+                    return RedirectToAction(nameof(Index));
+                }
+
                 _context.Konji.Remove(konj);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Konj je uspješno uklonjen!";
             }
-
-            await _context.SaveChangesAsync();
-
-            // Dodaj success poruku
-            TempData["SuccessMessage"] = "Konj je uspješno uklonjen!";
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Došlo je do greške prilikom brisanja: {ex.Message}");
+            }
 
             return RedirectToAction(nameof(Index));
         }

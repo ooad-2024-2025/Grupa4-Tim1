@@ -64,6 +64,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         {
             if (mjeseci != 1 && mjeseci != 6 && mjeseci != 12)
             {
+                ModelState.AddModelError(nameof(mjeseci), "Nevaljan broj mjeseci za produžavanje.");
                 TempData["Error"] = "Nevaljan broj mjeseci za produžavanje.";
                 return RedirectToAction(nameof(Index));
             }
@@ -116,9 +117,17 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 _context.Add(novaClanarina);
             }
 
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+                TempData["Success"] = $"Članarina je uspješno produžena za {mjeseci} mjesec(i). Važeća do: {noviIstek:dd.MM.yyyy}";
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Greška pri spremanju podataka o članarini.");
+                TempData["Error"] = "Greška pri produžavanju članarine.";
+            }
 
-            TempData["Success"] = $"Članarina je uspješno produžena za {mjeseci} mjesec(i). Važeća do: {noviIstek:dd.MM.yyyy}";
             return RedirectToAction(nameof(Index));
         }
 
@@ -216,14 +225,21 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
                 if (postojecaClanarina != null)
                 {
-                    ModelState.AddModelError("UserId", "Korisnik već ima članarinu. Koristite opciju uređivanja.");
+                    ModelState.AddModelError(nameof(clanarina.UserId), "Korisnik već ima članarinu. Koristite opciju uređivanja.");
                 }
                 else
                 {
-                    _context.Add(clanarina);
-                    await _context.SaveChangesAsync();
-                    TempData["Success"] = "Članarina je uspješno kreirana.";
-                    return RedirectToAction(nameof(AdminIndex));
+                    try
+                    {
+                        _context.Add(clanarina);
+                        await _context.SaveChangesAsync();
+                        TempData["Success"] = "Članarina je uspješno kreirana.";
+                        return RedirectToAction(nameof(AdminIndex));
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", "Greška pri kreiranju članarine.");
+                    }
                 }
             }
 
@@ -279,10 +295,18 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                     }
                     else
                     {
-                        throw;
+                        ModelState.AddModelError("", "Greška prilikom ažuriranja - podaci su izmijenjeni od strane drugog korisnika.");
                     }
                 }
-                return RedirectToAction(nameof(AdminIndex));
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Greška pri ažuriranju članarine.");
+                }
+
+                if (ModelState.IsValid)
+                {
+                    return RedirectToAction(nameof(AdminIndex));
+                }
             }
 
             var users = await _context.Users.ToListAsync();
@@ -319,9 +343,16 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             var clanarina = await _context.Clanarine.FindAsync(id);
             if (clanarina != null)
             {
-                _context.Clanarine.Remove(clanarina);
-                await _context.SaveChangesAsync();
-                TempData["Success"] = "Članarina je uspješno obrisana.";
+                try
+                {
+                    _context.Clanarine.Remove(clanarina);
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "Članarina je uspješno obrisana.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["Error"] = "Greška pri brisanju članarine.";
+                }
             }
 
             return RedirectToAction(nameof(AdminIndex));
@@ -397,70 +428,99 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         // POST: Clanarina/PotvrdiPlacanje
         // Corrected PotvrdiPlacanje method in ClanarinaController.cs
-[Authorize]
-[HttpPost]
-public async Task<IActionResult> PotvrdiPlacanje(string ImePrezime, string BrojKartice, string CVV, int Opcija)
-{
-    if (string.IsNullOrWhiteSpace(BrojKartice) || string.IsNullOrWhiteSpace(ImePrezime) ||
-        string.IsNullOrWhiteSpace(CVV) || (Opcija != 1 && Opcija != 6 && Opcija != 12))
-    {
-        TempData["Error"] = "Svi podaci moraju biti uneseni ispravno.";
-        return RedirectToAction(nameof(Placanje), new { mjeseci = Opcija });
-    }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> PotvrdiPlacanje(string ImePrezime, string BrojKartice, string CVV, int Opcija)
+        {
+            if (string.IsNullOrWhiteSpace(BrojKartice))
+            {
+                ModelState.AddModelError(nameof(BrojKartice), "Broj kartice je obavezan.");
+            }
 
-    var userId = _userManager.GetUserId(User);
-    var user = await _userManager.FindByIdAsync(userId);
-        
-    // Get all clanarinas for this user, ordered by expiration date descending
-    var allClanarinas = await _context.Clanarine
-        .Where(c => c.UserId == userId)
-        .OrderByDescending(c => c.IstekClanarine)
-        .ToListAsync();
+            if (string.IsNullOrWhiteSpace(ImePrezime))
+            {
+                ModelState.AddModelError(nameof(ImePrezime), "Ime i prezime su obavezni.");
+            }
 
-    DateTime noviPocetak;
-    DateTime noviIstek;
+            if (string.IsNullOrWhiteSpace(CVV))
+            {
+                ModelState.AddModelError(nameof(CVV), "CVV kod je obavezan.");
+            }
 
-    if (allClanarinas.Any())
-    {
-        // Get the latest expiration date from all clanarinas
-        var najnoviji_istek = allClanarinas.First().IstekClanarine;
-        
-        // If the latest expiration is in the future, extend from that date
-        // Otherwise, start from today
-        noviPocetak = najnoviji_istek > DateTime.Now ? najnoviji_istek : DateTime.Now;
-        noviIstek = noviPocetak.AddMonths(Opcija);
-    }
-    else
-    {
-        // If no existing clanarinas, start from today
-        noviPocetak = DateTime.Now;
-        noviIstek = noviPocetak.AddMonths(Opcija);
-    }
+            if (Opcija != 1 && Opcija != 6 && Opcija != 12)
+            {
+                ModelState.AddModelError(nameof(Opcija), "Nevalidna opcija mjeseci.");
+            }
 
-    // Always create a new clanarina for each payment
-    var novaClanarina = new Clanarina
-    {
-        UserId = userId,
-        PocetakClanarine = noviPocetak,
-        IstekClanarine = noviIstek
-    };
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Svi podaci moraju biti uneseni ispravno.";
+                return RedirectToAction(nameof(Placanje), new { mjeseci = Opcija });
+            }
 
-    _context.Add(novaClanarina);
-    await _context.SaveChangesAsync();
+            var userId = _userManager.GetUserId(User);
+            var user = await _userManager.FindByIdAsync(userId);
 
-    // Send email confirmation
-    try
-    {
-        await PosaljiEmailPotvrdu(user.Email, user.UserName, Opcija, noviIstek);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Greška pri slanju email-a: {ex.Message}");
-    }
+            // Get all clanarinas for this user, ordered by expiration date descending
+            var allClanarinas = await _context.Clanarine
+                .Where(c => c.UserId == userId)
+                .OrderByDescending(c => c.IstekClanarine)
+                .ToListAsync();
 
-    TempData["Success"] = $"Plaćanje je uspješno izvršeno! Članarina je produžena za {Opcija} mjesec(i). Važeća do: {noviIstek:dd.MM.yyyy}. Potvrda je poslana na vaš email.";
-    return RedirectToAction(nameof(Index));
-}
+            DateTime noviPocetak;
+            DateTime noviIstek;
+
+            if (allClanarinas.Any())
+            {
+                // Get the latest expiration date from all clanarinas
+                var najnoviji_istek = allClanarinas.First().IstekClanarine;
+
+                // If the latest expiration is in the future, extend from that date
+                // Otherwise, start from today
+                noviPocetak = najnoviji_istek > DateTime.Now ? najnoviji_istek : DateTime.Now;
+                noviIstek = noviPocetak.AddMonths(Opcija);
+            }
+            else
+            {
+                // If no existing clanarinas, start from today
+                noviPocetak = DateTime.Now;
+                noviIstek = noviPocetak.AddMonths(Opcija);
+            }
+
+            // Always create a new clanarina for each payment
+            var novaClanarina = new Clanarina
+            {
+                UserId = userId,
+                PocetakClanarine = noviPocetak,
+                IstekClanarine = noviIstek
+            };
+
+            try
+            {
+                _context.Add(novaClanarina);
+                await _context.SaveChangesAsync();
+
+                // Send email confirmation
+                try
+                {
+                    await PosaljiEmailPotvrdu(user.Email, user.UserName, Opcija, noviIstek);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Greška pri slanju email-a: {ex.Message}");
+                    // Don't fail the payment process if email fails
+                }
+
+                TempData["Success"] = $"Plaćanje je uspješno izvršeno! Članarina je produžena za {Opcija} mjesec(i). Važeća do: {noviIstek:dd.MM.yyyy}. Potvrda je poslana na vaš email.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Greška pri obradi plaćanja. Molimo pokušajte ponovo.");
+                TempData["Error"] = "Greška pri obradi plaćanja.";
+                return RedirectToAction(nameof(Placanje), new { mjeseci = Opcija });
+            }
+        }
 
         private async Task PosaljiEmailPotvrdu(string emailAdresa, string korisnickoIme, int mjeseci, DateTime datumIsteka)
         {
