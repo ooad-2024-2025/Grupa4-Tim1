@@ -15,6 +15,21 @@ Sistem jahačkog kluba omogućava korisnicima da rezervišu različite trailove,
 - Vedad Gaštan
 - Ajdin Hajdarević
 
+## Deployment
+[Live deployed app](http://tim1grupa4-001-site1.ntempurl.com/)
+
+`Username:` 11248683
+
+`Password:` 60-dayfreetrial
+
+## Database Access (SQL Server)
+
+**Connection string for `appsettings.json`:**
+
+```json
+"Data Source=SQL6031.site4now.net;Initial Catalog=db_aba42b_ooad2025;User Id=db_aba42b_ooad2025_admin;Password=tim1grupa4"
+
+
 ## Funkcionalnosti
 
 ### Osnovne Usluge Sistema
@@ -52,13 +67,6 @@ Za testiranje aplikacije možete koristiti sljedeće korisničke račune:
 | Admin | `admin@admin.com` | `admin123` |
 
 
-
-## Deployment
-[Live deployed app](http://tim1grupa4-001-site1.ntempurl.com/)
-
-`Username:` 11248683
-
-`Password:` 60-dayfreetrial
 
 
 **Univerzitet u Sarajevu - Elektrotehnički Fakultet**  
