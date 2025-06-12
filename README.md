@@ -1,8 +1,8 @@
-# 🐎Jahački Klub Željezničar🔵
+# Jahački Klub Željezničar
 
-Sistem za upravljanje jahačkim klubom koji omogućava rezervaciju treninga, upravljanje članstvom i organizaciju jahačkih aktivnosti.
+Sistem za upravljanje jahačkim klubom koji omogućava rezervaciju treninga, upravljanje članstvom i rezervaciju trail-ova.
 
-## 📋 O Projektu
+## O Projektu
 
 Sistem jahačkog kluba omogućava korisnicima da rezervišu različite trailove, apliciraju za članstvo u klubu i prate svoje članarine. Korisnici se mogu prijavljivati na treninge, a algoritam na osnovu prethodnih termina treninga, trenera i konja koje su jahali predlaže nove termine. Implementirana je kontrola pristupa gdje članovi i administrator imaju različite ovlasti i funkcionalnosti.
 
@@ -51,13 +51,13 @@ Za testiranje aplikacije možete koristiti sljedeće korisničke račune:
 | Trener | `trener@trener.com` | `trener123` |
 | Admin | `admin@admin.com` | `admin123` |
 
-## 🛡️ Nefunkcionalni Zahtjevi
+## Nefunkcionalni Zahtjevi
 
 - **Dostupnost 24/7** - Kontinuiran pristup sistemu
 - **Mobilna kompatibilnost** - Potpuna funkcionalnost na iPhone i Android uređajima
 - **Sigurnost podataka** - Siguran prenos i čuvanje korisničkih informacija
 
-## 🏗️ Arhitektura
+##  Arhitektura
 
 Sistem je razvijen koristeći objektno orijentisanu analizu i dizajn sa fokusom na:
 - Kontrolu pristupa na osnovu tipova korisnika
@@ -65,7 +65,7 @@ Sistem je razvijen koristeći objektno orijentisanu analizu i dizajn sa fokusom 
 - Asinhronu obradu e-mail notifikacija
 - Responsivni dizajn za mobilne uređaje
 
-## 📧 Kontakt
+##  Kontakt
 
 Za pitanja vezana za projekat, kontaktirajte članove tima preko GitHub-a.
 
