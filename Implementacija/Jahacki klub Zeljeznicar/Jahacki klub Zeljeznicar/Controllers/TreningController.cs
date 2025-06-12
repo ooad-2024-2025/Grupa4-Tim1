@@ -60,9 +60,20 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Trening/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Konji = _context.Konji.ToList();
+            // Postavi ViewBag za trenere
+            var treneri = await _userManager.GetUsersInRoleAsync("Trener");
+            ViewBag.TrenerId = new SelectList(
+                treneri.Select(u => new {
+                    Id = u.Id,
+                    ImePrezime = u.Ime + " " + u.Prezime
+                }).ToList(),
+                "Id",
+                "ImePrezime"
+            );
+
+            ViewBag.Konji = await _context.Konji.ToListAsync();
             return View();
         }
 
@@ -122,10 +133,20 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
 
-            ViewBag.Konji = _context.Konji.ToList();
+            // Ako validacija ne prođe, ponovo postavi ViewBag podatke
+            var treneri = await _userManager.GetUsersInRoleAsync("Trener");
+            ViewBag.TrenerId = new SelectList(
+                treneri.Select(u => new {
+                    Id = u.Id,
+                    ImePrezime = u.Ime + " " + u.Prezime
+                }).ToList(),
+                "Id",
+                "ImePrezime"
+            );
+
+            ViewBag.Konji = await _context.Konji.ToListAsync();
             return View(trening);
         }
-
 
         // GET: Trening/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -144,12 +165,34 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 return NotFound();
             }
 
-            ViewData["TrenerId"] = new SelectList(_context.Set<User>(), "Id", "Id", trening.TrenerId);
-            ViewBag.Konji = _context.Konji.ToList();
+            // Postavi ViewBag za trenere (samo korisnici sa ulogom Trener)
+            var treneri = await _userManager.GetUsersInRoleAsync("Trener");
+
+            // Debug - ispiši koliko trenera ima
+            System.Diagnostics.Debug.WriteLine($"Broj trenera: {treneri.Count}");
+            foreach (var t in treneri)
+            {
+                System.Diagnostics.Debug.WriteLine($"Trener: {t.Ime} {t.Prezime}, ID: {t.Id}");
+
+            }
+            // Dodaj ovo u Edit GET metodu
+            ViewBag.DebugTreneri = $"Broj trenera: {treneri.Count}";
+
+            // Kreiraj listu trenera
+            var trenerList = treneri.Select(u => new SelectListItem
+            {
+                Value = u.Id,
+                Text = $"{u.Ime} {u.Prezime}",
+                Selected = u.Id == trening.TrenerId
+            }).ToList();
+
+            ViewBag.TrenerId = trenerList;
+
+            // Postavi ViewBag za konje
+            ViewBag.Konji = await _context.Konji.ToListAsync();
             ViewBag.SelectedHorseIds = trening.TreningKonji.Select(tk => tk.KonjId).ToArray();
 
             return View(trening);
-
         }
 
         [HttpPost]
@@ -221,11 +264,19 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 return RedirectToAction("Index", "Dashboard");
             }
 
-            ViewData["TrenerId"] = new SelectList(_context.Set<User>(), "Id", "Id", trening.TrenerId);
-            ViewBag.Konji = _context.Konji.ToList();
+            // Ako validacija ne prođe, ponovo postavi ViewBag podatke
+            var treneri2 = await _userManager.GetUsersInRoleAsync("Trener");
+            var trenerList2 = treneri2.Select(u => new SelectListItem
+            {
+                Value = u.Id,
+                Text = $"{u.Ime} {u.Prezime}",
+                Selected = u.Id == trening.TrenerId
+            }).ToList();
+
+            ViewBag.TrenerId = trenerList2;
+            ViewBag.Konji = await _context.Konji.ToListAsync();
             return View(trening);
         }
-
 
         // GET: Trening/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -303,7 +354,6 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             return View(treninzi);
         }
 
-        
         public async Task<IActionResult> TrenerView()
         {
             // Učitaj sve treninge sa povezanim podacima za trenerski prikaz

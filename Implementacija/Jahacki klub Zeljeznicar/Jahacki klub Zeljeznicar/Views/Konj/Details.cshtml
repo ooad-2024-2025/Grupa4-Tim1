@@ -1,42 +1,189 @@
 ﻿@model Jahacki_klub_Zeljeznicar.Models.Konj
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalji konja";
 }
 
-<h1>Details</h1>
+<div class="details-container">
+    <div class="details-card">
+        <div class="details-header">
+            <h1>Detalji konja</h1>
+        </div>
 
-<div>
-    <h4>Konj</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Opis)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Opis)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Spol)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Spol)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Boja)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Boja)
-        </dd>
-    </dl>
+        <div class="details-body">
+            <div class="detail-row">
+                <div class="detail-label">@Html.DisplayNameFor(model => model.Ime)</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.Ime)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">@Html.DisplayNameFor(model => model.Opis)</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.Opis)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">@Html.DisplayNameFor(model => model.Spol)</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.Spol)</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">@Html.DisplayNameFor(model => model.Boja)</div>
+                <div class="detail-value">@Html.DisplayFor(model => model.Boja)</div>
+            </div>
+        </div>
+
+        <div class="details-footer">
+            <a href="javascript:history.back()" class="btn btn-secondary">Nazad na listu</a>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a href="javascript:history.back()">Back to List</a>
-</div>
+
+<style>
+    .details-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 70vh;
+        padding: 20px;
+        background-color: #f8f9fa;
+    }
+
+    .details-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 0;
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .details-header {
+        background-color: #333;
+        color: white;
+        padding: 20px 30px;
+        border-radius: 8px 8px 0 0;
+        text-align: center;
+    }
+
+        .details-header h1 {
+            margin: 0;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+    .details-body {
+        padding: 30px;
+    }
+
+    .detail-row {
+        display: flex;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e9ecef;
+        flex-wrap: wrap;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    .detail-label {
+        font-weight: bold;
+        color: #495057;
+        width: 200px;
+        flex-shrink: 0;
+        padding-right: 20px;
+        word-wrap: break-word;
+    }
+
+    .detail-value {
+        flex: 1;
+        color: #212529;
+        font-size: 16px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        min-width: 0;
+    }
+
+    .details-footer {
+        padding: 20px 30px;
+        background-color: #f8f9fa;
+        border-radius: 0 0 8px 8px;
+        text-align: center;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 0 5px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #333;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #555;
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            color: white;
+            text-decoration: none;
+        }
+
+    
+
+    .details-header,
+    .details-body,
+    .details-footer {
+        padding: 15px;
+    }
+
+        .details-header h1 {
+            font-size: 24px;
+        }
+
+    .detail-row {
+        flex-direction: column;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+    }
+
+    .detail-label {
+        width: 100%;
+        margin-bottom: 8px;
+        padding-right: 0;
+        font-size: 14px;
+    }
+
+    .detail-value {
+        font-size: 15px;
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    }
+</style>

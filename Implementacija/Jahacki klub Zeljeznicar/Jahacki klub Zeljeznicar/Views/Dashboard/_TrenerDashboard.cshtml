@@ -4,7 +4,7 @@
 <div class="dashboard-section">
     <div class="section-header">
         <h2>Upravljanje Treninzima</h2>
-        <a href="@Url.Action("Create", "Trening")" class="btn btn-success">
+        <a href="@Url.Action("Create", "Trening")" class="btn btn-success" style="background-color: #333; border-color: #333;">
             <i class="fas fa-plus"></i> Dodaj Novi Trening
         </a>
     </div>
@@ -78,7 +78,7 @@
     {
         <div class="no-data-message">
             <p>Nema dodanih treninga.</p>
-            <a href="@Url.Action("Create", "Trening")" class="btn btn-success">Dodaj Prvi Trening</a>
+            <a href="@Url.Action("Create", "Trening")" class="btn btn-success" style="background-color: #333; border-color: #333;">Dodaj Prvi Trening</a>
         </div>
     }
 </div>
@@ -99,7 +99,7 @@
                         <th>Prezime</th>
                         <th>Trenutni Nivo</th>
                         <th>Novi Nivo</th>
-                        <th>Akcije</th>
+                        <th>Sačuvaj</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -120,7 +120,7 @@
                                     <option value="">Izaberite nivo</option>
                                 </select>
                             </td>
-                            <td class="text-end">
+                            <td class="text-center">
                                 <form asp-controller="Dashboard" asp-action="ChangeUserLevel" method="post" style="display: inline-block;">
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="userId" value="@clan.Id" />
@@ -129,7 +129,7 @@
                                     <button type="submit" class="btn btn-sm btn-primary save-level-btn"
                                             title="Sačuvaj promene" disabled
                                             data-user-name="@clan.Ime @clan.Prezime">
-                                        <i class="fas fa-save"></i> Sačuvaj
+                                        <i class="fas fa-save"></i>
                                     </button>
                                 </form>
                             </td>
@@ -283,8 +283,13 @@
     .save-level-btn {
         background: linear-gradient(145deg, #0d6efd, #0b5ed7);
         border: none;
-        border-radius: 6px;
-        padding: 6px 12px;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-weight: 500;
         transition: all 0.3s ease;
         box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2);
@@ -304,6 +309,10 @@
             box-shadow: none;
         }
 
+        .save-level-btn i {
+            font-size: 14px;
+        }
+
     .training-level {
         padding: 6px 12px;
         border-radius: 6px;
@@ -313,6 +322,7 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
+
     .fas {
         font-family: "Font Awesome 5 Free";
         font-weight: 900;
@@ -332,26 +342,26 @@
     }
 
     .form-select-sm {
-    padding: 6px 12px;
-    font-size: 0.875rem;
-}
+        padding: 6px 12px;
+        font-size: 0.875rem;
+    }
 
-.text-end {
-    text-align: right !important;
-}
+    .text-end {
+        text-align: right !important;
+    }
 
-.dashboard-table td {
-    vertical-align: middle;
-    padding: 12px 8px;
-}
+    .dashboard-table td {
+        vertical-align: middle;
+        padding: 12px 8px;
+    }
 
-.level-change-row {
-    transition: background-color 0.2s ease;
-}
+    .level-change-row {
+        transition: background-color 0.2s ease;
+    }
 
-.level-change-row:hover {
-    background-color: rgba(13, 110, 253, 0.05);
-}
+        .level-change-row:hover {
+            background-color: rgba(13, 110, 253, 0.05);
+        }
 </style>
 
 <script>

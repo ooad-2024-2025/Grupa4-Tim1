@@ -1,57 +1,252 @@
 ﻿@model Jahacki_klub_Zeljeznicar.ViewModels.TrailDetailsViewModel
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalji traila";
 }
 
-<h1>Detalji traila</h1>
-
-<div>
-    <h4>Trail</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Naziv
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Trail.Naziv
-        </dd>
-        <dt class="col-sm-2">
-            Opis
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Trail.Opis
-        </dd>
-        <dt class="col-sm-2">
-            Datum
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Trail.Datum.ToString("dd.MM.yyyy")
-        </dd>
-        <dt class="col-sm-2">
-            Maksimalan broj konja
-        </dt>
-        <dd class="col-sm-10">
-            @Model.MaxHorses
-        </dd>
-    </dl>
-</div>
-
-<div>
-    @if (Model.Trail.RezervatorId == null)
-    {
-        <form asp-action="Rezervisi" asp-controller="Trail" method="post">
-            <input type="hidden" name="trailId" value="@Model.Trail.Id" />
-            <button type="submit" class="btn btn-primary">Rezerviši</button>
-        </form>
-    }
-    else if (Model.Trail.RezervatorId == Model.LoggedInUserId)
-    {
-        <div class="alert alert-info mt-2">
-            Vi ste rezervisali ovaj trail. Za otkazivanje, kontaktirajte vlasnike direktno.
+<div class="details-container">
+    <div class="details-card">
+        <div class="details-header">
+            <h1>Detalji traila</h1>
         </div>
+
+        <div class="details-body">
+            <div class="detail-row">
+                <div class="detail-label">Naziv</div>
+                <div class="detail-value">@Model.Trail.Naziv</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Opis</div>
+                <div class="detail-value">@Model.Trail.Opis</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Datum</div>
+                <div class="detail-value">@Model.Trail.Datum.ToString("dd.MM.yyyy")</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Maksimalan broj konja</div>
+                <div class="detail-value">@Model.MaxHorses</div>
+            </div>
+
+            @if (Model.Trail.RezervatorId != null)
+            {
+                <div class="detail-row">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value">
+                        @if (Model.Trail.RezervatorId == Model.LoggedInUserId)
+                        {
+                            <span class="status-reserved-by-you">Rezervisano od vas</span>
+                        }
+                        else
+                        {
+                            <span class="status-reserved">Rezervisano</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="details-footer">
+            @if (Model.Trail.RezervatorId == null)
+            {
+                <form asp-action="Rezervisi" asp-controller="Trail" method="post" style="display: inline;">
+                    <input type="hidden" name="trailId" value="@Model.Trail.Id" />
+                    <button type="submit" class="btn btn-primary">Rezerviši</button>
+                </form>
+            }
+            else if (Model.Trail.RezervatorId == Model.LoggedInUserId)
+            {
+                <div class="alert alert-info">
+                    Vi ste rezervisali ovaj trail. Za otkazivanje, kontaktirajte vlasnike direktno.
+                </div>
+            }
+            <a href="javascript:history.back()" class="btn btn-secondary">Nazad na listu</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .details-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 70vh;
+        padding: 20px;
+        background-color: #f8f9fa;
     }
 
-    <a asp-action="Edit" asp-route-id="@Model.Trail.Id">Edit</a> |
-    <a href="javascript:history.back()">Back to List</a>
-</div>
+    .details-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 0;
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .details-header {
+        background-color: #333;
+        color: white;
+        padding: 20px 30px;
+        border-radius: 8px 8px 0 0;
+        text-align: center;
+    }
+
+        .details-header h1 {
+            margin: 0;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+    .details-body {
+        padding: 30px;
+    }
+
+    .detail-row {
+        display: flex;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e9ecef;
+        flex-wrap: wrap;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    .detail-label {
+        font-weight: bold;
+        color: #495057;
+        width: 200px;
+        flex-shrink: 0;
+        padding-right: 20px;
+        word-wrap: break-word;
+    }
+
+    .detail-value {
+        flex: 1;
+        color: #212529;
+        font-size: 16px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        min-width: 0;
+    }
+
+    .status-reserved {
+        background-color: #dc3545;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        display: inline-block;
+    }
+
+    .status-reserved-by-you {
+        background-color: #28a745;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        display: inline-block;
+    }
+
+    .alert {
+        padding: 12px 16px;
+        margin: 10px 0;
+        border-radius: 4px;
+        border: 1px solid transparent;
+        word-wrap: break-word;
+    }
+
+    .alert-info {
+        color: #0c5460;
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+    }
+
+    .details-footer {
+        padding: 20px 30px;
+        background-color: #f8f9fa;
+        border-radius: 0 0 8px 8px;
+        text-align: center;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 0 5px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #333;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #555;
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            color: white;
+            text-decoration: none;
+        }
+
+    
+    .details-header,
+    .details-body,
+    .details-footer {
+        padding: 15px;
+    }
+
+        .details-header h1 {
+            font-size: 24px;
+        }
+
+    .detail-row {
+        flex-direction: column;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+    }
+
+    .detail-label {
+        width: 100%;
+        margin-bottom: 8px;
+        padding-right: 0;
+        font-size: 14px;
+    }
+
+    .detail-value {
+        font-size: 15px;
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    }
+</style>

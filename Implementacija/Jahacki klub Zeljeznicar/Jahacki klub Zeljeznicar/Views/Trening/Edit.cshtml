@@ -1,54 +1,296 @@
 ﻿@model Jahacki_klub_Zeljeznicar.Models.Trening
-
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Uredi trening";
 }
 
-<h1>Edit</h1>
+<style>
+    .training-form-container {
+        max-width: 600px;
+        margin: 30px auto;
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
-<h4>Trening</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Naziv" class="control-label"></label>
-                <input asp-for="Naziv" class="form-control" />
-                <span asp-validation-for="Naziv" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Nivo" class="control-label"></label>
-                <select asp-for="Nivo" class="form-control"></select>
-                <span asp-validation-for="Nivo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Datum" class="control-label"></label>
-                <input asp-for="Datum" class="form-control" />
-                <span asp-validation-for="Datum" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaxBrClanova" class="control-label"></label>
-                <input asp-for="MaxBrClanova" class="form-control" />
-                <span asp-validation-for="MaxBrClanova" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TrenerId" class="control-label"></label>
-                <select asp-for="TrenerId" class="form-control" asp-items="ViewBag.TrenerId"></select>
-                <span asp-validation-for="TrenerId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        .training-form-container h1 {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .training-form-container .form-group {
+            margin-bottom: 20px;
+        }
+
+        .training-form-container label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .training-form-container .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #f8f9fa;
+        }
+
+            .training-form-container .form-control:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+                background-color: white;
+            }
+
+        .training-form-container select.form-control {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .training-form-container .btn-submit {
+            width: 100%;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            background-color: #343a40;
+            color: white;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+            .training-form-container .btn-submit:hover {
+                background-color: #23272b;
+            }
+
+        .training-form-container .btn-back {
+            width: 100%;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            background-color: #6c757d;
+            color: white;
+            margin-top: 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+            .training-form-container .btn-back:hover {
+                background-color: #545b62;
+                color: white;
+                text-decoration: none;
+            }
+
+    .container {
+        max-width: 100% !important;
+        padding: 0 15px;
+    }
+
+    .text-danger {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .selected-items {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+    }
+
+    .selected-item {
+        background-color: #343a40;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+    }
+
+    .remove-item {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .remove-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+</style>
+
+<div class="training-form-container">
+    <h1>Uredi trening</h1>
+
+    <form asp-action="Edit" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group">
+            <label asp-for="Naziv">Naziv treninga</label>
+            <input asp-for="Naziv" class="form-control" placeholder="Unesite naziv treninga" />
+            <span asp-validation-for="Naziv" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Nivo">Nivo</label>
+            <select asp-for="Nivo" class="form-control" asp-items="Html.GetEnumSelectList<Nivo>()">
+                <option value="">Izaberite nivo</option>
+            </select>
+            <span asp-validation-for="Nivo" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Datum">Datum treninga</label>
+            <input asp-for="Datum" type="datetime-local" class="form-control" />
+            <span asp-validation-for="Datum" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MaxBrClanova">Maksimalan broj članova</label>
+            <input asp-for="MaxBrClanova" type="number" class="form-control" placeholder="Unesite maksimalan broj članova" min="1" />
+            <span asp-validation-for="MaxBrClanova" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="konji-select">Konji</label>
+            <select id="konji-select" class="form-control">
+                <option value="">Izaberite konje</option>
+                @if (ViewBag.Konji != null)
+                {
+                    @foreach (var konj in ViewBag.Konji)
+                    {
+                        <option value="@konj.Id">@konj.Ime</option>
+                    }
+                }
+            </select>
+            <div class="selected-items" id="selectedHorses"></div>
+            <!-- Hidden inputs za odabrane konje -->
+            <div id="hiddenHorseInputs"></div>
+        </div>
+
+        <button type="submit" class="btn-submit">Spremi promjene</button>
+        <a href="@Url.Action("Index", "Dashboard")" class="btn-back">Nazad na listu</a>
+    </form>
 </div>
 
-<div>
-    <a href="@Url.Action("Index", "Dashboard")">Back to List</a>
-</div>
+<script>
+    let selectedHorses = [];
+
+    // Inicijaliziraj sa postojećim konjima
+    @if (ViewBag.SelectedHorseIds != null && ViewBag.Konji != null)
+    {
+                    <text>
+                    const existingHorseIds = @Html.Raw(Json.Serialize(ViewBag.SelectedHorseIds));
+                    const allHorses = [
+                        @foreach (var konj in ViewBag.Konji)
+                        {
+                                        <text>{ Id: @konj.Id, Ime: "@konj.Ime" },</text>
+                        }
+                    ];
+
+                    existingHorseIds.forEach(horseId => {
+                        const horse = allHorses.find(h => h.Id === horseId);
+                        if (horse) {
+                            selectedHorses.push(horseId);
+                            addHorse(horseId, horse.Ime);
+                        }
+                    });
+                    updateHiddenInputs();
+                    </text>
+    }
+
+    // Funkcija za dodavanje konja
+    document.getElementById('konji-select').addEventListener('change', function() {
+        if (this.value) {
+            const selectedValue = parseInt(this.value);
+            const selectedText = this.options[this.selectedIndex].text;
+
+            // Provjeri da li je već dodano
+            if (!selectedHorses.includes(selectedValue)) {
+                selectedHorses.push(selectedValue);
+                addHorse(selectedValue, selectedText);
+                updateHiddenInputs();
+            }
+
+            this.value = '';
+        }
+    });
+
+    function addHorse(id, name) {
+        const selectedItems = document.getElementById('selectedHorses');
+        const item = document.createElement('div');
+        item.className = 'selected-item';
+        item.setAttribute('data-id', id);
+        item.innerHTML = `
+            ${name}
+            <button type="button" class="remove-item" onclick="removeHorse(this, ${id})">×</button>
+        `;
+        selectedItems.appendChild(item);
+    }
+
+    function removeHorse(button, horseId) {
+        selectedHorses = selectedHorses.filter(id => id !== horseId);
+        button.parentElement.remove();
+        updateHiddenInputs();
+    }
+
+    function updateHiddenInputs() {
+        const container = document.getElementById('hiddenHorseInputs');
+        container.innerHTML = '';
+
+        selectedHorses.forEach((horseId, index) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `SelectedHorseIds[${index}]`;
+            input.value = horseId;
+            container.appendChild(input);
+        });
+    }
+
+    // Validacija forme
+    document.querySelector('form').addEventListener('submit', function(e) {
+        if (selectedHorses.length === 0) {
+            e.preventDefault();
+            alert('Molimo odaberite najmanje jednog konja.');
+        }
+    });
+</script>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

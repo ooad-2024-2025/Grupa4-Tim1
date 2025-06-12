@@ -19,301 +19,316 @@
     };
 }
 
-
-<style>
-    .user-level-section {
-        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-        color: white;
-        text-align: center;
-        padding: 20px;
-        margin-top: 40px;
-    }
-
-    .level-info {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 15px;
-        font-size: 18px;
-    }
-
-    .level-label {
-        font-weight: 500;
-    }
-
-    .user-level-badge {
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-weight: bold;
-        font-size: 16px;
-    }
-
-    .training-level {
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-    .level-advanced {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .level-medium {
-        background-color: #fd7e14;
-        color: white;
-    }
-
-    .level-low {
-        background-color: #28a745;
-        color: white;
-    }
-
-    .registered-training {
-        border-left: 4px solid #28a745;
-    }
-
-    .available-training {
-        border-left: 4px solid #007bff;
-    }
-
-        .available-training.disabled {
-            opacity: 0.6;
-            border-left: 4px solid #6c757d;
+<div class="dashboard-container">
+    <style>
+        .dashboard-container {
+            max-width: 70%;
+            margin: 0 auto;
         }
 
-    .training-info {
-        margin: 15px 0;
-    }
-
-        .training-info p {
-            margin: 5px 0;
-            color: #666;
+        .user-level-section {
+            background-color:#333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
         }
 
-    .training-actions {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-        .training-actions .btn.disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
+        .level-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            font-size: 18px;
         }
 
-    .no-data-message {
-        text-align: center;
-        padding: 40px;
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        color: #6c757d;
-    }
+        .level-label {
+            font-weight: 500;
+        }
 
-    .no-data-message p {
-        margin: 10px 0;
-        font-size: 16px;
-    }
+        .user-level-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
 
-</style>
+        .training-level {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
 
-<!-- User Level Info -->
-<div class="dashboard-section user-level-section">
-    <div class="level-info">
-        <span class="level-label">Vaš trenutni nivo:</span>
-        <span class="user-level-badge @userLevelClass">@userLevelText</span>
+        .level-advanced {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .level-medium {
+            background-color: #fd7e14;
+            color: white;
+        }
+
+        .level-low {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .registered-training {
+            border-left: 4px solid #28a745;
+        }
+
+        .available-training {
+            border-left: 4px solid #007bff;
+        }
+
+            .available-training.disabled {
+                opacity: 0.6;
+                border-left: 4px solid #6c757d;
+            }
+
+        .training-info {
+            margin: 15px 0;
+        }
+
+            .training-info p {
+                margin: 5px 0;
+                color: #666;
+            }
+
+        .training-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+            .training-actions .btn.disabled {
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
+
+        .btn-details {
+            background-color: #333;
+            border-color: #333;
+            color: white;
+        }
+
+            .btn-details:hover {
+                background-color: #555;
+                border-color: #555;
+            }
+
+        .no-data-message {
+            text-align: center;
+            padding: 40px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            color: #6c757d;
+        }
+
+            .no-data-message p {
+                margin: 10px 0;
+                font-size: 16px;
+            }
+    </style>
+
+    <!-- User Level Info -->
+    <div class="dashboard-section user-level-section">
+        <div class="level-info">
+            <span class="level-label">Vaš trenutni nivo:</span>
+            <span class="user-level-badge @userLevelClass">@userLevelText</span>
+        </div>
     </div>
-</div>
 
-<!-- Clanarina Status Section - Add this before Registered Trainings -->
-@if (Model.CurrentUser?.Kategorija == Kategorija.Clan)
-{
+    <!-- Clanarina Status Section - Add this before Registered Trainings -->
+    @if (Model.CurrentUser?.Kategorija == Kategorija.Clan)
+    {
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>Status Članarine</h2>
+            </div>
+
+            @{
+                // Get the current user's active clanarina (latest one that hasn't expired or latest overall)
+                var aktivnaClanarina = Model.CurrentUserClanarina;
+            }
+
+            @if (aktivnaClanarina == null || aktivnaClanarina.IstekClanarine < DateTime.Now)
+            {
+                <!-- No active membership -->
+                <div class="dashboard-card" style="border-left: 4px solid #dc3545; background-color: #f8d7da;">
+                    <h3 style="color: #721c24;">Nemate aktivnu članarinu</h3>
+                    <div class="training-info">
+                        @if (aktivnaClanarina == null)
+                        {
+                            <p>Trenutno nemate registrovanu članarinu.</p>
+                        }
+                        else
+                        {
+                            <p>Vaša članarina je istekla: @aktivnaClanarina.IstekClanarine.ToString("dd.MM.yyyy")</p>
+                        }
+                        <p>Da biste mogli da se prijavljujete na treninge, potrebno je da produžite članarinu.</p>
+                    </div>
+                    <div class="training-actions">
+                        <a href="@Url.Action("Index", "Clanarina")" class="btn btn-primary">
+                            Produži Članarinu
+                        </a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <!-- Active membership -->
+                var daysUntilExpiry = (aktivnaClanarina.IstekClanarine - DateTime.Now).Days;
+                var statusClass = daysUntilExpiry <= 7 ? "border-left: 4px solid #ffc107; background-color: #fff3cd;" : "border-left: 4px solid #28a745; background-color: #d4edda;";
+                var statusColor = daysUntilExpiry <= 7 ? "#856404" : "#155724";
+
+
+                <div class="dashboard-card" style="@statusClass">
+                    <h3 style="color: @statusColor;">
+                        @if (daysUntilExpiry <= 7)
+                        {
+                            <span>⚠️ Članarina uskoro ističe</span>
+                        }
+                        else
+                        {
+                            <span>✅ Aktivna članarina</span>
+                        }
+                    </h3>
+                    <div class="training-info">
+                        <p><strong>Važeća do:</strong> @aktivnaClanarina.IstekClanarine.ToString("dd.MM.yyyy")</p>
+                        <p><strong>Preostalo dana:</strong> @daysUntilExpiry</p>
+                        @if (daysUntilExpiry <= 7)
+                        {
+                            <p style="color: #856404;">Preporučujemo da produžite članarinu na vrijeme.</p>
+                        }
+                    </div>
+                    <div class="training-actions">
+                        <a href="@Url.Action("Index", "Clanarina")" class="btn btn-success">
+                            Produži Članarinu
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Registered Trainings -->
+    @if (Model.RegisteredTrainings != null && Model.RegisteredTrainings.Any())
+    {
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>Prijavljeni Treninzi</h2>
+            </div>
+            <div class="dashboard-cards">
+                @foreach (var trening in Model.RegisteredTrainings)
+                {
+                    <div class="dashboard-card registered-training">
+                        <h3>@trening.Naziv</h3>
+                        <div class="training-level @(trening.Nivo switch { Nivo.Napredni => "level-advanced", Nivo.Srednji => "level-medium", Nivo.Pocetnik => "level-low", _ => "level-low" })">
+                            @trening.Nivo
+                        </div>
+                        <div class="training-info" id="treninzi">
+                            <p><strong>Datum:</strong> @trening.Datum.ToString("dd.MM.yyyy HH:mm")</p>
+                            <p><strong>Trener:</strong> @trening.Trener?.Ime @trening.Trener?.Prezime</p>
+                            <p><strong>Max. članovi:</strong> @trening.MaxBrClanova</p>
+                            @if (trening.TreningKonji != null && trening.TreningKonji.Any())
+                            {
+                                <p><strong>Konji:</strong> @string.Join(", ", trening.TreningKonji.Select(tk => tk.Konj?.Ime))</p>
+                            }
+                        </div>
+                        <div class="training-actions">
+                            <a href="@Url.Action("Details", "Trening", new { id = trening.Id })" class="btn btn-details">
+                                Detalji
+                            </a>
+                            @if (trening.Datum > DateTime.Now)
+                            {
+                                <form method="post" action="@Url.Action("OdjaviSe", "Dashboard", new { id = trening.Id })"
+                                      style="display: inline-block;"
+                                      onsubmit="return confirm('Da li ste sigurni da se želite odjaviti sa ovog treninga?')">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger">
+                                        Odjavi se
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="btn btn-secondary disabled" title="Trening je završen">
+                                    Završeno
+                                </span>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- Available Trainings for Registration -->
     <div class="dashboard-section">
         <div class="section-header">
-            <h2>Status Članarine</h2>
+            <h2>Dostupni Treninzi za Prijavu</h2>
         </div>
 
-        @{
-            // Get the current user's active clanarina (latest one that hasn't expired or latest overall)
-            var aktivnaClanarina = Model.CurrentUserClanarina;
-        }
-        
-        @if (aktivnaClanarina == null || aktivnaClanarina.IstekClanarine < DateTime.Now)
+        @if (Model.AvailableTrainings != null && Model.AvailableTrainings.Any())
         {
-            <!-- No active membership -->
-            <div class="dashboard-card" style="border-left: 4px solid #dc3545; background-color: #f8d7da;">
-                <h3 style="color: #721c24;">Nemate aktivnu članarinu</h3>
-                <div class="training-info">
-                    @if (aktivnaClanarina == null)
+            <div class="dashboard-cards">
+                @foreach (var trening in Model.AvailableTrainings)
+                {
+                    var nivoKlasa = trening.Nivo switch
                     {
-                        <p>Trenutno nemate registrovanu članarinu.</p>
-                    }
-                    else
-                    {
-                        <p>Vaša članarina je istekla: @aktivnaClanarina.IstekClanarine.ToString("dd.MM.yyyy")</p>
-                    }
-                    <p>Da biste mogli da se prijavljujete na treninge, potrebno je da produžite članarinu.</p>
-                </div>
-                <div class="training-actions">
-                    <a href="@Url.Action("Index", "Clanarina")" class="btn btn-primary">
-                        Produži Članarinu
-                    </a>
-                </div>
+                        Nivo.Napredni => "level-advanced",
+                        Nivo.Srednji => "level-medium",
+                        Nivo.Pocetnik => "level-low",
+                        _ => "level-low"
+                    };
+
+                    var canRegister = (int)trening.Nivo <= (int)currentUserLevel;
+
+                    <div class="dashboard-card available-training @(!canRegister ? "disabled" : "")">
+                        <h3>@trening.Naziv</h3>
+                        <div class="training-level @nivoKlasa">@trening.Nivo</div>
+                        <div class="training-info">
+                            <p><strong>Datum:</strong> @trening.Datum.ToString("dd.MM.yyyy HH:mm")</p>
+                            <p><strong>Trener:</strong> @trening.Trener?.Ime @trening.Trener?.Prezime</p>
+                            <p><strong>Max. članovi:</strong> @trening.MaxBrClanova</p>
+                            @if (trening.TreningKonji != null && trening.TreningKonji.Any())
+                            {
+                                <p><strong>Konji:</strong> @string.Join(", ", trening.TreningKonji.Select(tk => tk.Konj?.Ime))</p>
+                            }
+                        </div>
+                        <div class="training-actions">
+                            <a href="@Url.Action("Details", "Trening", new { id = trening.Id })" class="btn btn-details">
+                                Detalji
+                            </a>
+                            @if (canRegister)
+                            {
+                                <a href="@Url.Action("PrijaviSe", "Dashboard", new { id = trening.Id })" class="btn btn-success">
+                                    Prijavi se
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="btn btn-secondary disabled" title="Vaš nivo nije dovoljno visok za ovaj trening">
+                                    Nedostupno
+                                </span>
+                            }
+                        </div>
+                    </div>
+                }
             </div>
         }
         else
         {
-            <!-- Active membership -->
-            
-            var daysUntilExpiry = (aktivnaClanarina.IstekClanarine - DateTime.Now).Days;
-            var statusClass = daysUntilExpiry <= 7 ? "border-left: 4px solid #ffc107; background-color: #fff3cd;" : "border-left: 4px solid #28a745; background-color: #d4edda;";
-            var statusColor = daysUntilExpiry <= 7 ? "#856404" : "#155724";
-            
-            
-            <div class="dashboard-card" style="@statusClass">
-                <h3 style="color: @statusColor;">
-                    @if (daysUntilExpiry <= 7)
-                    {
-                        <span>⚠️ Članarina uskoro ističe</span>
-                    }
-                    else
-                    {
-                        <span>✅ Aktivna članarina</span>
-                    }
-                </h3>
-                <div class="training-info">
-                    <p><strong>Važeća do:</strong> @aktivnaClanarina.IstekClanarine.ToString("dd.MM.yyyy")</p>
-                    <p><strong>Preostalo dana:</strong> @daysUntilExpiry</p>
-                    @if (daysUntilExpiry <= 7)
-                    {
-                        <p style="color: #856404;">Preporučujemo da produžite članarinu na vrijeme.</p>
-                    }
-                </div>
-                <div class="training-actions">
-                    <a href="@Url.Action("Index", "Clanarina")" class="btn btn-success">
-                        Produži Članarinu
-                    </a>
-                </div>
+            <div class="no-data-message">
+                <p>Trenutno nema dostupnih treninga za prijavu.</p>
             </div>
         }
     </div>
-}
-
-<!-- Registered Trainings -->
-@if (Model.RegisteredTrainings != null && Model.RegisteredTrainings.Any())
-{
-    <div class="dashboard-section">
-        <div class="section-header">
-            <h2>Prijavljeni Treninzi</h2>
-        </div>
-        <div class="dashboard-cards">
-            @foreach (var trening in Model.RegisteredTrainings)
-            {
-                <div class="dashboard-card registered-training">
-                    <h3>@trening.Naziv</h3>
-                    <div class="training-level @(trening.Nivo switch { Nivo.Napredni => "level-advanced", Nivo.Srednji => "level-medium", Nivo.Pocetnik => "level-low", _ => "level-low" })">
-                        @trening.Nivo
-                    </div>
-                    <div class="training-info" id="treninzi">
-                        <p><strong>Datum:</strong> @trening.Datum.ToString("dd.MM.yyyy HH:mm")</p>
-                        <p><strong>Trener:</strong> @trening.Trener?.Ime @trening.Trener?.Prezime</p>
-                        <p><strong>Max. članovi:</strong> @trening.MaxBrClanova</p>
-                        @if (trening.TreningKonji != null && trening.TreningKonji.Any())
-                        {
-                            <p><strong>Konji:</strong> @string.Join(", ", trening.TreningKonji.Select(tk => tk.Konj?.Ime))</p>
-                        }
-                    </div>
-                    <div class="training-actions">
-                        <a href="@Url.Action("Details", "Trening", new { id = trening.Id })" class="btn btn-primary">
-                            Detalji
-                        </a>
-                        @if (trening.Datum > DateTime.Now)
-                        {
-                            <form method="post" action="@Url.Action("OdjaviSe", "Dashboard", new { id = trening.Id })"
-                                  style="display: inline-block;"
-                                  onsubmit="return confirm('Da li ste sigurni da se želite odjaviti sa ovog treninga?')">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-danger">
-                                    Odjavi se
-                                </button>
-                            </form>
-                        }
-                        else
-                        {
-                            <span class="btn btn-secondary disabled" title="Trening je završen">
-                                Završeno
-                            </span>
-                        }
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-}
-
-<!-- Available Trainings for Registration -->
-<div class="dashboard-section">
-    <div class="section-header">
-        <h2>Dostupni Treninzi za Prijavu</h2>
-    </div>
-
-    @if (Model.AvailableTrainings != null && Model.AvailableTrainings.Any())
-    {
-        <div class="dashboard-cards">
-            @foreach (var trening in Model.AvailableTrainings)
-            {
-                var nivoKlasa = trening.Nivo switch
-                {
-                    Nivo.Napredni => "level-advanced",
-                    Nivo.Srednji => "level-medium",
-                    Nivo.Pocetnik => "level-low",
-                    _ => "level-low"
-                };
-
-                var canRegister = (int)trening.Nivo <= (int)currentUserLevel;
-
-                <div class="dashboard-card available-training @(!canRegister ? "disabled" : "")">
-                    <h3>@trening.Naziv</h3>
-                    <div class="training-level @nivoKlasa">@trening.Nivo</div>
-                    <div class="training-info">
-                        <p><strong>Datum:</strong> @trening.Datum.ToString("dd.MM.yyyy HH:mm")</p>
-                        <p><strong>Trener:</strong> @trening.Trener?.Ime @trening.Trener?.Prezime</p>
-                        <p><strong>Max. članovi:</strong> @trening.MaxBrClanova</p>
-                        @if (trening.TreningKonji != null && trening.TreningKonji.Any())
-                        {
-                            <p><strong>Konji:</strong> @string.Join(", ", trening.TreningKonji.Select(tk => tk.Konj?.Ime))</p>
-                        }
-                    </div>
-                    <div class="training-actions">
-                        @if (canRegister)
-                        {
-                            <a href="@Url.Action("PrijaviSe", "Dashboard", new { id = trening.Id })" class="btn btn-success">
-                                Prijavi se
-                            </a>
-                        }
-                        else
-                        {
-                            <span class="btn btn-secondary disabled" title="Vaš nivo nije dovoljno visok za ovaj trening">
-                                Nedostupno
-                            </span>
-                        }
-                        <a href="@Url.Action("Details", "Trening", new { id = trening.Id })" class="btn btn-primary">
-                            Detalji
-                        </a>
-                    </div>
-                </div>
-            }
-        </div>
-    }
-    else
-    {
-        <div class="no-data-message">
-            <p>Trenutno nema dostupnih treninga za prijavu.</p>
-        </div>
-    }
 </div>
