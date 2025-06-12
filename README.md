@@ -6,7 +6,7 @@ Sistem za upravljanje jahačkim klubom koji omogućava rezervaciju treninga, upr
 
 Sistem jahačkog kluba omogućava korisnicima da rezervišu različite trailove, apliciraju za članstvo u klubu i prate svoje članarine. Korisnici se mogu prijavljivati na treninge, a algoritam na osnovu prethodnih termina treninga, trenera i konja koje su jahali predlaže nove termine. Implementirana je kontrola pristupa gdje članovi i administrator imaju različite ovlasti i funkcionalnosti.
 
-## 👥 Tim
+## Tim
 
 **Nastavna grupa:** RI  
 **Članovi tima:**
@@ -15,7 +15,7 @@ Sistem jahačkog kluba omogućava korisnicima da rezervišu različite trailove,
 - Vedad Gaštan
 - Ajdin Hajdarević
 
-## 🚀 Funkcionalnosti
+## Funkcionalnosti
 
 ### Osnovne Usluge Sistema
 - **Rezervacija trailova** - Prijava putem e-maila sa odabirom dostupnih termina
@@ -33,7 +33,7 @@ Sistem jahačkog kluba omogućava korisnicima da rezervišu različite trailove,
 - **Prijedlog treninga** - Algoritamsko preporučivanje treninga na osnovu istorije
 - **Asinhrona potvrda uplate** - Automatska e-mail potvrda članarine
 
-## 👤 Korisnici Sistema
+##  Korisnici Sistema
 
 ### Tipovi Korisnika
 - **Admin** - Potpuna kontrola nad sistemom (konji, treneri, trailovi)
@@ -65,6 +65,12 @@ Sistem je razvijen koristeći objektno orijentisanu analizu i dizajn sa fokusom 
 - Asinhronu obradu e-mail notifikacija
 - Responsivni dizajn za mobilne uređaje
 
+## Deployment
+[Live deployed app](http://charity555-001-site1.ntempurl.com/)
+
+`Username:` 11248683
+
+`Password:` 60-dayfreetrial
 ##  Kontakt
 
 Za pitanja vezana za projekat, kontaktirajte članove tima preko GitHub-a.
