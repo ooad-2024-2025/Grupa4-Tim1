@@ -24,7 +24,6 @@ Sistem jahačkog kluba omogućava korisnicima da rezervišu različite trailove,
 
 ## Database Access (SQL Server)
 
-**Connection string for `appsettings.json`:**
 
 ```json
 "Data Source=SQL6031.site4now.net;Initial Catalog=db_aba42b_ooad2025;User Id=db_aba42b_ooad2025_admin;Password=tim1grupa4"
