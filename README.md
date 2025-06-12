@@ -41,7 +41,7 @@ Sistem jahačkog kluba omogućava korisnicima da rezervišu različite trailove,
 - **Član** - Rezervacija treninga, upravljanje članarinom
 - **Obični korisnik** - Rezervacija trailova, apliciranje za članstvo
 
-### Test Korisnici
+### Test Korisnici (uneseni u bazu)
 Za testiranje aplikacije možete koristiti sljedeće korisničke račune:
 
 | Tip korisnika | Email | Lozinka |
@@ -51,31 +51,15 @@ Za testiranje aplikacije možete koristiti sljedeće korisničke račune:
 | Trener | `trener@trener.com` | `trener123` |
 | Admin | `admin@admin.com` | `admin123` |
 
-## Nefunkcionalni Zahtjevi
 
-- **Dostupnost 24/7** - Kontinuiran pristup sistemu
-- **Mobilna kompatibilnost** - Potpuna funkcionalnost na iPhone i Android uređajima
-- **Sigurnost podataka** - Siguran prenos i čuvanje korisničkih informacija
-
-##  Arhitektura
-
-Sistem je razvijen koristeći objektno orijentisanu analizu i dizajn sa fokusom na:
-- Kontrolu pristupa na osnovu tipova korisnika
-- Algoritamsko preporučivanje treninga
-- Asinhronu obradu e-mail notifikacija
-- Responsivni dizajn za mobilne uređaje
 
 ## Deployment
-[Live deployed app](http://charity555-001-site1.ntempurl.com/)
+[Live deployed app](http://tim1grupa4-001-site1.ntempurl.com/)
 
 `Username:` 11248683
 
 `Password:` 60-dayfreetrial
-##  Kontakt
 
-Za pitanja vezana za projekat, kontaktirajte članove tima preko GitHub-a.
-
----
 
 **Univerzitet u Sarajevu - Elektrotehnički Fakultet**  
 *Objektno Orijentisana Analiza i Dizajn*
