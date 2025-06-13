@@ -51,6 +51,12 @@
                 background-color: white;
             }
 
+            .training-form-container .form-control[readonly] {
+                background-color: #e9ecef;
+                cursor: not-allowed;
+                color: #6c757d;
+            }
+
         .training-form-container select.form-control {
             cursor: pointer;
             appearance: none;
@@ -156,12 +162,28 @@
     <form asp-action="Edit" method="post">
         @Html.AntiForgeryToken()
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <!-- Hidden fields to preserve required data -->
         <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="TrenerId" />
+
+        <!-- Debug informacije (ukloni nakon testiranja) -->
+        @if (Model != null)
+        {
+            <div style="color: red; font-size: 12px;">
+                Debug: TrenerId = "@Model.TrenerId"
+            </div>
+        }
 
         <div class="form-group">
             <label asp-for="Naziv">Naziv treninga</label>
             <input asp-for="Naziv" class="form-control" placeholder="Unesite naziv treninga" />
             <span asp-validation-for="Naziv" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Trener</label>
+            <input type="text" class="form-control" readonly value="@ViewBag.TrenerName" />
         </div>
 
         <div class="form-group">
@@ -214,28 +236,31 @@
     // Inicijaliziraj sa postojećim konjima
     @if (ViewBag.SelectedHorseIds != null && ViewBag.Konji != null)
     {
-                    <text>
-                    const existingHorseIds = @Html.Raw(Json.Serialize(ViewBag.SelectedHorseIds));
-                    const allHorses = [
-                        @foreach (var konj in ViewBag.Konji)
-                        {
-                                        <text>{ Id: @konj.Id, Ime: "@konj.Ime" },</text>
-                        }
-                    ];
+                <text>
+                const existingHorseIds = @Html.Raw(Json.Serialize(ViewBag.SelectedHorseIds));
+                const allHorses = [
+                    @foreach (var konj in ViewBag.Konji)
+                    {
+                                <text>{ Id: @konj.Id, Ime: "@konj.Ime" },</text>
+                    }
+                ];
 
-                    existingHorseIds.forEach(horseId => {
-                        const horse = allHorses.find(h => h.Id === horseId);
-                        if (horse) {
-                            selectedHorses.push(horseId);
-                            addHorse(horseId, horse.Ime);
-                        }
-                    });
-                    updateHiddenInputs();
-                    </text>
+                console.log('Existing horse IDs:', existingHorseIds);
+                console.log('All horses:', allHorses);
+
+                existingHorseIds.forEach(horseId => {
+                    const horse = allHorses.find(h => h.Id === horseId);
+                    if (horse) {
+                        selectedHorses.push(horseId);
+                        addHorse(horseId, horse.Ime);
+                    }
+                });
+                updateHiddenInputs();
+                </text>
     }
 
     // Funkcija za dodavanje konja
-    document.getElementById('konji-select').addEventListener('change', function() {
+    document.getElementById('konja-select').addEventListener('change', function() {
         if (this.value) {
             const selectedValue = parseInt(this.value);
             const selectedText = this.options[this.selectedIndex].text;
@@ -271,6 +296,9 @@
 
     function updateHiddenInputs() {
         const container = document.getElementById('hiddenHorseInputs');
+        console.log('Container found:', container !== null);
+        console.log('Selected horses before update:', selectedHorses);
+
         container.innerHTML = '';
 
         selectedHorses.forEach((horseId, index) => {
@@ -279,14 +307,46 @@
             input.name = `SelectedHorseIds[${index}]`;
             input.value = horseId;
             container.appendChild(input);
+            console.log(`Added hidden input: SelectedHorseIds[${index}] = ${horseId}`);
         });
+
+        // Provjeri da li su inputi stvarno dodani
+        const addedInputs = container.querySelectorAll('input');
+        console.log('Total hidden inputs after update:', addedInputs.length);
     }
 
     // Validacija forme
     document.querySelector('form').addEventListener('submit', function(e) {
+        console.log('Form submitted, selected horses:', selectedHorses);
+        console.log('Selected horses length:', selectedHorses.length);
+
+        // Debug: provjeri sve hidden fieldove
+        const allHiddenInputs = document.querySelectorAll('input[type="hidden"]');
+        console.log('All hidden inputs:');
+        allHiddenInputs.forEach(input => {
+            console.log(`${input.name} = ${input.value}`);
+        });
+
         if (selectedHorses.length === 0) {
             e.preventDefault();
             alert('Molimo odaberite najmanje jednog konja.');
+            return false;
+        }
+
+        // Provjeri da li su hidden inputi stvarno dodani
+        const hiddenInputs = document.querySelectorAll('#hiddenHorseInputs input');
+        console.log('Hidden inputs count:', hiddenInputs.length);
+
+        if (hiddenInputs.length === 0) {
+            e.preventDefault();
+            updateHiddenInputs(); // Pokušaj ponovno dodati hidden inpute
+            console.log('Re-added hidden inputs');
+
+            // Ponovno pokreni submit
+            setTimeout(() => {
+                document.querySelector('form').submit();
+            }, 100);
+            return false;
         }
     });
 </script>

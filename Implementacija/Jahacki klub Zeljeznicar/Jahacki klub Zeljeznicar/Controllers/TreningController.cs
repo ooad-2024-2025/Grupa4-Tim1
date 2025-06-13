@@ -159,6 +159,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
 
         // GET: Trening/Edit/5
+        // GET: Trening/Edit/5
         [Authorize(Policy = "TrenerOrAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -169,6 +170,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
             var trening = await _context.Treninzi
                 .Include(t => t.TreningKonji)
+                .Include(t => t.Trener)
                 .FirstOrDefaultAsync(t => t.Id == id);
 
             if (trening == null)
@@ -176,32 +178,39 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 return NotFound();
             }
 
-            // Postavi ViewBag za trenere (samo korisnici sa ulogom Trener)
-            var treneri = await _userManager.GetUsersInRoleAsync("Trener");
-
-            // Debug - ispiši koliko trenera ima
-            System.Diagnostics.Debug.WriteLine($"Broj trenera: {treneri.Count}");
-            foreach (var t in treneri)
+            // Osiguraj da je TrenerId postavljen u modelu
+            if (string.IsNullOrEmpty(trening.TrenerId) && trening.Trener != null)
             {
-                System.Diagnostics.Debug.WriteLine($"Trener: {t.Ime} {t.Prezime}, ID: {t.Id}");
-
+                // Ovo se neće dogoditi u normalnim okolnostima, ali za sigurnost
+                var trenerFromDb = await _context.Users.FirstOrDefaultAsync(u => u.Id == trening.Trener.Id);
+                if (trenerFromDb != null)
+                {
+                    trening.TrenerId = trenerFromDb.Id;
+                }
             }
-            // Dodaj ovo u Edit GET metodu
-            ViewBag.DebugTreneri = $"Broj trenera: {treneri.Count}";
 
-            // Kreiraj listu trenera
-            var trenerList = treneri.Select(u => new SelectListItem
+            // Dodaj ime trenera u ViewBag za prikaz (readonly)
+            if (trening.Trener != null)
             {
-                Value = u.Id,
-                Text = $"{u.Ime} {u.Prezime}",
-                Selected = u.Id == trening.TrenerId
-            }).ToList();
-
-            ViewBag.TrenerId = trenerList;
+                ViewBag.TrenerName = $"{trening.Trener.Ime} {trening.Trener.Prezime}";
+            }
+            else if (!string.IsNullOrEmpty(trening.TrenerId))
+            {
+                var trener = await _userManager.FindByIdAsync(trening.TrenerId);
+                ViewBag.TrenerName = trener != null ? $"{trener.Ime} {trener.Prezime}" : "Nepoznat trener";
+            }
+            else
+            {
+                ViewBag.TrenerName = "Nepoznat trener";
+            }
 
             // Postavi ViewBag za konje
             ViewBag.Konji = await _context.Konji.ToListAsync();
             ViewBag.SelectedHorseIds = trening.TreningKonji.Select(tk => tk.KonjId).ToArray();
+
+            // Debug informacije
+            System.Diagnostics.Debug.WriteLine($"TrenerId in model: {trening.TrenerId}");
+            System.Diagnostics.Debug.WriteLine($"TrenerName in ViewBag: {ViewBag.TrenerName}");
 
             return View(trening);
         }
@@ -214,8 +223,19 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             if (id != trening.Id)
             {
                 ModelState.AddModelError(string.Empty, "ID treninga se ne poklapa.");
+                await PopulateEditViewData(trening.TrenerId, SelectedHorseIds ?? new int[0]);
                 return View(trening);
             }
+
+            // Uvijek dohvati postojeći TrenerId iz baze da se osiguraš da se ne mijenja
+            var existingTrening = await _context.Treninzi.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+            if (existingTrening == null)
+            {
+                return NotFound();
+            }
+
+            // Forsiraj TrenerId iz postojećeg treninga (ne može se mijenjati)
+            trening.TrenerId = existingTrening.TrenerId;
 
             // Validate required fields
             if (string.IsNullOrWhiteSpace(trening.Naziv))
@@ -236,7 +256,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             // Validate horse selection
             if (SelectedHorseIds == null || SelectedHorseIds.Length == 0)
             {
-                ModelState.AddModelError(nameof(SelectedHorseIds), "Morate odabrati najmanje jednog konja.");
+                ModelState.AddModelError("", "Morate odabrati najmanje jednog konja.");
             }
             else
             {
@@ -254,7 +274,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                     if (isOccupied)
                     {
                         var horse = await _context.Konji.FindAsync(horseId);
-                        ModelState.AddModelError(nameof(SelectedHorseIds), $"Konj {horse?.Ime} je već rezervisan za taj dan.");
+                        ModelState.AddModelError("", $"Konj {horse?.Ime} je već rezervisan za taj dan.");
                     }
                 }
             }
@@ -298,10 +318,9 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             }
 
             // Re-populate view data if validation fails
-            await PopulateEditViewData(trening.TrenerId, SelectedHorseIds);
+            await PopulateEditViewData(trening.TrenerId, SelectedHorseIds ?? new int[0]);
             return View(trening);
         }
-
 
         // GET: Trening/Delete/5
         [Authorize(Policy = "TrenerOrAdmin")]
@@ -384,16 +403,13 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         private async Task PopulateEditViewData(string trenerId, int[] selectedHorseIds)
         {
-            var treneri = await _userManager.GetUsersInRoleAsync("Trener");
-            ViewBag.TrenerId = new SelectList(
-                treneri.Select(u => new {
-                    Id = u.Id,
-                    ImePrezime = $"{u.Ime} {u.Prezime}"
-                }),
-                "Id",
-                "ImePrezime",
-                trenerId
-            );
+            // Dodaj ime trenera u ViewBag
+            if (!string.IsNullOrEmpty(trenerId))
+            {
+                var trener = await _userManager.FindByIdAsync(trenerId);
+                ViewBag.TrenerName = trener != null ? $"{trener.Ime} {trener.Prezime}" : "Nepoznat trener";
+            }
+
             ViewBag.Konji = await _context.Konji.ToListAsync();
             ViewBag.SelectedHorseIds = selectedHorseIds;
         }
