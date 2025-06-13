@@ -179,8 +179,11 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             // Get all trainings (trainer can see all and create new ones)
             model.AllTrainings = await _context.Treninzi
                 .Include(t => t.Trener)
+                .Include(t => t.TreningUsers)
+                    .ThenInclude(tu => tu.User)
                 .OrderByDescending(t => t.Datum)
                 .ToListAsync();
+
 
             // Get all clan members whose level can be changed
             model.ClanMembers = await _context.Users

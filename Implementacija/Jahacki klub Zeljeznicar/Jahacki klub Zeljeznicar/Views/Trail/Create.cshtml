@@ -196,8 +196,10 @@
             <span asp-validation-for="Opis" class="text-danger"></span>
         </div>
 
+        <div id="horseInputsContainer"></div>
         <!-- ISPRAVLJEN NAZIV: SelectedHorseIds umesto SelectedKonjiIds -->
-        <input type="hidden" id="selectedHorsesIds" name="SelectedHorseIds" value="" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        
 
         <button type="submit" class="btn-submit">Dodaj trail</button>
     </form>
@@ -245,8 +247,16 @@
     }
 
     function updateHiddenInput() {
-        document.getElementById('selectedHorsesIds').value = selectedHorses.join(',');
-        console.log('Selected horses: ', selectedHorses); // Debug linija
+        const container = document.getElementById('horseInputsContainer');
+        container.innerHTML = ''; // Clear old inputs
+
+        selectedHorses.forEach(id => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'SelectedHorseIds';
+            input.value = id;
+            container.appendChild(input);
+        });
     }
 
     // Validacija forme - konji su obavezni

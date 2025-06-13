@@ -145,7 +145,7 @@
             <input asp-for="Boja" class="form-control" placeholder="Unesite boju konja" />
             <span asp-validation-for="Boja" class="text-danger"></span>
         </div>
-
+        <div asp-validation-summary="All" class="text-danger"></div>
         <button type="submit" class="btn-submit">Spremi promjene</button>
         <a href="@Url.Action("Index", "Dashboard")" class="btn-back">Nazad na listu</a>
     </form>

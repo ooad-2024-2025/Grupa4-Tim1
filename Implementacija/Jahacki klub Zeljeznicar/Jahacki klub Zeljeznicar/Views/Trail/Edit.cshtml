@@ -133,13 +133,20 @@
             <label for="konji">Konji</label>
             <select id="konji" class="form-control">
                 <option value="">Izaberite konje</option>
-                @foreach (var konj in konji)
+                @if (konji != null && konji.Any())
                 {
-                    <option value="@konj.Id">@konj.Ime</option>
+                    @foreach (var konj in konji)
+                    {
+                        <option value="@konj.Id">@konj.Ime</option>
+                    }
+                }
+                else
+                {
+                    <option disabled>Nema dostupnih konja</option>
                 }
             </select>
             <div class="selected-items" id="selectedHorses">
-                <!-- Dinamički prikazani konji -->
+                <!-- Ovdje će se dinamički dodavati izabrani konji -->
             </div>
         </div>
 
@@ -163,11 +170,14 @@
             <span asp-validation-for="RezervatorId" class="text-danger"></span>
         </div>
 
-        <input type="hidden" id="selectedHorsesIds" name="SelectedHorseIds" value="" />
+        <div id="horseInputsContainer"></div>
+        <div asp-validation-summary="All" class="text-danger"></div>
 
         <button type="submit" class="btn-submit">Sačuvaj promjene</button>
         <a class="btn-back" href="@Url.Action("Index", "Dashboard")">Nazad na listu</a>
     </form>
+    <partial name="_ValidationScriptsPartial" />
+
 </div>
 
 <script>
@@ -215,8 +225,18 @@
     }
 
     function updateHiddenInput() {
-        document.getElementById('selectedHorsesIds').value = selectedHorses.join(',');
+        const container = document.getElementById('horseInputsContainer');
+        container.innerHTML = ''; // Clear old inputs
+
+        selectedHorses.forEach(id => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'SelectedHorseIds';
+            input.value = id;
+            container.appendChild(input);
+        });
     }
+
 
     document.querySelector('form').addEventListener('submit', function (e) {
         if (selectedHorses.length === 0) {

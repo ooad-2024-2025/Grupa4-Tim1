@@ -69,6 +69,24 @@
                                 }
                             </td>
                         </tr>
+                        <tr class="registered-users-row">
+                            <td colspan="7">
+                                <strong>Prijavljeni korisnici:</strong>
+                                @if (trening.TreningUsers != null && trening.TreningUsers.Any())
+                                {
+                                    <ul>
+                                        @foreach (var reg in trening.TreningUsers)
+                                        {
+                                            <li>@reg.User.Ime @reg.User.Prezime (@reg.User.Email)</li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <em>Nema prijavljenih korisnika.</em>
+                                }
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>

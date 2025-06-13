@@ -108,7 +108,7 @@
             <textarea asp-for="Opis" class="form-control" rows="4" placeholder="Unesite opis konja"></textarea>
             <span asp-validation-for="Opis" class="text-danger"></span>
         </div>
-
+        <div asp-validation-summary="All" class="text-danger"></div>
         <button type="submit" class="btn-submit">Dodaj konja</button>
     </form>
 </div>
