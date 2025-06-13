@@ -1,7 +1,6 @@
-﻿@model IEnumerable<Jahacki_klub_Zeljeznicar.Models.Trail>
+﻿@model Jahacki_klub_Zeljeznicar.ViewModels.TrailsIndexViewModel
 @{
     ViewData["Title"] = "Index";
-    var availableTrails = Model?.Where(t => t.RezervatorId == null).ToList();
 }
 
 <style>
@@ -17,6 +16,23 @@
         margin-bottom: 50px;
         color: #333;
         font-weight: 700;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+        color: #333;
+        font-weight: 600;
+        border-bottom: 3px solid #333;
+        padding-bottom: 10px;
+    }
+
+    .registered-section {
+        margin-bottom: 50px;
+    }
+
+    .available-section {
+        margin-bottom: 40px;
     }
 
     .trails-grid {
@@ -38,6 +54,11 @@
         justify-content: space-between;
     }
 
+        .trail-card.registered {
+            border: 2px solid #28a745;
+            background: linear-gradient(135deg, #f8fff9 0%, #ffffff 100%);
+        }
+
         .trail-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
@@ -56,6 +77,10 @@
         text-transform: uppercase;
         letter-spacing: 1px;
     }
+
+        .trail-title.registered {
+            color: #28a745;
+        }
 
     .trail-info {
         margin-bottom: 20px;
@@ -105,6 +130,38 @@
             transform: translateY(-2px);
         }
 
+    .btn-registered {
+        background-color: #28a745;
+        color: white;
+    }
+
+        .btn-registered:hover {
+            background-color: #218838;
+            color: white;
+        }
+
+    .btn-cancel {
+        background-color: #dc3545;
+        color: white;
+        margin-top: 10px;
+    }
+
+        .btn-cancel:hover {
+            background-color: #c82333;
+            color: white;
+        }
+
+    .registered-badge {
+        background-color: #28a745;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: inline-block;
+    }
+
     .no-trails {
         text-align: center;
         padding: 80px 20px;
@@ -121,41 +178,87 @@
 <div class="trails-container">
     <h1 class="page-title">Trailovi</h1>
 
-    @if (availableTrails != null && availableTrails.Any())
+    @if (Model.HasRegisteredTrails)
     {
-        <div class="trails-grid">
-            @foreach (var item in availableTrails)
-            {
-                <div class="trail-card">
-                    <div class="trail-content">
-                        <h3 class="trail-title">@Html.DisplayFor(modelItem => item.Naziv)</h3>
+        <div class="registered-section">
+            <h2 class="section-title">Vaši registrovani trailovi</h2>
+            <div class="trails-grid">
+                @foreach (var item in Model.RegisteredTrails)
+                {
+                    <div class="trail-card registered">
+                        <div class="trail-content">
+                            <div class="registered-badge">REGISTROVAN</div>
+                            <h3 class="trail-title registered">@Html.DisplayFor(modelItem => item.Naziv)</h3>
 
-                        <div class="trail-info">
-                            <div class="trail-date">
-                                <strong>Datum:</strong> @item.Datum.ToString("dd.MM.yyyy")
+                            <div class="trail-info">
+                                <div class="trail-date">
+                                    <strong>Datum:</strong> @item.Datum.ToString("dd.MM.yyyy")
+                                </div>
                             </div>
-                        </div>
 
-                        @if (!string.IsNullOrEmpty(item.Opis))
-                        {
-                            <div class="trail-description">
-                                @(item.Opis.Length > 100 ? item.Opis.Substring(0, 100) + "..." : item.Opis)
+                            @if (!string.IsNullOrEmpty(item.Opis))
+                            {
+                                <div class="trail-description">
+                                    @(item.Opis.Length > 100 ? item.Opis.Substring(0, 100) + "..." : item.Opis)
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="trail-description">Nema opisa</div>
+                            }
+
+                            <div class="trail-actions">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-registered">Detalji</a>
                             </div>
-                        }
-                        else
-                        {
-                            <div class="trail-description">Nema opisa</div>
-                        }
-
-                        <div class="trail-actions">
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-reserve">Rezerviši</a>
                         </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
     }
-    else
+
+    @if (Model.HasAvailableTrails)
+    {
+        <div class="available-section">
+            @if (Model.HasRegisteredTrails)
+            {
+                <h2 class="section-title">Dostupni trailovi</h2>
+            }
+            <div class="trails-grid">
+                @foreach (var item in Model.AvailableTrails)
+                {
+                    <div class="trail-card">
+                        <div class="trail-content">
+                            <h3 class="trail-title">@Html.DisplayFor(modelItem => item.Naziv)</h3>
+
+                            <div class="trail-info">
+                                <div class="trail-date">
+                                    <strong>Datum:</strong> @item.Datum.ToString("dd.MM.yyyy")
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(item.Opis))
+                            {
+                                <div class="trail-description">
+                                    @(item.Opis.Length > 100 ? item.Opis.Substring(0, 100) + "..." : item.Opis)
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="trail-description">Nema opisa</div>
+                            }
+
+                            <div class="trail-actions">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-reserve">Rezerviši</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    @if (!Model.HasRegisteredTrails && !Model.HasAvailableTrails)
     {
         <div class="no-trails">
             <h3>Trenutno nema dostupnih trail-ova</h3>

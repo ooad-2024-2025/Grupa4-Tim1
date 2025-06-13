@@ -1,8 +1,165 @@
 ﻿@model Jahacki_klub_Zeljeznicar.ViewModels.DashboardViewModel
 
-<div class="dashboard-section">
+<style>
+    .dashboard-container {
+        padding: 40px 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: #333;
+            font-weight: 700;
+            margin: 0;
+        }
+
+    .dashboard-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 2px solid #28a745;
+        background: linear-gradient(135deg, #f8fff9 0%, #ffffff 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #28a745;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            padding: 25px 25px 0 25px;
+        }
+
+    .registered-badge {
+        background-color: #28a745;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: inline-block;
+        text-align: center;
+        width: fit-content;
+        margin: 0 auto 15px auto;
+    }
+
+    .trail-info {
+        padding: 0 25px;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+        .trail-info p {
+            margin: 10px 0;
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+            .trail-info p strong {
+                color: #333;
+                font-weight: 600;
+            }
+
+    .trail-date {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 10px;
+        font-weight: 500;
+    }
+
+    .trail-description {
+        color: #777;
+        margin-bottom: 15px;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        min-height: 40px;
+    }
+
+    .trail-actions {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 25px 25px 25px;
+    }
+
+    .btn-primary {
+        background-color: #28a745;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
+        display: inline-block;
+    }
+
+        .btn-primary:hover {
+            background-color: #218838;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+    .no-data-message {
+        text-align: center;
+        padding: 80px 20px;
+        background-color: #f8f9fa;
+        border-radius: 15px;
+        color: #666;
+        margin: 40px auto;
+        max-width: 600px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+        .no-data-message h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .no-data-message p {
+            margin: 15px 0;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+</style>
+
+<div class="dashboard-container">
     <div class="section-header">
-        <h2>Moje Ture</h2>
+        <h2>Moji Trailovi</h2>
     </div>
 
     @if (Model.UserTrails != null && Model.UserTrails.Any())
@@ -11,15 +168,33 @@
             @foreach (var trail in Model.UserTrails)
             {
                 <div class="dashboard-card">
+                    <div class="registered-badge">REGISTROVAN</div>
                     <h3>@trail.Naziv</h3>
+
                     <div class="trail-info">
-                        <p><strong>Datum:</strong> @trail.Datum.ToString("dd.MM.yyyy HH:mm")</p>
-                        <p><strong>Opis:</strong> @trail.Opis</p>
+                        <div class="trail-date">
+                            <strong>Datum:</strong> @trail.Datum.ToString("dd.MM.yyyy HH:mm")
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(trail.Opis))
+                        {
+                            <div class="trail-description">
+                                <strong>Opis:</strong> @(trail.Opis.Length > 100 ? trail.Opis.Substring(0, 100) + "..." : trail.Opis)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="trail-description">
+                                <strong>Opis:</strong> Nema opisa
+                            </div>
+                        }
+
                         @if (trail.RezervatorId != null)
                         {
-                            <p><strong>Rezervisano:</strong> @(trail.RezervatorId!=null ? "Da" : "Ne")</p>
+                            <p><strong>Status:</strong> <span style="color: #28a745; font-weight: 600;">Rezervisano</span></p>
                         }
                     </div>
+
                     <div class="trail-actions">
                         <a href="@Url.Action("Details", "Trail", new { id = trail.Id })" class="btn btn-primary">
                             Detalji
@@ -32,42 +207,9 @@
     else
     {
         <div class="no-data-message">
-            <p>Niste prijavljeni na nijednu turu.</p>
-            <p>Kontaktirajte administratora za više informacija o dostupnim turama.</p>
+            <h3>Niste prijavljeni na nijedan trail</h3>
+            <p>Trenutno niste registrovani za nijedan trail.</p>
+            <p>Kontaktirajte administratora za više informacija o dostupnim trailovima.</p>
         </div>
     }
 </div>
-
-<style>
-    .trail-info {
-        margin-bottom: 15px;
-    }
-
-        .trail-info p {
-            margin: 5px 0;
-            color: #666;
-        }
-
-    .trail-actions {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-    }
-
-    .no-data-message {
-        text-align: center;
-        padding: 40px;
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        color: #6c757d;
-    }
-
-        .no-data-message p {
-            margin: 10px 0;
-            font-size: 16px;
-        }
-
-    .dashboard-section{
-        margin: 40px;
-    }
-</style>

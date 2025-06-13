@@ -33,16 +33,6 @@
                             <a class="nav-link" href="@Url.Action("AboutUs", "Home")">O nama</a>
                         </li>
 
-                        @if (User.Identity.IsAuthenticated && User.IsInRole("Clan"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("Index", "Dashboard")#treninzi">Treninzi</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("Index", "Clanarina")">Članarina</a>
-                            </li>
-                        }
-
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("Index", "Trail")">Trailovi</a>
                         </li>

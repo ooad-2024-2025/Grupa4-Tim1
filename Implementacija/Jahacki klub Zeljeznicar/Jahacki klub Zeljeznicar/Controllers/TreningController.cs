@@ -85,6 +85,10 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         [Authorize(Policy = "TrenerOrAdmin")]
         public async Task<IActionResult> Create(Trening trening, int[] SelectedHorseIds)
         {
+
+            ModelState.Remove(nameof(trening.TrenerId));
+            ModelState.Remove(nameof(trening.Trener));
+
             // Validate required fields
             if (string.IsNullOrWhiteSpace(trening.Naziv))
             {
@@ -220,6 +224,9 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         [Authorize(Policy = "TrenerOrAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Naziv,Nivo,Datum,MaxBrClanova,TrenerId")] Trening trening, int[] SelectedHorseIds)
         {
+
+            ModelState.Remove(nameof(trening.TrenerId));
+            ModelState.Remove(nameof(trening.Trener));
             if (id != trening.Id)
             {
                 ModelState.AddModelError(string.Empty, "ID treninga se ne poklapa.");

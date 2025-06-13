@@ -31,11 +31,26 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Trail
+
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Trails.Include(t => t.Rezervator);
-            return View(await applicationDbContext.ToListAsync());
+            var currentUserId = _userManager.GetUserId(User);
+
+            var trails = await _context.Trails
+                .Include(t => t.Rezervator)
+                .OrderBy(t => t.Datum)
+                .ToListAsync();
+
+            var viewModel = new ViewModels.TrailsIndexViewModel
+            {
+                RegisteredTrails = trails.Where(t => t.RezervatorId == currentUserId).ToList(),
+                AvailableTrails = trails.Where(t => t.RezervatorId == null).ToList(),
+                LoggedInUserId = currentUserId
+            };
+
+            return View(viewModel);
         }
+
 
         public async Task<IActionResult> Details(int id)
         {

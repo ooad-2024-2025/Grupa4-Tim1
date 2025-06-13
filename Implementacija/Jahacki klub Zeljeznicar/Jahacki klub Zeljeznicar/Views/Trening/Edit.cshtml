@@ -163,17 +163,8 @@
         @Html.AntiForgeryToken()
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <!-- Hidden fields to preserve required data -->
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="TrenerId" />
-
-        <!-- Debug informacije (ukloni nakon testiranja) -->
-        @if (Model != null)
-        {
-            <div style="color: red; font-size: 12px;">
-                Debug: TrenerId = "@Model.TrenerId"
-            </div>
-        }
 
         <div class="form-group">
             <label asp-for="Naziv">Naziv treninga</label>
@@ -185,6 +176,9 @@
             <label>Trener</label>
             <input type="text" class="form-control" readonly value="@ViewBag.TrenerName" />
         </div>
+        <input type="hidden" asp-for="TrenerId" />
+
+
 
         <div class="form-group">
             <label asp-for="Nivo">Nivo</label>
@@ -260,7 +254,7 @@
     }
 
     // Funkcija za dodavanje konja
-    document.getElementById('konja-select').addEventListener('change', function() {
+    document.getElementById('konji-select').addEventListener('change', function() {
         if (this.value) {
             const selectedValue = parseInt(this.value);
             const selectedText = this.options[this.selectedIndex].text;

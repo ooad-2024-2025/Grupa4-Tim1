@@ -3,8 +3,8 @@
 <!-- Trainings Management Section -->
 <div class="dashboard-section">
     <div class="section-header">
-        <h2>Upravljanje Treninzima</h2>
-        <a href="@Url.Action("Create", "Trening")" class="btn btn-success" style="background-color: #333; border-color: #333;">
+        <h2 style="color:white;"><i class="fas fa-dumbbell"></i> Upravljanje Treninzima</h2>
+        <a href="@Url.Action("Create", "Trening")" class="btn btn-success">
             <i class="fas fa-plus"></i> Dodaj Novi Trening
         </a>
     </div>
@@ -15,76 +15,81 @@
             <table class="dashboard-table">
                 <thead>
                     <tr>
-                        <th>Akcije</th>
-                        <th>Naziv</th>
-                        <th>Nivo</th>
-                        <th>Datum</th>
-                        <th>Max. Članovi</th>
-                        <th>Trener</th>
-                        <th>Status</th>
+                        <th><i class="fas fa-cogs"></i> Akcije</th>
+                        <th><i class="fas fa-tag"></i> Naziv</th>
+                        <th><i class="fas fa-chart-line"></i> Nivo</th>
+                        <th><i class="fas fa-calendar"></i> Datum</th>
+                        <th><i class="fas fa-users"></i> Max. Članovi</th>
+                        <th><i class="fas fa-user-tie"></i> Trener</th>
+                        <th><i class="fas fa-info-circle"></i> Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var trening in Model.AllTrainings)
                     {
                         var isPast = trening.Datum < DateTime.Now;
-                        <tr class="@(isPast ? "past-training" : "")">
+                        <tr class="@(isPast ? "past-training" : "upcoming-training")">
                             <td class="action-column">
                                 <div class="action-buttons btn-group" role="group">
                                     <a href="@Url.Action("Details", "Trening", new { id = trening.Id })"
-                                       class="btn btn-sm btn-outline-primary" title="Detalji" data-bs-toggle="tooltip">
+                                       class="btn btn-sm btn-outline-primary action-btn" title="Detalji" data-bs-toggle="tooltip">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     <a href="@Url.Action("Edit", "Trening", new { id = trening.Id })"
-                                       class="btn btn-sm btn-outline-secondary" title="Uredi" data-bs-toggle="tooltip">
+                                       class="btn btn-sm btn-outline-secondary action-btn" title="Uredi" data-bs-toggle="tooltip">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form asp-controller="Trening" asp-action="Delete" asp-route-id="@trening.Id"
                                           method="post" class="delete-form" onsubmit="return confirm('Da li ste sigurni da želite obrisati trening @trening.Naziv?');">
                                         @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Obriši" data-bs-toggle="tooltip">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger action-btn" title="Obriši" data-bs-toggle="tooltip">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                 </div>
                             </td>
 
-                            <td>@trening.Naziv</td>
+                            <td class="training-name">@trening.Naziv</td>
                             <td>
                                 <span class="training-level @(trening.Nivo switch { Nivo.Napredni => "level-advanced", Nivo.Srednji => "level-medium", Nivo.Pocetnik => "level-low", _ => "level-low" })">
                                     @trening.Nivo
                                 </span>
                             </td>
-                            <td>@trening.Datum.ToString("dd.MM.yyyy HH:mm")</td>
-                            <td class="text-center">@trening.MaxBrClanova</td>
-                            <td>@(trening.Trener != null ? $"{trening.Trener.Ime} {trening.Trener.Prezime}" : "N/A")</td>
+                            <td class="training-date">@trening.Datum.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="text-center member-count">@trening.MaxBrClanova</td>
+                            <td class="trainer-info">@(trening.Trener != null ? $"{trening.Trener.Ime} {trening.Trener.Prezime}" : "N/A")</td>
                             <td>
                                 @if (isPast)
                                 {
-                                    <span class="status-badge past">Završen</span>
+                                    <span class="status-badge past"><i class="fas fa-check-circle"></i> Završen</span>
                                 }
                                 else
                                 {
-                                    <span class="status-badge upcoming">Predstoji</span>
+                                    <span class="status-badge upcoming"><i class="fas fa-clock"></i> Predstoji</span>
                                 }
                             </td>
                         </tr>
                         <tr class="registered-users-row">
                             <td colspan="7">
-                                <strong>Prijavljeni korisnici:</strong>
-                                @if (trening.TreningUsers != null && trening.TreningUsers.Any())
-                                {
-                                    <ul>
-                                        @foreach (var reg in trening.TreningUsers)
-                                        {
-                                            <li>@reg.User.Ime @reg.User.Prezime (@reg.User.Email)</li>
-                                        }
-                                    </ul>
-                                }
-                                else
-                                {
-                                    <em>Nema prijavljenih korisnika.</em>
-                                }
+                                <div class="registered-users-content">
+                                    <strong><i class="fas fa-user-friends"></i> Prijavljeni korisnici:</strong>
+                                    @if (trening.TreningUsers != null && trening.TreningUsers.Any())
+                                    {
+                                        <div class="users-list">
+                                            @foreach (var reg in trening.TreningUsers)
+                                            {
+                                                <span class="user-badge">
+                                                    <i class="fas fa-user"></i> @reg.User.Ime @reg.User.Prezime
+                                                    <small>(@reg.User.Email)</small>
+                                                </span>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <em class="no-users"><i class="fas fa-info-circle"></i> Nema prijavljenih korisnika.</em>
+                                    }
+                                </div>
                             </td>
                         </tr>
                     }
@@ -95,8 +100,14 @@
     else
     {
         <div class="no-data-message">
-            <p>Nema dodanih treninga.</p>
-            <a href="@Url.Action("Create", "Trening")" class="btn btn-success" style="background-color: #333; border-color: #333;">Dodaj Prvi Trening</a>
+            <div class="no-data-icon">
+                <i class="fas fa-dumbbell"></i>
+            </div>
+            <h4>Nema dodanih treninga</h4>
+            <p>Dodajte prvi trening da počnete sa organizovanjem aktivnosti.</p>
+            <a href="@Url.Action("Create", "Trening")" class="btn btn-success modern-btn">
+                <i class="fas fa-plus"></i> Dodaj Prvi Trening
+            </a>
         </div>
     }
 </div>
@@ -104,7 +115,7 @@
 <!-- Clan Members Management Section -->
 <div class="dashboard-section">
     <div class="section-header">
-        <h2>Upravljanje Nivoima Članova</h2>
+        <h2 style="color:white;"><i class="fas fa-users-cog"></i> Upravljanje Nivoima Članova</h2>
     </div>
 
     @if (Model.ClanMembers != null && Model.ClanMembers.Any())
@@ -113,19 +124,19 @@
             <table class="dashboard-table">
                 <thead>
                     <tr>
-                        <th>Ime</th>
-                        <th>Prezime</th>
-                        <th>Trenutni Nivo</th>
-                        <th>Novi Nivo</th>
-                        <th>Sačuvaj</th>
+                        <th><i class="fas fa-user"></i> Ime</th>
+                        <th><i class="fas fa-user"></i> Prezime</th>
+                        <th><i class="fas fa-chart-line"></i> Trenutni Nivo</th>
+                        <th><i class="fas fa-arrow-up"></i> Novi Nivo</th>
+                        <th><i class="fas fa-save"></i> Sačuvaj</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var clan in Model.ClanMembers)
                     {
-                        <tr>
-                            <td>@clan.Ime</td>
-                            <td>@clan.Prezime</td>
+                        <tr class="member-row">
+                            <td class="member-name">@clan.Ime</td>
+                            <td class="member-surname">@clan.Prezime</td>
                             <td>
                                 <span class="training-level @(clan.Nivo switch { Nivo.Napredni => "level-advanced", Nivo.Srednji => "level-medium", Nivo.Pocetnik => "level-low", _ => "level-low" })">
                                     @clan.Nivo
@@ -160,14 +171,113 @@
     else
     {
         <div class="no-data-message">
-            <p>Nema registrovanih članova.</p>
+            <div class="no-data-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h4>Nema registrovanih članova</h4>
+            <p>Članovi će se pojaviti ovde kada se registruju u sistem.</p>
         </div>
     }
 </div>
 
 <style>
+    .dashboard-section {
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e9ecef;
+        overflow: hidden;
+    }
+
+    .section-header {
+        background: linear-gradient(135deg, #333, #4a4a4a);
+        color: white;
+        padding: 20px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 3px solid #007bff;
+    }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+    .modern-btn {
+        background: linear-gradient(145deg, #333, #555);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: white;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .modern-btn:hover {
+            background: linear-gradient(145deg, #555, #333);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
     .table-responsive {
         overflow-x: auto;
+        padding: 25px;
+    }
+
+    .dashboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+        .dashboard-table thead {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        .dashboard-table th {
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            font-size: 0.9rem;
+        }
+
+        .dashboard-table td {
+            padding: 15px 12px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f3f4;
+            transition: background-color 0.2s ease;
+        }
+
+        .dashboard-table tbody tr:hover {
+            background-color: rgba(13, 110, 253, 0.02);
+        }
+
+    .upcoming-training {
+        background: linear-gradient(90deg, rgba(40, 167, 69, 0.02), transparent);
+        border-left: 3px solid #28a745;
+    }
+
+    .past-training {
+        opacity: 0.7;
+        background: linear-gradient(90deg, rgba(108, 117, 125, 0.02), transparent);
+        border-left: 3px solid #6c757d;
     }
 
     .action-column {
@@ -179,99 +289,144 @@
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
     }
 
-        .action-buttons .btn {
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    .action-btn {
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        border-radius: 6px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
-
-            .action-buttons .btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            }
-
-            .action-buttons .btn i {
-                font-size: 0.875rem;
-            }
-
-
-    .btn-sm {
-        padding: 4px 8px;
-        font-size: 12px;
-        border-radius: 3px;
-    }
 
     .training-level {
         display: inline-block;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: bold;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
         text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .level-advanced {
-        background-color: #dc3545;
+        background: linear-gradient(135deg, #dc3545, #c82333);
         color: white;
     }
 
     .level-medium {
-        background-color: #fd7e14;
+        background: linear-gradient(135deg, #fd7e14, #e85d04);
         color: white;
     }
 
     .level-low {
-        background-color: #28a745;
+        background: linear-gradient(135deg, #28a745, #20c997);
         color: white;
     }
 
     .status-badge {
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: bold;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
         .status-badge.past {
-            background-color: #6c757d;
+            background: linear-gradient(135deg, #6c757d, #5a6268);
             color: white;
         }
 
         .status-badge.upcoming {
-            background-color: #17a2b8;
+            background: linear-gradient(135deg, #17a2b8, #138496);
             color: white;
         }
 
-    .past-training {
-        opacity: 0.7;
-        background-color: #f8f9fa !important;
+    .registered-users-row {
+        background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        border-top: none !important;
     }
 
-    .level-change-actions {
+    .registered-users-content {
+        padding: 15px;
+        border-radius: 8px;
+        background: white;
+        margin: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .users-list {
+        margin-top: 10px;
         display: flex;
-        gap: 5px;
-        justify-content: center;
         flex-wrap: wrap;
+        gap: 8px;
     }
 
-    .text-center {
-        text-align: center;
+    .user-badge {
+        background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        border: 1px solid #dee2e6;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+        .user-badge small {
+            color: #6c757d;
+            font-size: 0.75rem;
+        }
+
+    .no-users {
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 5px;
     }
 
     .no-data-message {
         text-align: center;
-        padding: 40px;
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        color: #6c757d;
+        padding: 60px 40px;
+        background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        border-radius: 12px;
+        margin: 25px;
+        border: 2px dashed #dee2e6;
     }
 
-        .no-data-message p {
-            margin: 10px 0;
-            font-size: 16px;
-        }
+    .no-data-icon {
+        font-size: 3rem;
+        color: #6c757d;
+        margin-bottom: 20px;
+    }
+
+    .no-data-message h4 {
+        color: #495057;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .no-data-message p {
+        color: #6c757d;
+        margin-bottom: 20px;
+        font-size: 1rem;
+    }
 
     .level-select {
         width: auto !important;
@@ -283,7 +438,7 @@
         padding: 8px 12px;
         font-weight: 500;
         transition: all 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
         .level-select:focus {
@@ -295,7 +450,7 @@
         .level-select:hover {
             border-color: #0d6efd;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
     .save-level-btn {
@@ -331,14 +486,40 @@
             font-size: 14px;
         }
 
-    .training-level {
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 0.875em;
+    .member-row:hover {
+        background: linear-gradient(90deg, rgba(13, 110, 253, 0.02), transparent);
+        border-left: 3px solid #0d6efd;
+    }
+
+    .training-name {
         font-weight: 600;
-        display: inline-block;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        color: #495057;
+    }
+
+    .training-date {
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .member-count {
+        font-weight: 600;
+        color: #28a745;
+        font-size: 1.1rem;
+    }
+
+    .trainer-info {
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .member-name, .member-surname {
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .text-center {
+        text-align: center;
     }
 
     .fas {
@@ -346,40 +527,6 @@
         font-weight: 900;
     }
 
-    .level-change-form {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .training-level {
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 0.875em;
-        font-weight: 500;
-    }
-
-    .form-select-sm {
-        padding: 6px 12px;
-        font-size: 0.875rem;
-    }
-
-    .text-end {
-        text-align: right !important;
-    }
-
-    .dashboard-table td {
-        vertical-align: middle;
-        padding: 12px 8px;
-    }
-
-    .level-change-row {
-        transition: background-color 0.2s ease;
-    }
-
-        .level-change-row:hover {
-            background-color: rgba(13, 110, 253, 0.05);
-        }
 </style>
 
 <script>
@@ -390,7 +537,6 @@
         });
     });
 </script>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -429,10 +575,12 @@
                     saveBtn.disabled = false;
                     saveBtn.classList.add('btn-warning');
                     saveBtn.classList.remove('btn-primary');
+                    saveBtn.style.background = 'linear-gradient(145deg, #ffc107, #e0a800)';
                 } else {
                     saveBtn.disabled = true;
                     saveBtn.classList.remove('btn-warning');
                     saveBtn.classList.add('btn-primary');
+                    saveBtn.style.background = 'linear-gradient(145deg, #0d6efd, #0b5ed7)';
                 }
             });
 
