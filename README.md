@@ -1,4 +1,4 @@
-# Jahački Klub Željezničar
+# 🐎Jahački Klub Željezničar 🔵
 
 Sistem za upravljanje jahačkim klubom koji omogućava rezervaciju treninga, upravljanje članstvom i rezervaciju trail-ova.
 
@@ -33,8 +33,8 @@ Connection string:
 
 ### Osnovne Usluge Sistema
 - **Rezervacija trailova** - Prijava putem e-maila sa odabirom dostupnih termina
-- **Učlanjivanje u klub** - Registracija novih članova sa besplatnom prvom sedmicom
-- **Organizacija treninga** - Kreiranje treninga sa odgovarajućim nivoom složenosti
+- **Učlanjivanje u klub** - Registracija novih članova sa besplatnim prvim mjesecom
+- **Organizacija treninga** - Kreiranje treninga sa odgovarajućom težinom
 
 ### Upravljanje Podacima (CRUD)
 - **Upravljanje članarinom** - Produžavanje i pregled statusa članarine
@@ -44,7 +44,7 @@ Connection string:
 - **Dodavanje trailova** - Kreiranje novih jahačkih ruta
 
 ### Napredne Funkcionalnosti
-- **Prijedlog treninga** - Algoritamsko preporučivanje treninga na osnovu istorije
+- **Prijedlog treninga** - Algoritamsko preporučivanje treninga na osnovu historije
 - **Asinhrona potvrda uplate** - Automatska e-mail potvrda članarine
 
 ##  Korisnici Sistema
