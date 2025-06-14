@@ -6,9 +6,7 @@
     <div class="dashboard-section">
         <div class="section-header">
             <h2>Upravljanje Treninzima</h2>
-            <a href="@Url.Action("Create", "Trening")" class="btn btn-success">
-                <i class="fas fa-plus"></i> Dodaj Novi Trening
-            </a>
+            
         </div>
 
         @if (Model.AllTrainings != null && Model.AllTrainings.Any())
@@ -103,7 +101,6 @@
                             <th>Ime</th>
                             <th>Prezime</th>
                             <th>Email</th>
-                            <th>Telefon</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -132,7 +129,6 @@
                                 <td>@trener.Ime</td>
                                 <td>@trener.Prezime</td>
                                 <td>@trener.Email</td>
-                                <td>@(trener.PhoneNumber ?? "N/A")</td>
                             </tr>
                         }
                     </tbody>

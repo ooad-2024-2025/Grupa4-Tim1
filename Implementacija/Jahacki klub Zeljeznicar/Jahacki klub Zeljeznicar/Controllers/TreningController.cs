@@ -62,9 +62,16 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Trening/Create
-        [Authorize(Policy = "TrenerOrAdmin")]
+        [Authorize(Roles = "Trener")]
         public async Task<IActionResult> Create()
         {
+            // Provjeri da korisnik nije Admin
+            if (User.IsInRole("Admin"))
+            {
+                TempData["ErrorMessage"] = "Administratori ne mogu kreirati treninge. Ova funkcionalnost je dostupna samo trenerima.";
+                return RedirectToAction("Index", "Dashboard");
+            }
+
             // Postavi ViewBag za trenere
             var treneri = await _userManager.GetUsersInRoleAsync("Trener");
             ViewBag.TrenerId = new SelectList(
@@ -82,9 +89,15 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Policy = "TrenerOrAdmin")]
+        [Authorize(Roles = "Trener")]
         public async Task<IActionResult> Create(Trening trening, int[] SelectedHorseIds)
         {
+            // Provjeri da korisnik nije Admin
+            if (User.IsInRole("Admin"))
+            {
+                TempData["ErrorMessage"] = "Administratori ne mogu kreirati treninge. Ova funkcionalnost je dostupna samo trenerima.";
+                return RedirectToAction("Index", "Dashboard");
+            }
 
             ModelState.Remove(nameof(trening.TrenerId));
             ModelState.Remove(nameof(trening.Trener));
@@ -161,8 +174,6 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             return View(trening);
         }
 
-
-        // GET: Trening/Edit/5
         // GET: Trening/Edit/5
         [Authorize(Policy = "TrenerOrAdmin")]
         public async Task<IActionResult> Edit(int? id)
@@ -426,6 +437,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             return _context.Treninzi.Any(e => e.Id == id);
         }
 
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> AvailableTrainings()
         {
             // Dohvati trenutnog korisnika i prosledji njegov nivo
@@ -452,6 +464,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             return View(treninzi);
         }
 
+        [Authorize(Roles = "Trener")]
         public async Task<IActionResult> TrenerView()
         {
             // Učitaj sve treninge sa povezanim podacima za trenerski prikaz
