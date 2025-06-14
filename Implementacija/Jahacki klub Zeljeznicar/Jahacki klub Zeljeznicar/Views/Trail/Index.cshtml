@@ -178,7 +178,7 @@
 <div class="trails-container">
     <h1 class="page-title">Trailovi</h1>
 
-    @if (Model.HasRegisteredTrails)
+    @if (Model.HasRegisteredTrails && User.Identity.IsAuthenticated)
     {
         <div class="registered-section">
             <h2 class="section-title">Vaši registrovani trailovi</h2>
