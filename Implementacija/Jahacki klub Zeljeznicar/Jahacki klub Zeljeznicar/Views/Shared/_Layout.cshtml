@@ -39,7 +39,7 @@
                     </ul>
 
                     <div class="auth-buttons">
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.Identity.IsAuthenticated && User.Identity.AuthenticationType == "Identity.Application")
                         {
                             <a class="btn btn-dark" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
                             <form method="post" asp-controller="Account" asp-action="Logout" class="d-inline">
@@ -65,7 +65,7 @@
 
     <footer>
         <div class="container text-center">
-            &copy; 2025 - Jahački klub Željezničar - <a href="@Url.Action("Privacy", "Home")">Privacy</a>
+            &copy; 2025 - Jahački klub Željezničar
         </div>
     </footer>
 
