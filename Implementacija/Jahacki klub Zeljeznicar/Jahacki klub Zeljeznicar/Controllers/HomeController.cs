@@ -19,11 +19,12 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Get trails for the homepage - you can add filtering/ordering as needed
+            
             var trails = await _context.Trails
                 .Include(t => t.Rezervator)
-                .OrderBy(t => t.Datum)
-                .Take(6) // Show only first 6 trails on homepage
+                .Where(t => t.Datum > DateTime.Now && string.IsNullOrEmpty(t.RezervatorId))
+                .OrderBy(t => t.Datum) 
+                .Take(6) // Uzimamo prvih 6 trail-ova
                 .ToListAsync();
 
             return View(trails);
@@ -39,10 +40,10 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
         public IActionResult AboutUs()
         {
             return View();
         }
-
     }
 }
