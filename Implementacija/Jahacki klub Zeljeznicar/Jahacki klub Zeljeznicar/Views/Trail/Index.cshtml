@@ -192,7 +192,7 @@
 
                             <div class="trail-info">
                                 <div class="trail-date">
-                                    <strong>Datum:</strong> @item.Datum.ToString("dd.MM.yyyy")
+                                    <strong>Datum:</strong> @item.Datum.ToString("dd.MM.yyyy HH:mm")
                                 </div>
                             </div>
 
@@ -213,9 +213,40 @@
                         </div>
                     </div>
                 }
+                @foreach (var item in Model.PastTrails)
+                {
+                    <div class="trail-card past">
+                        <div class="trail-content">
+                            <div class="registered-badge" style="background-color: #999;">ISTEKAO</div>
+                            <h3 class="trail-title">@item.Naziv</h3>
+
+                            <div class="trail-info">
+                                <div class="trail-date">
+                                    <strong>Datum:</strong> @item.Datum.ToString("dd.MM.yyyy HH:mm")
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(item.Opis))
+                            {
+                                <div class="trail-description">
+                                    @(item.Opis.Length > 100 ? item.Opis.Substring(0, 100) + "..." : item.Opis)
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="trail-description">Nema opisa</div>
+                            }
+
+                            <div class="trail-actions">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary">Detalji</a>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     }
+
 
     @if (Model.HasAvailableTrails)
     {

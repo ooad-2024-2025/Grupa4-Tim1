@@ -214,7 +214,7 @@
                 <div class="training-info">
                     <p>Konji: @(string.Join(", ", ((IEnumerable<Jahacki_klub_Zeljeznicar.Models.Trening_Konj>)trening.TreningKonji).Select(tk => tk.Konj.Ime)))</p>
                     <p>Trener: @(trening.Trener.Ime) @(trening.Trener.Prezime)</p>
-                    <p>Datum: @trening.Datum.ToString("dd.MM.yyyy.")</p>
+                    <p>Datum: @trening.Datum.ToString("dd.MM.yyyy HH:mm")</p>
                 </div>
                 <a href="@Url.Action("PrijaviSe", "Trening", new { id = trening.Id })" class="btn">Prijavi se</a>
             </div>

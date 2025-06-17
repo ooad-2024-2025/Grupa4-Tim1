@@ -97,81 +97,79 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 .OrderByDescending(c => c.IstekClanarine)
                 .FirstOrDefaultAsync();
 
-            // Get IDs of trainings user is already registered for
+            bool hasActiveMembership = model.CurrentUserClanarina != null &&
+                                      model.CurrentUserClanarina.IstekClanarine >= DateTime.Now;
+
             var registeredTrainingIds = await _context.TreningUsers
                 .Where(tu => tu.UserId == userId)
                 .Select(tu => tu.TreningId)
                 .ToListAsync();
 
-            // Get all available trainings for registration (excluding ones user is already registered for and full trainings)
-            var availableTrainings = await _context.Treninzi
-                .Include(t => t.Trener)
-                .Include(t => t.TreningKonji)
-                    .ThenInclude(tk => tk.Konj)
-                .Include(t => t.TreningUsers) // Include to check capacity
-                .Where(t => t.Datum > DateTime.Now && // Only future trainings
-                           !registeredTrainingIds.Contains(t.Id) && // Exclude trainings user is already registered for
-                           t.TreningUsers.Count < t.MaxBrClanova) // Exclude full trainings
-                .ToListAsync();
-
-            // Initialize recommendation list
-            model.RecommendedTrainingIds = new List<int>();
-
-            // Apply recommendation algorithm if user exists
-            if (userDetails != null && availableTrainings.Any())
+            if (hasActiveMembership)
             {
-                // Get user's training history for recommendations
-                var userTrainingHistory = await _context.TreningUsers
+                var availableTrainings = await _context.Treninzi
+                    .Include(t => t.Trener)
+                    .Include(t => t.TreningKonji)
+                        .ThenInclude(tk => tk.Konj)
+                    .Include(t => t.TreningUsers) 
+                    .Where(t => t.Datum > DateTime.Now && 
+                               !registeredTrainingIds.Contains(t.Id) &&
+                               t.TreningUsers.Count < t.MaxBrClanova)
+                    .ToListAsync();
+
+                model.RecommendedTrainingIds = new List<int>();
+
+                if (userDetails != null && availableTrainings.Any())
+                {
+                    var userTrainingHistory = await _context.TreningUsers
+                        .Include(tu => tu.Trening)
+                            .ThenInclude(t => t.Trener)
+                        .Include(tu => tu.Trening)
+                            .ThenInclude(t => t.TreningKonji)
+                                .ThenInclude(tk => tk.Konj)
+                        .Where(tu => tu.UserId == userId)
+                        .OrderByDescending(tu => tu.Trening.Datum)
+                        .ToListAsync();
+
+                    var recommendedTrainings = ApplyRecommendationAlgorithm(userDetails, userTrainingHistory, availableTrainings)
+                        .Take(3)
+                        .ToList();
+
+                    model.RecommendedTrainingIds = recommendedTrainings.Select(t => t.Id).ToList();
+
+                    var sortedTrainings = new List<Trening>();
+                    sortedTrainings.AddRange(recommendedTrainings);
+                    var nonRecommendedTrainings = availableTrainings
+                        .Where(t => !model.RecommendedTrainingIds.Contains(t.Id))
+                        .OrderBy(t => t.Datum)
+                        .ToList();
+                    sortedTrainings.AddRange(nonRecommendedTrainings);
+                    model.AvailableTrainings = sortedTrainings;
+                }
+                else
+                {
+                    model.AvailableTrainings = availableTrainings.OrderBy(t => t.Datum).ToList();
+                }
+
+                model.RegisteredTrainings = await _context.TreningUsers
                     .Include(tu => tu.Trening)
                         .ThenInclude(t => t.Trener)
                     .Include(tu => tu.Trening)
                         .ThenInclude(t => t.TreningKonji)
                             .ThenInclude(tk => tk.Konj)
                     .Where(tu => tu.UserId == userId)
-                    .OrderByDescending(tu => tu.Trening.Datum)
-                    .ToListAsync();
-
-                // Apply recommendation algorithm
-                var recommendedTrainings = ApplyRecommendationAlgorithm(userDetails, userTrainingHistory, availableTrainings)
-                    .Take(3)
-                    .ToList();
-
-                // Store recommended training IDs for the view
-                model.RecommendedTrainingIds = recommendedTrainings.Select(t => t.Id).ToList();
-
-                // Sort trainings: recommended first (by recommendation score), then others by date
-                var sortedTrainings = new List<Trening>();
-
-                // Add recommended trainings first, maintaining their recommendation order
-                sortedTrainings.AddRange(recommendedTrainings);
-
-                // Add non-recommended trainings, sorted by date
-                var nonRecommendedTrainings = availableTrainings
-                    .Where(t => !model.RecommendedTrainingIds.Contains(t.Id))
+                    .Select(tu => tu.Trening)
                     .OrderBy(t => t.Datum)
-                    .ToList();
-
-                sortedTrainings.AddRange(nonRecommendedTrainings);
-
-                model.AvailableTrainings = sortedTrainings;
+                    .ToListAsync();
             }
             else
             {
-                // If no user details or no trainings, just sort by date
-                model.AvailableTrainings = availableTrainings.OrderBy(t => t.Datum).ToList();
+                model.AvailableTrainings = new List<Trening>();
+                model.RegisteredTrainings = new List<Trening>();
+                model.RecommendedTrainingIds = new List<int>();
             }
 
-            // Get trainings user is already registered for
-            model.RegisteredTrainings = await _context.TreningUsers
-                .Include(tu => tu.Trening)
-                    .ThenInclude(t => t.Trener)
-                .Include(tu => tu.Trening)
-                    .ThenInclude(t => t.TreningKonji)
-                        .ThenInclude(tk => tk.Konj)
-                .Where(tu => tu.UserId == userId)
-                .Select(tu => tu.Trening)
-                .OrderBy(t => t.Datum)
-                .ToListAsync();
+            model.HasActiveMembership = hasActiveMembership;
         }
 
         private async Task LoadTrenerDashboardData(DashboardViewModel model, string userId)

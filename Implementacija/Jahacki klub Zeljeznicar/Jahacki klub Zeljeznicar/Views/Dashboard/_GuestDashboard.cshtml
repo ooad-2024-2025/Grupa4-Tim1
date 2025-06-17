@@ -167,7 +167,9 @@
         <div class="dashboard-cards">
             @foreach (var trail in Model.UserTrails)
             {
-                <div class="dashboard-card">
+                var isUpcoming = trail.Datum >= DateTime.Now;
+
+                <div class="dashboard-card @(isUpcoming ? "" : "past")">
                     <div class="registered-badge">REGISTROVAN</div>
                     <h3>@trail.Naziv</h3>
 

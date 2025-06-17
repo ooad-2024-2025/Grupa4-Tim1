@@ -6,9 +6,13 @@ namespace Jahacki_klub_Zeljeznicar.ViewModels
     {
         public List<Trail> RegisteredTrails { get; set; } = new List<Trail>();
         public List<Trail> AvailableTrails { get; set; } = new List<Trail>();
+        public List<Trail> PastTrails { get; set; } = new List<Trail>();
+
         public string LoggedInUserId { get; set; }
 
         public bool HasRegisteredTrails => RegisteredTrails != null && RegisteredTrails.Any();
         public bool HasAvailableTrails => AvailableTrails != null && AvailableTrails.Any();
+        public bool HasPastTrails => PastTrails != null && PastTrails.Any();
     }
+
 }

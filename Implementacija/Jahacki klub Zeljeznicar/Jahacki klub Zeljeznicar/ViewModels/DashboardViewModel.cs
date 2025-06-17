@@ -17,6 +17,7 @@ namespace Jahacki_klub_Zeljeznicar.ViewModels
 
         // For Clan users - membership info  
         public Clanarina CurrentUserClanarina { get; set; }
+        public bool HasActiveMembership { get; set; } = false; // New property
 
         // For Guest users
         public List<Trail> UserTrails { get; set; } = new List<Trail>();

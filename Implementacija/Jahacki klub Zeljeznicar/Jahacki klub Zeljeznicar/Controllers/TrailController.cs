@@ -41,15 +41,19 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 .OrderBy(t => t.Datum)
                 .ToListAsync();
 
+            var now = DateTime.Now;
+
             var viewModel = new ViewModels.TrailsIndexViewModel
             {
-                RegisteredTrails = trails.Where(t => t.RezervatorId == currentUserId).ToList(),
-                AvailableTrails = trails.Where(t => t.RezervatorId == null).ToList(),
+                RegisteredTrails = trails.Where(t => t.RezervatorId == currentUserId && t.Datum >= now).ToList(),
+                AvailableTrails = trails.Where(t => t.RezervatorId == null && t.Datum >= now).ToList(),
+                PastTrails = trails.Where(t => t.RezervatorId == currentUserId && t.Datum < now).ToList(),
                 LoggedInUserId = currentUserId
             };
 
             return View(viewModel);
         }
+
 
 
         public async Task<IActionResult> Details(int id)
@@ -110,11 +114,6 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine($"Naziv: {trail.Naziv}");
-                System.Diagnostics.Debug.WriteLine($"Datum: {trail.Datum}");
-                System.Diagnostics.Debug.WriteLine($"Opis: {trail.Opis}");
-                System.Diagnostics.Debug.WriteLine($"Selected horses count: {SelectedHorseIds?.Count ?? 0}");
-
                 // Trail is not reserved by default
                 trail.RezervatorId = null;
 
@@ -122,6 +121,18 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
                 ModelState.Remove("Rezervator");
                 ModelState.Remove("TrailKonji");
 
+                if (string.IsNullOrWhiteSpace(trail.Naziv))
+                {
+                    ModelState.AddModelError(nameof(trail.Naziv), "Naziv traila je obavezan.");
+                }
+                if (trail.Datum < DateTime.Today)
+                {
+                    ModelState.AddModelError(nameof(trail.Datum), "Datum traila ne može biti u prošlosti.");
+                }
+                if (string.IsNullOrWhiteSpace(trail.Opis))
+                {
+                    ModelState.AddModelError(nameof(trail.Opis), "Opis traila je obavezan.");
+                }
                 if (SelectedHorseIds == null || !SelectedHorseIds.Any())
                 {
                     ModelState.AddModelError("", "Morate izabrati najmanje jednog konja za trail.");
@@ -236,6 +247,18 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
             ModelState.Remove("TrailKonji");
 
+            if (string.IsNullOrWhiteSpace(trail.Naziv))
+            {
+                ModelState.AddModelError(nameof(trail.Naziv), "Naziv traila je obavezan.");
+            }
+            if (trail.Datum < DateTime.Today)
+            {
+                ModelState.AddModelError(nameof(trail.Datum), "Datum traila ne može biti u prošlosti.");
+            }
+            if (string.IsNullOrWhiteSpace(trail.Opis))
+            {
+                ModelState.AddModelError(nameof(trail.Opis), "Opis traila je obavezan.");
+            }
             if (SelectedHorseIds == null || !SelectedHorseIds.Any())
             {
                 ModelState.AddModelError("", "Morate izabrati najmanje jednog konja za trail.");

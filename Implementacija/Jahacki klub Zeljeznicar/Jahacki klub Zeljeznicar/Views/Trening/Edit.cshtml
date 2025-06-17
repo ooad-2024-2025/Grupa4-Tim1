@@ -190,7 +190,8 @@
 
         <div class="form-group">
             <label asp-for="Datum">Datum treninga</label>
-            <input asp-for="Datum" type="datetime-local" class="form-control" />
+            <input asp-for="Datum" type="datetime-local" class="form-control"
+                   value="@Model.Datum.ToString("yyyy-MM-ddTHH:mm")" />
             <span asp-validation-for="Datum" class="text-danger"></span>
         </div>
 

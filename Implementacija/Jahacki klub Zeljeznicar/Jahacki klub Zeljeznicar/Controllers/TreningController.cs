@@ -62,7 +62,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
         }
 
         // GET: Trening/Create
-        [Authorize(Roles = "Trener")]
+        [Authorize(Policy = "TrenerOnly")]
         public async Task<IActionResult> Create()
         {
             // Provjeri da korisnik nije Admin
@@ -89,7 +89,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Trener")]
+        [Authorize(Policy = "TrenerOnly")]
         public async Task<IActionResult> Create(Trening trening, int[] SelectedHorseIds)
         {
             // Provjeri da korisnik nije Admin
@@ -437,7 +437,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             return _context.Treninzi.Any(e => e.Id == id);
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Policy = "ClanOnly")]
         public async Task<IActionResult> AvailableTrainings()
         {
             // Dohvati trenutnog korisnika i prosledji njegov nivo
@@ -464,7 +464,7 @@ namespace Jahacki_klub_Zeljeznicar.Controllers
             return View(treninzi);
         }
 
-        [Authorize(Roles = "Trener")]
+        [Authorize(Policy = "TrenerOnly")]
         public async Task<IActionResult> TrenerView()
         {
             // Učitaj sve treninge sa povezanim podacima za trenerski prikaz
