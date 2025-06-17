@@ -1,4 +1,4 @@
-# 🐎Jahački Klub Željezničar 🔵
+# 🐎 Jahački Klub Željezničar 🔵
 
 Sistem za upravljanje jahačkim klubom koji omogućava rezervaciju treninga, upravljanje članstvom i rezervaciju trail-ova.
 
